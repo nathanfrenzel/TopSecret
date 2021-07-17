@@ -20,7 +20,7 @@ struct HomeScreenView: View {
                 
                 Text("Events")
                 
-                Text("And more")
+                Text("And more Penis")
             }
         }
     }
