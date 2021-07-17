@@ -23,8 +23,8 @@ struct AddContentView: View {
     }
     
     var body: some View {
-        NavigationView {
-            
+        ZStack {
+        
         }.fullScreenCover(isPresented: $isPresented, content: {
             FullScreenPostView(selectedTab: $selectedTab, isPresented: $isPresented, storedTab: $storedTab, selectedOption: selectedOption)
         })

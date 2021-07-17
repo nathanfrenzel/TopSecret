@@ -10,7 +10,6 @@
 		6290119826797A1400A226EF /* FullScreenPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6290119726797A1400A226EF /* FullScreenPostView.swift */; };
 		6290119B267B748000A226EF /* TextArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6290119A267B748000A226EF /* TextArea.swift */; };
 		6290119C267BE56D00A226EF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 789FC2CD2617DA720021616B /* Preview Assets.xcassets */; };
-		62A86E3D265D59CD0059E950 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 62A86E3C265D59CD0059E950 /* GoogleService-Info.plist */; };
 		62A86E3F265D684F0059E950 /* AddContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62A86E3E265D684F0059E950 /* AddContentView.swift */; };
 		62D5CBDF2689204000CA37C9 /* PostViewFilterOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62D5CBDE2689204000CA37C9 /* PostViewFilterOptions.swift */; };
 		62FD065626754EB600C1CEBE /* PostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62FD065526754EB600C1CEBE /* PostCell.swift */; };
@@ -19,6 +18,7 @@
 		62FD065E26781F8200C1CEBE /* VotingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62FD065D26781F8200C1CEBE /* VotingView.swift */; };
 		62FD066026781FEB00C1CEBE /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62FD065F26781FEB00C1CEBE /* MessageView.swift */; };
 		62FD06622678201B00C1CEBE /* EventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62FD06612678201B00C1CEBE /* EventView.swift */; };
+		782C89A926A3514A0059CBDA /* SideBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782C89A826A3514A0059CBDA /* SideBarView.swift */; };
 		784A0E16261A97610092284B /* Color Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 784A0E15261A97610092284B /* Color Extension.swift */; };
 		784A0E1C261B6E8E0092284B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 784A0E1B261B6E8E0092284B /* SettingsView.swift */; };
 		7887ADDD2625056900D9FC21 /* ProfileTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7887ADDC2625056900D9FC21 /* ProfileTabView.swift */; };
@@ -29,6 +29,7 @@
 		7887ADF026267F7300D9FC21 /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7887ADEF26267F7300D9FC21 /* ForgotPasswordView.swift */; };
 		788C7B57261A2A3100E0C54C /* HomeScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788C7B56261A2A3100E0C54C /* HomeScreenViewModel.swift */; };
 		788C7B5A261A725C00E0C54C /* CustomTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788C7B59261A725C00E0C54C /* CustomTabBar.swift */; };
+		789ABCEC26A34795000B9AFA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 789ABCEB26A34795000B9AFA /* GoogleService-Info.plist */; };
 		789FC2C72617DA700021616B /* TopSecretApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 789FC2C62617DA700021616B /* TopSecretApp.swift */; };
 		789FC2C92617DA700021616B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 789FC2C82617DA700021616B /* ContentView.swift */; };
 		789FC2CB2617DA720021616B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 789FC2CA2617DA720021616B /* Assets.xcassets */; };
@@ -50,7 +51,6 @@
 /* Begin PBXFileReference section */
 		6290119726797A1400A226EF /* FullScreenPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenPostView.swift; sourceTree = "<group>"; };
 		6290119A267B748000A226EF /* TextArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextArea.swift; sourceTree = "<group>"; };
-		62A86E3C265D59CD0059E950 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		62A86E3E265D684F0059E950 /* AddContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddContentView.swift; sourceTree = "<group>"; };
 		62D5CBDE2689204000CA37C9 /* PostViewFilterOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewFilterOptions.swift; sourceTree = "<group>"; };
 		62FD065526754EB600C1CEBE /* PostCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCell.swift; sourceTree = "<group>"; };
@@ -59,6 +59,7 @@
 		62FD065D26781F8200C1CEBE /* VotingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VotingView.swift; sourceTree = "<group>"; };
 		62FD065F26781FEB00C1CEBE /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
 		62FD06612678201B00C1CEBE /* EventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventView.swift; sourceTree = "<group>"; };
+		782C89A826A3514A0059CBDA /* SideBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideBarView.swift; sourceTree = "<group>"; };
 		784A0E15261A97610092284B /* Color Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color Extension.swift"; sourceTree = "<group>"; };
 		784A0E1B261B6E8E0092284B /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		7887ADDC2625056900D9FC21 /* ProfileTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTabView.swift; sourceTree = "<group>"; };
@@ -69,6 +70,7 @@
 		7887ADEF26267F7300D9FC21 /* ForgotPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordView.swift; sourceTree = "<group>"; };
 		788C7B56261A2A3100E0C54C /* HomeScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenViewModel.swift; sourceTree = "<group>"; };
 		788C7B59261A725C00E0C54C /* CustomTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBar.swift; sourceTree = "<group>"; };
+		789ABCEB26A34795000B9AFA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../GoogleService-Info.plist"; sourceTree = "<group>"; };
 		789FC2C32617DA700021616B /* TopSecret.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TopSecret.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		789FC2C62617DA700021616B /* TopSecretApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSecretApp.swift; sourceTree = "<group>"; };
 		789FC2C82617DA700021616B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -122,6 +124,7 @@
 		7887ADDB262504F900D9FC21 /* TabViews */ = {
 			isa = PBXGroup;
 			children = (
+				782C89A826A3514A0059CBDA /* SideBarView.swift */,
 				62A86E3E265D684F0059E950 /* AddContentView.swift */,
 				789FC3022618C24B0021616B /* HomeScreenView.swift */,
 				784A0E1B261B6E8E0092284B /* SettingsView.swift */,
@@ -177,7 +180,7 @@
 				789FC2D72617DA8B0021616B /* Model */,
 				789FC2D62617DA840021616B /* View */,
 				789FC2CF2617DA720021616B /* Info.plist */,
-				62A86E3C265D59CD0059E950 /* GoogleService-Info.plist */,
+				789ABCEB26A34795000B9AFA /* GoogleService-Info.plist */,
 				789FC2CA2617DA720021616B /* Assets.xcassets */,
 				789FC2CC2617DA720021616B /* Preview Content */,
 			);
@@ -195,11 +198,11 @@
 		789FC2D62617DA840021616B /* View */ = {
 			isa = PBXGroup;
 			children = (
+				789FC2C82617DA700021616B /* ContentView.swift */,
 				62FD06632679455D00C1CEBE /* Posts */,
 				7887ADEE26267F5C00D9FC21 /* Login */,
 				7887ADE0262513C600D9FC21 /* Register */,
 				7887ADDB262504F900D9FC21 /* TabViews */,
-				789FC2C82617DA700021616B /* ContentView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -305,7 +308,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				62A86E3D265D59CD0059E950 /* GoogleService-Info.plist in Resources */,
+				789ABCEC26A34795000B9AFA /* GoogleService-Info.plist in Resources */,
 				6290119C267BE56D00A226EF /* Preview Assets.xcassets in Resources */,
 				789FC2CB2617DA720021616B /* Assets.xcassets in Resources */,
 			);
@@ -342,6 +345,7 @@
 				789FC2FF2618BB080021616B /* Constants.swift in Sources */,
 				789FC2F82618B9FC0021616B /* UserModel.swift in Sources */,
 				789FC2C72617DA700021616B /* TopSecretApp.swift in Sources */,
+				782C89A926A3514A0059CBDA /* SideBarView.swift in Sources */,
 				62A86E3F265D684F0059E950 /* AddContentView.swift in Sources */,
 				7887ADE2262513E600D9FC21 /* RegisterUsernameView.swift in Sources */,
 				62FD065A2675513800C1CEBE /* PostModel.swift in Sources */,
