@@ -13,7 +13,7 @@ struct AddContentView: View {
     @Binding var storedTab: Int
     @Binding var selectedOption: String
     @ObservedObject var viewModel: UploadPostViewModel
-    
+
     init(isPresented: Binding<Bool>, selectedTab: Binding<Int>, storedTab: Binding<Int>, selectedOption: Binding<String>) {
         self._isPresented = isPresented
         self._selectedTab = selectedTab
@@ -24,7 +24,7 @@ struct AddContentView: View {
     
     var body: some View {
         ZStack {
-        
+
         }.fullScreenCover(isPresented: $isPresented, content: {
             FullScreenPostView(selectedTab: $selectedTab, isPresented: $isPresented, storedTab: $storedTab, selectedOption: selectedOption)
         })

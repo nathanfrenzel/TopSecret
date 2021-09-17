@@ -26,8 +26,8 @@ init(dictionary: [String:Any]) {
     self.password = dictionary["password"] as? String ?? ""
     self.fullname = dictionary["fullname"] as? String ?? ""
     self.birthday = dictionary["birthday"] as? Date ?? Date()
-    self.groups = dictionary["groups"] as? [Group] ?? [Group()]
-    self.chats = dictionary["chats"] as? [ChatModel] ?? [ChatModel()]
+    self.groups = dictionary["groups"] as? [Group] ?? []
+    self.chats = dictionary["chats"] as? [ChatModel] ?? []
  }
 
     init(){

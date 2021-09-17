@@ -35,14 +35,26 @@ class GroupViewModel: ObservableObject {
         let data = ["name": group.groupName ?? " ",
                     "memberAmount":group.memberAmount,
                     "dateCreated":Date(),
-                    "users":[userVM?.user?.id]] as [String : Any]
+                    "users":[userVM?.user?.id], "id":UUID().uuidString,] as [String : Any]
         
         let chat = ChatModel(dictionary: data)
         
-        COLLECTION_USER.document(userVM?.user?.id ?? " ").collection("Chat").addDocument(data: data)
-        COLLECTION_USER.document(userVM?.user?.id ?? " ").collection("Groups").document(group.id ?? " ").collection("Chat").addDocument(data: data)
+        COLLECTION_CHAT.document(chat.id).setData(data) { (err) in
+            if let err = err{
+                print("Error")
+                return
+            }
+            print(chat.id)
+        }
+       
+        COLLECTION_CHAT.document(chat.id).updateData(["id":chat.id])
+        COLLECTION_GROUP.document(group.id).updateData(["chatID":chat.id])
+
+     
         
-        
+    }
+    func joinChat(chatID: String){
+        COLLECTION_CHAT.document(chatID).updateData(["users":FieldValue.arrayUnion([userVM?.user?.id ?? ""])])
     }
     
     
@@ -52,8 +64,7 @@ class GroupViewModel: ObservableObject {
         //this finds the group in group list and adds user to its user list
         
         let groupQuery = COLLECTION_GROUP.whereField("publicID", isEqualTo: publicID)
-        let userGroupQuery = COLLECTION_USER.document(userVM?.user?.id ?? " ").collection("Groups").whereField("publicID", isEqualTo: publicID)
-        
+
         groupQuery.getDocuments { [self]  (querySnapshot, err) in
             if let err = err {
                 print("DEBUG: \(err.localizedDescription)")
@@ -72,6 +83,7 @@ class GroupViewModel: ObservableObject {
                 document.reference.updateData(["memberAmount": group.memberAmount+1])
                 
                 print("sucesfully added user to group")
+                joinChat(chatID: group.chatID ?? " ")
                 
                 
             }
@@ -80,26 +92,7 @@ class GroupViewModel: ObservableObject {
             
         }
         
-        userGroupQuery.getDocuments { [self]  (querySnapshot, err) in
-            if let err = err {
-                print("DEBUG: \(err.localizedDescription)")
-                return
-            }
-            if querySnapshot!.documents.count == 0 {
-                print("unable to find group with code: \(publicID)")
-            }
-            
-            for document in querySnapshot!.documents{
-                let group = Group(dictionary: document.data())
-
-                
-                
-                document.reference.updateData(["users":FieldValue.arrayUnion([userVM?.user?.id ?? " "]),"memberAmount": group.memberAmount+1])
-                
-                        }
-            
-            
-        }
+       
     }
     
     func leaveGroup(){
@@ -141,20 +134,19 @@ class GroupViewModel: ObservableObject {
                     "memberLimit" : memberLimit,
                     "publicID" : publicID,
                     "users" : [userVM?.user?.id] ,
-                    "memberAmount": group?.memberAmount ?? 0
+                    "memberAmount": group?.memberAmount ?? 0, "id":UUID().uuidString, "chatID": " "
         ] as [String:Any]
         
         let group = Group(dictionary: data)
+        
+        
+        //adds group to db
+        COLLECTION_GROUP.document(group.id).setData(data)
+        COLLECTION_GROUP.document(group.id).updateData(["id":group.id])
         createChat(group: group)
+
         
-        
-        
-        COLLECTION_GROUP.document(group.id ?? " ").setData(data)
-        //adds group to group db
-        COLLECTION_USER.document(userVM?.user?.id ?? " ").collection("Groups").document(group.id ?? " ").setData(data){ _ in
-            print("DEBUG: Sucessfully created group")
-        }
-        
+        //adds user to group
         joinGroup(publicID: group.publicID ?? " ")
         
         

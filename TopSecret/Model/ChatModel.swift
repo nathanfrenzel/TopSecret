@@ -9,20 +9,25 @@ import Foundation
 import SwiftUI
 
 struct ChatModel : Identifiable {
-    var id: String = UUID().uuidString
+    var id: String
     var name: String?
     var memberAmount: Int?
     var users : [User.ID]?
     var dateCreated: Date?
+    var messages : [Message]?
     
     
     init(dictionary:[String:Any]){
-        self.name = dictionary["name"] as? String ?? " "
+        self.id = dictionary["id"] as? String ?? " "
+        self.name = dictionary["name"] as? String ?? ""
         self.memberAmount = dictionary["memberAmount"] as? Int ?? 0
-        self.users = dictionary["users"] as? [User.ID] ?? [" "]
+        self.users = dictionary["users"] as? [User.ID] ?? []
         self.dateCreated = dictionary["dateCreated"] as? Date ?? Date()
+        self.messages = dictionary["messages"] as? [Message] ?? []
     }
     init(){
-        
+        self.id = UUID().uuidString
     }
+   
+   
 }

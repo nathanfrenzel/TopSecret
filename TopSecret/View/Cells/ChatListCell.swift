@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct ChatListCell: View {
-    var chatName: String = ""
-    var chatMembersCount: Int = 0
+    var chat : ChatModel
     var body: some View {
         HStack{
             VStack{
@@ -20,10 +19,10 @@ struct ChatListCell: View {
             
             VStack{
                 HStack{
-                    Text("\(chatName)").fontWeight(.bold).foregroundColor(Color("Foreground"))
+                    Text("\(chat.name ?? "")").fontWeight(.bold).foregroundColor(Color("Foreground"))
                     Text("@").foregroundColor(Color("AccentColor"))
                     Spacer()
-                    Text("\(chatMembersCount) members").padding(.trailing,15).foregroundColor(Color.gray).font(.footnote)
+                    Text("\(chat.memberAmount ?? 0) members").padding(.trailing,15).foregroundColor(Color.gray).font(.footnote)
                 HStack(alignment: .firstTextBaseline){
                     Text("This is my message")
                 }
@@ -31,10 +30,10 @@ struct ChatListCell: View {
         }
     }
 }
+}
+//struct ChatListCell_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ChatListCell(chat: ChatModel()).preferredColorScheme(.dark)
+//    }
+//}
 
-struct ChatListCell_Previews: PreviewProvider {
-    static var previews: some View {
-        ChatListCell().preferredColorScheme(.dark)
-    }
-}
-}

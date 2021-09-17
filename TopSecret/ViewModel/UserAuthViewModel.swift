@@ -100,9 +100,9 @@ class UserAuthViewModel: ObservableObject {
     }
     
     func fetchChats(){
-        guard let uid = user?.id  else{return}
+        guard let uid = userSession?.uid  else{return}
         
-        COLLECTION_USER.document(uid).collection("Chat").whereField("users", arrayContains: uid).getDocuments { (snapshot, err) in
+        COLLECTION_CHAT.whereField("users", arrayContains: uid).getDocuments { (snapshot, err) in
             guard let documents = snapshot?.documents else{
                 print("No documents")
                 return
@@ -128,7 +128,7 @@ class UserAuthViewModel: ObservableObject {
         guard let uid = userSession?.uid else {return}
         
         
-        COLLECTION_USER.document(uid).collection("Groups").whereField("users", arrayContains: uid).getDocuments { (snapshot, err) in
+        COLLECTION_GROUP.whereField("users", arrayContains: uid).getDocuments { (snapshot, err) in
             guard let documents = snapshot?.documents else{
                 print("No documents")
                 return

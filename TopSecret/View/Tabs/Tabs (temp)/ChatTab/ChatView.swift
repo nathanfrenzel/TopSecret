@@ -11,7 +11,8 @@ struct ChatView: View {
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var groupVM = GroupViewModel()
     @EnvironmentObject var userVM : UserAuthViewModel
-    @ObservedObject var messageVM  = ChatViewModel()
+    @StateObject var messageVM  = ChatViewModel()
+    var chat: ChatModel
     @State var text = ""
     
     var body: some View {
@@ -20,19 +21,20 @@ struct ChatView: View {
             Color("Background")
             VStack{
                 VStack{
-                HStack{
-                    Button(action:{
-                        presentationMode.wrappedValue.dismiss()
-                    },label:{
-                        Text("Back")
-                    })
-                    Spacer()
-                }.padding(.leading,20)
+                    HStack{
+                        Button(action:{
+                            presentationMode.wrappedValue.dismiss()
+                        },label:{
+                            Text("Back")
+                        })
+                        Text("\(chat.name ?? "")")
+                        Spacer()
+                    }.padding(.leading,20)
                     Divider()
                 }.padding(.vertical,30)
                 ScrollView(showsIndicators: false){
                     ForEach(messageVM.messages){ message in
-                        MessageCell(username: message.username, timeStamp: message.timeStamp, text: message.text)
+                        MessageCell(username: message.username ?? "", timeStamp: message.timeStamp ?? Date(), text: message.text ?? "")
                     }
                 }
                 Divider()
@@ -40,29 +42,32 @@ struct ChatView: View {
                 HStack{
                     TextField("message", text: $text)
                     Button(action:{
-                        messageVM.sendMessage(text: text, username: userVM.user?.username ?? " ", timeStamp: Date(), chatID: groupVM.groupChat?.id ?? " ")
-                            
+                        messageVM.sendMessage(message: Message(dictionary: ["text":text,"username":userVM.user?.username ?? "","timeStamp":Date()]), chatID: chat.id )
+                        text = ""
+                  
                     },label:{
                         Text("Send")
                     })
                 }.padding().padding(.bottom,10)
-            
-            
+                
+                
             }.padding(.top,20)
             .navigationBarHidden(true)
-         
-        
+            
+            
         }
         .onAppear{self.groupVM.setupUserVM(self.userVM)
-                                           self.messageVM.setupUserVM(self.userVM)
-        
+            self.messageVM.setupUserVM(self.userVM)
+//            self.messageVM.loadMessages(chatID: chat.id ?? " ")
+            self.messageVM.readAllMessages(chatID: chat.id )
+            print("read messages")
             
         }.edgesIgnoringSafeArea(.all)
     }
 }
 
-struct ChatView_Previews: PreviewProvider {
-    static var previews: some View {
-        ChatView()
-    }
-}
+//struct ChatView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ChatView(chat: ChatModel(dictionary: ))
+//    }
+//}

@@ -53,42 +53,8 @@ struct HomeScreenView: View {
                 }
             }.navigationBarHidden(true)
             .edgesIgnoringSafeArea(.all)
-            .toolbar {
-                
-                ToolbarItem(placement: .navigationBarLeading, content: {
-                    Button(action: { self.settingsOpen.toggle() }, label: {
-                            Image("Hamburger_icon")
-                            .resizable()
-                            .frame(width: 32, height: 32)
-                    })
-                })
-                
-                ToolbarItem(placement: .principal) {
-                    Button(action:{
-                        
-                    }, label:{
-                        Image("FinishedIcon")
-                            .resizable()
-                            .frame(width: 64, height: 64)
-                            .padding(.top, 12)
-                    })
-                   
-                }
-                
-                ToolbarItem(placement: .navigationBarTrailing, content: {
-                    Button(action: {
-                        showCreateGroupView.toggle()
-                    }, label: {
-                        Image(systemName: "person.3.fill")
-                            .resizable()
-                            .frame(width: 32, height: 32)
-                    })
-                })
-              
-            }
-            .sheet(isPresented: $settingsOpen, content: {
-                SettingsMenuView()
-            })
+            
+          
            
             
            
