@@ -35,7 +35,7 @@ class GroupViewModel: ObservableObject {
         let data = ["name": group.groupName ?? " ",
                     "memberAmount":group.memberAmount,
                     "dateCreated":Date(),
-                    "users":[userVM?.user?.id], "id":UUID().uuidString,] as [String : Any]
+                    "users":[userVM?.user?.id], "id":UUID().uuidString] as [String : Any]
         
         let chat = ChatModel(dictionary: data)
         
@@ -44,7 +44,6 @@ class GroupViewModel: ObservableObject {
                 print("Error")
                 return
             }
-            print(chat.id)
         }
        
         COLLECTION_CHAT.document(chat.id).updateData(["id":chat.id])
@@ -54,7 +53,9 @@ class GroupViewModel: ObservableObject {
         
     }
     func joinChat(chatID: String){
+      
         COLLECTION_CHAT.document(chatID).updateData(["users":FieldValue.arrayUnion([userVM?.user?.id ?? ""])])
+        
     }
     
     
@@ -72,6 +73,7 @@ class GroupViewModel: ObservableObject {
             }
             if querySnapshot!.documents.count == 0 {
                 print("unable to find group with code: \(publicID)")
+                return
             }
             
             for document in querySnapshot!.documents{

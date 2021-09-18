@@ -23,9 +23,7 @@ struct ChatListCell: View {
                     Text("@").foregroundColor(Color("AccentColor"))
                     Spacer()
                     Text("\(chat.memberAmount ?? 0) members").padding(.trailing,15).foregroundColor(Color.gray).font(.footnote)
-                HStack(alignment: .firstTextBaseline){
-                    Text("This is my message")
-                }
+              
             }.padding(.trailing,10)
         }
     }

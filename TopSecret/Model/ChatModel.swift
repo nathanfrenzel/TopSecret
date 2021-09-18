@@ -14,7 +14,8 @@ struct ChatModel : Identifiable {
     var memberAmount: Int?
     var users : [User.ID]?
     var dateCreated: Date?
-    var messages : [Message]?
+    var messages : [Message] = [ ]
+    var isPersonal: Bool 
     
     
     init(dictionary:[String:Any]){
@@ -23,10 +24,12 @@ struct ChatModel : Identifiable {
         self.memberAmount = dictionary["memberAmount"] as? Int ?? 0
         self.users = dictionary["users"] as? [User.ID] ?? []
         self.dateCreated = dictionary["dateCreated"] as? Date ?? Date()
-        self.messages = dictionary["messages"] as? [Message] ?? []
+        self.messages = dictionary["messages"] as? [Message] ?? [ ]
+        self.isPersonal = dictionary["isPersonal"] as? Bool ?? false
     }
     init(){
         self.id = UUID().uuidString
+        self.isPersonal = false
     }
    
    

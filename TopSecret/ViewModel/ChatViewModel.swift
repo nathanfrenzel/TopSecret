@@ -23,51 +23,58 @@ class ChatViewModel : ObservableObject {
         self.userVM = userVM
     }
     
-    func loadMessages(chatID: String){
-        COLLECTION_CHAT.document(chatID).collection("Messages").getDocuments { (querySnapshot, err) in
-            if err != nil{
-                print("Error")
-                return
-            }
-            for document in querySnapshot!.documents{
-                self.messages.append(Message(dictionary: document.data()))
-            }
-        }
-    }
+    
     
     func readAllMessages(chatID: String){
+        
+        COLLECTION_CHAT.document(chatID).collection("Messages").addSnapshotListener { (snapshot, err) in
             
-            COLLECTION_CHAT.document(chatID).collection("Messages").addSnapshotListener { (snapshot, err) in
+            if err != nil {
+                print(err!.localizedDescription)
+                return
+            }
+            
+            for doc in snapshot!.documentChanges {
                 
-                if err != nil {
-                    print(err!.localizedDescription)
-                    return
-                }
-
-                for doc in snapshot!.documentChanges {
+                
+                // adding when data is added
+                
+                if doc.type == .added {
+                    let username = doc.document.get("username") as! String
+                    let text = doc.document.get("text") as! String
+                    let timeStamp = doc.document.get("timeStamp") as? Date ?? Date()
+                    let id = doc.document.documentID
                     
+                    self.messages.append(Message(dictionary: ["username":username, "text":text,"timeStamp":timeStamp,"id":id]))
                     
-                    // adding when data is added
-                    
-                    if doc.type == .added {
-                        let username = doc.document.get("username") as? String ?? ""
-                        let text = doc.document.get("text") as! String
-                        let timeStamp = doc.document.get("timeStamp") as? Date ?? Date()
-                        let id = doc.document.documentID
-                        
-                        self.messages.append(Message(dictionary: ["username":username, "text":text,"timeStamp":timeStamp,"id":id]))
-                        
-                        
-                    }
                     
                 }
                 
+            }
+            
             
         }
     }
     
     func sendMessage(message: Message,chatID: String){
-        COLLECTION_CHAT.document(chatID).collection("Messages").addDocument(data: ["text":message.text,"username":message.username])
+        COLLECTION_CHAT.document(chatID).collection("Messages").addDocument(data: ["text":message.text,"username":message.username,"timeStamp":message.timeStamp])
+    }
+    
+    
+    
+    
+    func createChat(isPersonal: Bool, chatName: String){
+        
+        let id = UUID().uuidString
+        let data = ["isPersonal":isPersonal,"name":chatName,"memberAmount":1,"dateCreated":Date(),"users":[userVM?.user?.id],"id":id] as [String : Any]
+        let chat = ChatModel(dictionary: data)
+        COLLECTION_CHAT.document(id).setData(data){(err) in
+            if let err = err{
+                print("Error")
+                return
+            }
+            
+        }
     }
 }
 

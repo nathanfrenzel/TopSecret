@@ -8,14 +8,36 @@
 import SwiftUI
 
 struct AddChatView: View {
-  
+    @State var name: String = ""
+    @Environment(\.presentationMode) var dismiss
+
+    @State var isPersonal: Bool = false
+    @ObservedObject var chatVM = ChatViewModel()
+    @EnvironmentObject var userVM: UserAuthViewModel
     var body: some View {
         ZStack{
             Color("Background")
             VStack{
-           
-             Text("Hello World!")
+                
+                Button(action:{
+                    dismiss.wrappedValue.dismiss()
+                },label:{
+                    Text("Back")
+                })
+                Spacer()
+                TextField("name",text:$name)
+                
+            Toggle("isPersonal", isOn: $isPersonal)
+                
+                Button(action:{
+                    chatVM.createChat(isPersonal: isPersonal, chatName: name)
+                    userVM.fetchChats()
+                },label:{
+                    Text("Create Chat")
+                })
             }
+        }.onAppear{
+            self.chatVM.setupUserVM(userVM)
         }
     }
 }

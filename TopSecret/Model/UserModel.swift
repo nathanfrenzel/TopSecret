@@ -20,7 +20,7 @@ struct User : Identifiable {
 
 
 init(dictionary: [String:Any]) {
-    self.id = dictionary["uid"] as? String ?? ""
+    self.id = dictionary["uid"] as? String ?? " "
     self.username = dictionary["username"] as? String ?? ""
     self.email = dictionary["email"] as? String ?? ""
     self.password = dictionary["password"] as? String ?? ""

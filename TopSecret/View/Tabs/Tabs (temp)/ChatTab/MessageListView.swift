@@ -15,6 +15,8 @@ struct MessageListView: View {
     @State var showAddChat = false
     @ObservedObject var groupVM = GroupViewModel()
     @EnvironmentObject var userVM : UserAuthViewModel
+    @ObservedObject var messageVM  = ChatViewModel()
+
     var body: some View {
         
         
@@ -44,7 +46,7 @@ struct MessageListView: View {
                                 Image(systemName: "plus.message")
                             }).padding(.trailing,20)
                             .sheet(isPresented: $showAddChat, content: {
-                                
+                                AddChatView()
                             })
                         }
                     }.padding(.top,50)
@@ -56,19 +58,40 @@ struct MessageListView: View {
                         }.pickerStyle(SegmentedPickerStyle())
                         Spacer()
                         ScrollView(showsIndicators: false){
+                            if selectedIndex == 0{
                             ForEach(userVM.user?.chats ?? [], id: \.id){ chat in
+                                if !chat.isPersonal{
                                 NavigationLink(
-                                    destination: ChatView(chat: chat),
+                                    destination: ChatView(isPersonal: chat.isPersonal, messageVM: messageVM, chat: chat),
                                     label: {
                                         ChatListCell(chat: chat)
                                     })
+                                
+                                Divider()
+                                }
+                            }
+                                
+                            }else{
+                                ForEach(userVM.user?.chats ?? [], id: \.id){ chat in
+                                    if chat.isPersonal{
+                                    NavigationLink(
+                                        destination: ChatView(isPersonal: chat.isPersonal, messageVM: messageVM, chat: chat),
+                                        label: {
+                                            ChatListCell(chat: chat)
+                                        })
+                                    
+                                    Divider()
+                                    }
+                                }
                             }
 
                             Button(action: {
                                 userVM.fetchChats()
+                                
                             }, label: {
                                 Text("Refresh")
                             })
+                        
                         }
                     }
                     .padding(.top,50)
@@ -109,8 +132,8 @@ struct MessageListView: View {
         }.edgesIgnoringSafeArea(.all)
         .onAppear{
             self.groupVM.setupUserVM(self.userVM)
-        
-        }
+            self.messageVM.setupUserVM(self.userVM)
+        }.navigationBarHidden(true)
        
 
     }

@@ -13,6 +13,7 @@ struct LoginView: View {
     @EnvironmentObject var vm: UserAuthViewModel
     @State var showForgotPasswordView = false
     @State var beginRegisterView: Bool = false
+    @State var value: CGFloat = 0
     var body: some View {
         
         NavigationView {
@@ -57,7 +58,7 @@ struct LoginView: View {
                             Button(action: {
                                 showForgotPasswordView = true
                             },label: {
-                                Text("Forgot Password?").foregroundColor(Color("AccentColor")).font(.system(size: 13)).padding(.trailing,20)
+                                Text("Forgot Password?").foregroundColor(Color("AccentColor")).font(.system(size: 12)).padding(.trailing,30)
                             })
                             
                         }
@@ -69,7 +70,7 @@ struct LoginView: View {
                         Text("Login")   .foregroundColor(Color("Foreground"))
                             .padding(.vertical)
                            .frame(width: UIScreen.main.bounds.width/1.5).background(Color("AccentColor")).cornerRadius(15)
-                    }).padding(.top,50)
+                    }).padding(.top,15)
                     .sheet(isPresented: $showForgotPasswordView, content: {
                         ForgotPasswordView(showForgotPasswordView: $showForgotPasswordView)
                     })
@@ -77,6 +78,19 @@ struct LoginView: View {
                     }.padding(.top,50)
                     
                     Spacer()
+                }.offset(y: -self.value)
+                .animation(.spring())
+                .onAppear{
+                    NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { (noti) in
+                        let value = noti.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! CGRect
+                        let height = value.height/2
+                        self.value = height
+                    }
+                    
+                    NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { (noti) in
+                   
+                        self.value = 0
+                    }
                 }
                 
                 NavigationLink(
