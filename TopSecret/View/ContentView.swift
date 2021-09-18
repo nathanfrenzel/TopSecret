@@ -61,7 +61,7 @@ struct ContentView: View {
                                         .frame(width: 128, height: 128)
                                 }.tag(4)
                                 .onAppear { isShowingNewPostView = true }
-                        }.accentColor(.white)
+                        }.accentColor(Color("TabColor"))
                         .foregroundColor(.gray)
                         .background(Color.gray)
                         .toolbar {
@@ -97,3 +97,9 @@ struct ContentView: View {
 }
 
 
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        /*@START_MENU_TOKEN@*/Text("Hello, World!")/*@END_MENU_TOKEN@*/
+    }
+}

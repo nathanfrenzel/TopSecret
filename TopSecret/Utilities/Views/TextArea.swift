@@ -4,7 +4,6 @@
 //
 //  Created by nathan frenzel on 6/17/21.
 //
-
 import SwiftUI
 
 struct TextArea: View {
@@ -29,5 +28,3 @@ struct TextArea: View {
         }.font(.body)
     }
 }
-
-

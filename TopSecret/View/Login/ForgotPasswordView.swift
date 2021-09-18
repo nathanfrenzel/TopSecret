@@ -2,27 +2,59 @@
 //  ForgotPasswordView.swift
 //  TopSecret
 //
-//  Created by Bruce Blake on 4/13/21.
+//  Created by Bruce Blake on 8/4/21.
 //
 
 import SwiftUI
 
 struct ForgotPasswordView: View {
     
+    @Binding var showForgotPasswordView: Bool
+    @State var email: String = ""
+    @State var isNext: Bool = false
+    @EnvironmentObject var vm: UserAuthViewModel
+
     
     var body: some View {
         ZStack{
-            Color.themeBackground
-                .ignoresSafeArea(.all)
+            Color("Background")
             VStack{
+                
+                Text("Forgot Password?").foregroundColor(Color("Foreground")).fontWeight(.bold).font(.largeTitle).padding(.bottom,10)
+                
+                
+                
+                CustomTextField(text: $email, placeholder: "email", isSecure: false, hasSymbol: false,symbol: "none").padding(.horizontal,20)
+                
+                
+                
                 Button(action: {
-                    //TODO
+                    self.isNext.toggle()
+                    vm.resetPassword(email: email)
                 }, label: {
-                    Text("Press to Dismiss!")
+                    Text("Next")
+                        .foregroundColor(Color("Foreground"))
+                        .padding(.vertical)
+                        .frame(width: UIScreen.main.bounds.width/1.5).background(Color("AccentColor")).cornerRadius(15)
+                }).padding()
+                
+                Button(action: {
+                    showForgotPasswordView.toggle()
+                }, label: {
+                    Text("back")
                 })
-            }
+                Spacer()
+                
+            }.padding(.top,70)
+            
+           
         }
+        
     }
 }
 
-
+struct ForgotPasswordView_Previews: PreviewProvider {
+    static var previews: some View {
+        ForgotPasswordView(showForgotPasswordView: .constant(true)).preferredColorScheme(.dark).environmentObject(UserAuthViewModel())
+    }
+}

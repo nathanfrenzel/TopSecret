@@ -2,120 +2,125 @@
 //  LoginView.swift
 //  TopSecret
 //
-//  Created by Bruce Blake on 4/2/21.
+//  Created by Bruce Blake on 8/3/21.
 //
 
 import SwiftUI
 
 struct LoginView: View {
-    
-    @EnvironmentObject var viewModel : UserAuthViewModel
-    
-    @State var color = Color.black.opacity(0.7)
     @State var email = ""
     @State var password = ""
-    @State var visible = false
-    @State var showForgotPassword = false
-    @Binding var showRegisterView: Bool
+    @EnvironmentObject var vm: UserAuthViewModel
+    @State var showForgotPasswordView = false
+    @State var beginRegisterView: Bool = false
+    @State var value: CGFloat = 0
     var body: some View {
-        ZStack(alignment: .topTrailing){
-            Color.themeBackground
-                .ignoresSafeArea(.all)
-           
-            GeometryReader{ _ in
-               
-                
+        
+        NavigationView {
+            ZStack{
+                //Background color
+                Color("Background")
+                    
+                    //Overal VStack
                 VStack{
                     
                     
-                    Spacer()
-
-                    Text("Log in to your account")
-                        .font(.title)
+                 Spacer()
+                   
+                    
+                 //Icon and Name
+                VStack{
+                    
+                  
+                    Image("FinishedIcon").resizable().aspectRatio(contentMode: .fit).frame(width: 150, height: 150)
+                    Text("Top Secret")
+                        .font(.largeTitle)
                         .fontWeight(.bold)
-                        .foregroundColor(Color.themeForeground)
-                        .padding(.top, 55)
-                    
-                    
-                    TextField("Email", text: self.$email)
-                        .autocapitalization(.none)
-                        .padding()
-                        .background(RoundedRectangle(cornerRadius: 4).stroke(self.email != "" ? Color.themeForeground : self.color, lineWidth: 2))
-                        .padding(.top, 25)
-                    ZStack{
-                        if viewModel.startingLoggingIn{
-                            ProgressView()
-                        }
-                    }
-                    
-                    HStack(spacing: 15){
-                        
-                        VStack{
-                            if self.visible {
-                                TextField("Password", text: self.$password)
-                                    .autocapitalization(.none)
-                            }else{
-                                SecureField("Password", text: self.$password)
-                                    .autocapitalization(.none)
-                                
-                            }
-                        }
-                        
-                        Button(action: {
-                            self.visible.toggle()
-                        }, label: {
-                            Image(systemName: self.visible ? "eye.slash.fill" : "eye.fill")
-                                .foregroundColor(Color.themeForeground)
-                        })
-                    }.padding()
-                    .background(RoundedRectangle(cornerRadius: 4).stroke(self.password != "" ? Color.themeForeground : self.color, lineWidth: 2))
-                    .padding(.top, 25)
-                    
-                    
-                    HStack{
-                        Spacer()
-                        
-                        Button(action: {
-                            self.showForgotPassword.toggle()
-                        }, label: {
-                            Text("Forgot Password?")
-                                .fontWeight(.bold)
-                                .foregroundColor(Color.themeAccent)
-                                .font(.system(size: 12))
-                        })
-                    }
-                    .padding(.bottom,35)
-                    
-                    Button(action: {
-                        if(self.email != "" && self.password != ""){
-                        viewModel.signIn(withEmail: email, password: password)
-                        }
-                    },label: {
-                        Text("Log In")
-                            .foregroundColor(.white)
-                            .padding(.vertical)
-                            .frame(width: UIScreen.main.bounds.width - 50)
-                    })
-                    .background(Color.themeAccent)
-                    .cornerRadius(10)
-                    .padding(.top,25)
-                    
-                    Spacer()
+                        .foregroundColor(Color("Foreground"))
                     
                 }
-                .padding(.horizontal,25)
-            }
-            Button(action: {
-                showRegisterView.toggle()
-                viewModel.startingRegistering = false
-            },label: {
-                Text("Register")
-                    .fontWeight(.bold)
-                    .foregroundColor(Color.themeAccent)
-            }).padding()
+                    
+                    VStack(spacing: 10){
+                        
+                    
+                        //Text Fields
+                    VStack(spacing: 20){
+                    CustomTextField(text: $email, placeholder: "Email", isSecure: false, hasSymbol: true,  symbol: "envelope")
+                        CustomTextField(text: $password, placeholder: "Password", isSecure: true, hasSymbol: true, symbol: "key")
+                           
+                      
+                    }.padding(.horizontal)
+                        //Forgot Password
+                        HStack{
+                          
+                            Spacer()
+                            
+                            Button(action: {
+                                showForgotPasswordView = true
+                            },label: {
+                                Text("Forgot Password?").foregroundColor(Color("AccentColor")).font(.system(size: 12)).padding(.trailing,30)
+                            })
+                            
+                        }
+                        
+
+                    Button(action: {
+                        vm.signIn(withEmail: email, password: password)
+                    }, label: {
+                        Text("Login")   .foregroundColor(Color("Foreground"))
+                            .padding(.vertical)
+                           .frame(width: UIScreen.main.bounds.width/1.5).background(Color("AccentColor")).cornerRadius(15)
+                    }).padding(.top,15)
+                    .sheet(isPresented: $showForgotPasswordView, content: {
+                        ForgotPasswordView(showForgotPasswordView: $showForgotPasswordView)
+                    })
+                    
+                    }.padding(.top,50)
+                    
+                    Spacer()
+                }.offset(y: -self.value)
+                .animation(.spring())
+                .onAppear{
+                    NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { (noti) in
+                        let value = noti.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! CGRect
+                        let height = value.height/2
+                        self.value = height
+                    }
+                    
+                    NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { (noti) in
+                   
+                        self.value = 0
+                    }
+                }
+                
+                NavigationLink(
+                    destination: RegisterEmailView(vm: _vm),
+                    isActive: $beginRegisterView,
+                    label: {
+                        EmptyView()
+                    })
+                    
+                    
+                
+            }.edgesIgnoringSafeArea(.all)
+            .toolbar{
+                ToolbarItem(placement: .navigationBarTrailing){
+                    Button(action: {
+                        self.beginRegisterView.toggle()
+                    },label:{
+                        Text("Register")
+                    })
+                }
+        }
+            
         }
         
+    }
+}
 
+struct LoginView_Previews: PreviewProvider {
+    static var previews: some View {
+        LoginView().preferredColorScheme(.dark).environmentObject(UserAuthViewModel())
     }
 }
 

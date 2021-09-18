@@ -2,12 +2,11 @@
 //  UploadPostViewModel.swift
 //  TopSecret
 //
-//  Created by nathan frenzel on 6/12/21.
+//  Created by nathan frenzel on 9/5/21.
 //
 
 import SwiftUI
 import Firebase
-
 
 class UploadPostViewModel: ObservableObject {
     @Binding var isPresented: Bool
@@ -36,3 +35,5 @@ class UploadPostViewModel: ObservableObject {
         }
     }
 }
+
+
