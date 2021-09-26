@@ -44,7 +44,6 @@ struct ContentView: View {
                     HomeScreenView(vm: _vm)
                         .tabItem {
                             Image(systemName: "house")
-                                
                                 .scaledToFill()
                                 .foregroundColor(.gray)
                                 .frame(width: 128, height: 128)

@@ -45,19 +45,24 @@ struct FullScreenPostView: View, KeyboardReadable {
                             }
                             .font(.system(size: 15, weight: .semibold))
 
-                    }.padding(.leading, geometry.size.width * 0.04)
+                    }
+                    .padding(.leading, geometry.size.width * 0.04)
                     .onTapGesture {
                         dismissKeyboard()
-                    }.navigationBarTitle("Top Secret")
-                    .navigationBarItems(leading: Button(action: { isPresented.toggle(); selectedTab = storedTab }, label: {
+                    }.navigationBarItems(leading: Button(action: { isPresented.toggle(); selectedTab = storedTab }, label: {
                         Text("Cancel")
+                            .padding(.horizontal, 8)
+                            .padding(.trailing, 8)
+                            .padding(.vertical, 8)
+                            .font(.system(size: 18, weight: .bold))
+                            .foregroundColor(Color("AccentColor"))
+                    }), trailing: Button(action: { isPresented.toggle(); selectedTab = storedTab } , label: {
+                        Text("Post")
                             .padding(.horizontal, 12)
                             .padding(.vertical, 8)
-                            .font(.system(size: 15, weight: .semibold))
-                            .background(Color("TabBarColor"))
-                            .foregroundColor(.white)
-                            .cornerRadius(32)
-                    }))
+                            .font(.system(size: 18, weight: .bold))
+                            .foregroundColor(Color("AccentColor"))
+                    })).frame(height: geometry.size.height * 0.1)
                     Spacer()
                    
                     ZStack(alignment:.bottom) {
@@ -71,6 +76,12 @@ struct FullScreenPostView: View, KeyboardReadable {
                         }.frame(width: geometry.size.width * 0.9)
                     }.frame(height: isKeyboardVisible ? geometry.size.height * 0.175 : geometry.size.height * 0.125)
                 }
+            }.toolbar {
+                ToolbarItem(placement: .principal, content: {
+                    Text("Top Secret")
+                        .font(.system(size: 30, weight: .bold))
+                        .foregroundColor(.white)
+                })
             }
         }
     }
