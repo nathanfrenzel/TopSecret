@@ -40,16 +40,20 @@ struct ContentView: View {
                                 .foregroundColor(.gray)
                                 .frame(width: 128, height: 128)
                         }.tag(1)
-                        .onAppear { storedTab = 1 }
+                        .onAppear { storedTab = 1
+                            vm.fetchChats()
+                        }
                     
-                    HomeScreenView(vm: _vm)
+                    HomeScreenView(userVM: _vm)
                         .tabItem {
                             Image(systemName: "house")
                                 .scaledToFill()
                                 .foregroundColor(.gray)
                                 .frame(width: 128, height: 128)
                         }.tag(0)
-                        .onAppear { storedTab = 0 }
+                        .onAppear { storedTab = 0
+                            vm.fetchGroups()
+                        }
                     
                     EventView()
                         .tabItem {
@@ -79,43 +83,3 @@ struct ContentView: View {
     }
 }
 
-//            ZStack{
-//                Color("Background")
-//                ZStack{
-//                    switch(selectedTab){
-//                    case "checkmark":
-//                        VotingView()
-//                    case "message":
-//                        MessageListView(isShowingTabs: $isShowingTabs)
-//                    case "house":
-//                        HomeScreenView()
-//                    case "text.book.closed":
-//                        EventView()
-//                    case "plus":
-//                        AddContentView()
-//                    default:
-//                        HomeScreenView()
-//                    }
-//                    if isShowingTabs{
-//                        VStack{
-//                            Spacer()
-//                            Divider()
-//                            HStack(spacing: 5){
-//                                ForEach(tabs, id: \.self){ tab in
-//                                    Button(action:{
-//                                        selectedTab = tab
-//                                    },label:{
-//                                        Image(systemName: tab)
-//                                            .scaledToFill()
-//                                            .foregroundColor(.gray)
-//                                            .frame(width: 64, height: 64)
-//                                    })
-//                                }
-//                            }
-//                        }
-//                    }
-//
-//
-//
-//                }
-//            }
