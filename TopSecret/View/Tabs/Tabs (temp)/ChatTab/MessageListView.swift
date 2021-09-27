@@ -16,126 +16,115 @@ struct MessageListView: View {
     @ObservedObject var groupVM = GroupViewModel()
     @EnvironmentObject var userVM : UserAuthViewModel
     @ObservedObject var messageVM  = ChatViewModel()
-
+    
     var body: some View {
         
         
         
         ZStack{
             Color("Background")
-
-
+            
+            VStack{
+            VStack{
+                VStack{
+                    HStack{
+                        Button(action:{
+                            //TODO
+                        },label:{
+                            Image(systemName: "gear").resizable().frame(width: 32, height:32).accentColor(Color("AccentColor"))
+                        }).padding(.leading,20)
+                        Spacer()
+                        
+                        Text("Messages").font(.largeTitle).fontWeight(.bold)
+                        
+                        Spacer()
+                        Button(action:{
+                            //TODO
+                            self.showAddChat.toggle()
+                        },label:{
+                            Image(systemName: "plus.message")
+                        }).padding(.trailing,20)
+                        .sheet(isPresented: $showAddChat, content: {
+                            AddChatView()
+                        })
+                    }
+                }.padding(.top,50)
+                
+            }
+            VStack{
+                
+            
             if userVM.user?.chats.count != 0{
                 VStack{
-                    VStack{
-                        HStack{
-                            Button(action:{
-                                //TODO
-                            },label:{
-                                Image(systemName: "gear").resizable().frame(width: 32, height:32).accentColor(Color("AccentColor"))
-                            }).padding(.leading,20)
-                            Spacer()
-
-                            Text("Messages").font(.largeTitle).fontWeight(.bold)
-
-                            Spacer()
-                            Button(action:{
-                                //TODO
-                                self.showAddChat.toggle()
-                            },label:{
-                                Image(systemName: "plus.message")
-                            }).padding(.trailing,20)
-                            .sheet(isPresented: $showAddChat, content: {
-                                AddChatView()
-                            })
+                    Picker("Options",selection: $selectedIndex){
+                        ForEach(0..<options.count){ index in
+                            Text(self.options[index]).tag(index)
                         }
-                    }.padding(.top,50)
-                    VStack{
-                        Picker("Options",selection: $selectedIndex){
-                            ForEach(0..<options.count){ index in
-                                Text(self.options[index]).tag(index)
-                            }
-                        }.pickerStyle(SegmentedPickerStyle())
-                        Spacer()
-                        ScrollView(showsIndicators: false){
-                            if selectedIndex == 0{
+                    }.pickerStyle(SegmentedPickerStyle())
+                    Spacer()
+                    ScrollView(showsIndicators: false){
+                        if selectedIndex == 0{
                             ForEach(userVM.user?.chats ?? [], id: \.id){ chat in
                                 if !chat.isPersonal{
-                                NavigationLink(
-                                    destination: ChatView(isPersonal: chat.isPersonal, messageVM: messageVM, chat: chat),
-                                    label: {
-                                        ChatListCell(chat: chat)
-                                    })
-                                
-                                Divider()
-                                }
-                            }
-                                
-                            }else{
-                                ForEach(userVM.user?.chats ?? [], id: \.id){ chat in
-                                    if chat.isPersonal{
                                     NavigationLink(
-                                        destination: ChatView(isPersonal: chat.isPersonal, messageVM: messageVM, chat: chat),
+                                        destination: ChatView(uid: userVM.user?.id ?? "", isPersonal: chat.isPersonal, messageVM: messageVM, chat: chat),
                                         label: {
                                             ChatListCell(chat: chat)
                                         })
                                     
                                     Divider()
-                                    }
                                 }
                             }
-
-                            Button(action: {
-                                userVM.fetchChats()
-                                
-                            }, label: {
-                                Text("Refresh")
-                            })
-                        
+                            
+                        }else{
+                            ForEach(userVM.user?.chats ?? [], id: \.id){ chat in
+                                if chat.isPersonal{
+                                    NavigationLink(
+                                        destination: ChatView(uid: userVM.user?.id ?? "", isPersonal: chat.isPersonal, messageVM: messageVM, chat: chat),
+                                        label: {
+                                            ChatListCell(chat: chat)
+                                        })
+                                    
+                                    Divider()
+                                }
+                            }
                         }
+                        
+                        Button(action: {
+                            userVM.fetchChats()
+                            
+                        }, label: {
+                            Text("Refresh")
+                        })
+                        
                     }
-                    .padding(.top,50)
                 }
+                .padding(.top,50)
             }
-
+            
             else{
                 VStack{
-                    VStack{
-                        HStack{
-                            Button(action:{
-                                //TODO
-                            },label:{
-                                Image(systemName: "gear").resizable().frame(width: 32, height:32).accentColor(Color("AccentColor"))
-                            }).padding(.leading,20)
-                            Spacer()
-
-                            Text("Messages").font(.largeTitle).fontWeight(.bold)
-
-                            Spacer()
-                            Button(action:{
-                                //TODO
-                            },label:{
-                                Image(systemName: "plus.message")
-                            }).padding(.trailing,20)
-                        }
-                    }.padding(.top,50)
+                  
                     Spacer()
                     Text("It looks like you don't have any chats!")
                         .padding(.top,50)
                     Spacer()
                 }
-
+                
             }
-
-         
-
-        }.edgesIgnoringSafeArea(.all)
+            
+            }
+            
+        }
         .onAppear{
             self.groupVM.setupUserVM(self.userVM)
             self.messageVM.setupUserVM(self.userVM)
+        }
+            
         }.navigationBarHidden(true)
-       
-
+        .edgesIgnoringSafeArea(.all)
+        
+        
     }
 }
 

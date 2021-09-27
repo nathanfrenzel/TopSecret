@@ -11,6 +11,7 @@ import SwiftUI
 
 struct Message : Identifiable{
     var id: String
+    var nameColor: String?
     var text : String?
     var timeStamp : Date?
     var username : String?
@@ -21,6 +22,7 @@ struct Message : Identifiable{
         self.timeStamp = dictionary["timeStamp"] as? Date ?? Date()
         self.username = dictionary["username"] as? String ?? " "
         self.id = dictionary["id"] as? String ?? " "
+        self.nameColor = dictionary["nameColor"] as? String ?? " "
     }
     init(){
         self.id = UUID().uuidString

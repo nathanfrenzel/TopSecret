@@ -11,8 +11,10 @@ struct ChatView: View {
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var groupVM = GroupViewModel()
     @EnvironmentObject var userVM : UserAuthViewModel
-    var isPersonal: Bool 
+    var uid: String
+    var isPersonal: Bool
     var messageVM: ChatViewModel
+    @State var infoScreen: Bool = false
     var chat: ChatModel
     @State var value: CGFloat = 0
     @State var text = ""
@@ -28,16 +30,32 @@ struct ChatView: View {
             }).padding().padding(.top,30)
             VStack{
                 VStack{
+                  
                     HStack{
                        Spacer()
-                        Text("\(chat.name ?? "")")
-                        Spacer()
+                       
+                        VStack{
+                            Circle()
+                                .frame(width:50,height:50).foregroundColor(Color("AccentColor"))
+                            Text("\(chat.name ?? "")")
+                            Text("\(chat.memberAmount) members").foregroundColor(.gray).opacity(0.5)
+                        }.padding(.leading,10)
+
+                           Spacer()
+                       
+                        Button(action:{
+                            infoScreen.toggle()
+                        },label:{
+                            Text("Info")
+                        }).fullScreenCover(isPresented: $infoScreen, content: {
+                            ChatInfoView(chat: chat)
+                        }).padding(.trailing,20)
                     }
                     Divider()
-                }.padding(.top,60)
+                }.padding(.top,40)
                 ScrollView(showsIndicators: false){
                     ForEach(messageVM.messages){ message in
-                        MessageCell(username: message.username ?? "", timeStamp: message.timeStamp ?? Date(), text: message.text ?? "")
+                        MessageCell(username: message.username ?? "", timeStamp: message.timeStamp ?? Date(), nameColor: message.nameColor ?? "red", text: message.text ?? "")
                     }
                 }
                
@@ -47,7 +65,7 @@ struct ChatView: View {
                    
                     TextField("message", text: $text)
                     Button(action:{
-                        messageVM.sendMessage(message: Message(dictionary: ["text":text,"username":userVM.user?.username ?? "","timeStamp":Date()]), chatID: chat.id )
+                        messageVM.sendMessage(message: Message(dictionary: ["text":text,"username":userVM.user?.username ?? "","timeStamp":Date(), "nameColor":messageVM.colors[chat.users.firstIndex(of: uid) ?? 0]]), chatID: chat.id)
                         text = ""
                   
                     },label:{
@@ -76,10 +94,10 @@ struct ChatView: View {
             
         }
         .onAppear{self.groupVM.setupUserVM(self.userVM)
-           
-//            self.messageVM.loadMessages(chatID: chat.id ?? " ")
+            messageVM.setupUserVM(self.userVM)
             messageVM.readAllMessages(chatID: chat.id )
             print("read messages")
+         
             
         }.edgesIgnoringSafeArea(.all)
     }

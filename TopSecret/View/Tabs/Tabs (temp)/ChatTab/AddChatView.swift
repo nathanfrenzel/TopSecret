@@ -30,7 +30,7 @@ struct AddChatView: View {
             Toggle("isPersonal", isOn: $isPersonal)
                 
                 Button(action:{
-                    chatVM.createChat(isPersonal: isPersonal, chatName: name)
+                    chatVM.createChat(name: name, userID: userVM.user?.id ?? " ")
                     userVM.fetchChats()
                 },label:{
                     Text("Create Chat")
@@ -38,6 +38,7 @@ struct AddChatView: View {
             }
         }.onAppear{
             self.chatVM.setupUserVM(userVM)
+            
         }
     }
 }

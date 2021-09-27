@@ -114,8 +114,9 @@ class UserAuthViewModel: ObservableObject {
 
                 let chat = ChatModel(dictionary: data)
                 
+                
                
-                print(chat.name ?? "no group")
+             
 
                 return chat
 
@@ -140,17 +141,6 @@ class UserAuthViewModel: ObservableObject {
 
                 let group = Group(dictionary: data)
                 
-                if group.memberAmount == 0{
-                    COLLECTION_GROUP.document(group.id ?? "").delete() { err in
-                        
-                        if let err = err {
-                            print("Unable to delete document")
-                        }else{
-                            print("sucessfully deleted document")
-                        }
-                        
-                    }
-                }
 
                 return group
                

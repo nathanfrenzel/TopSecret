@@ -20,12 +20,11 @@ struct ChatListCell: View {
             VStack{
                 HStack{
                     Text("\(chat.name ?? "")").fontWeight(.bold).foregroundColor(Color("Foreground"))
-                    Text("@").foregroundColor(Color("AccentColor"))
-                    Spacer()
-                    Text("\(chat.memberAmount ?? 0) members").padding(.trailing,15).foregroundColor(Color.gray).font(.footnote)
+                    
               
             }.padding(.trailing,10)
         }
+            Spacer()
     }
 }
 }

@@ -59,17 +59,7 @@ struct RegisterEmailView: View {
                         },label:{Text("I want to use my phone number").font(.body)})
                         
                         
-                        //FOR TESTING
-                        
-                        Button(action: {
-                            self.isNext.toggle()
-                            vm.email = email
-                        }, label: {
-                            Text("Skip (FOR TESTING)")
-                                .foregroundColor(Color("Foreground"))
-                                .padding(.vertical)
-                                .frame(width: UIScreen.main.bounds.width/1.5).background(Color.green).cornerRadius(15)
-                        }).padding()
+                    
                     }
                     
                     Spacer()

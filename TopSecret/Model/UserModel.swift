@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 struct User : Identifiable {
     var id : String?

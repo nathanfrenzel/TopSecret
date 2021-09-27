@@ -20,6 +20,7 @@
 		62CE5AE226DEE48600AE6ACC /* HomeScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62CE5AE126DEE48600AE6ACC /* HomeScreenView.swift */; };
 		62CE5AE426DEE62300AE6ACC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 62CE5AE326DEE62300AE6ACC /* GoogleService-Info.plist */; };
 		7839C05626E9084E000B8722 /* ChatModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7839C05526E9084E000B8722 /* ChatModel.swift */; };
+		787E2DA326FB9CCB00670DA4 /* ChatInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787E2DA226FB9CCB00670DA4 /* ChatInfoView.swift */; };
 		7894BD3426EB9814008FCE55 /* TextArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7894BD3326EB9814008FCE55 /* TextArea.swift */; };
 		789FC2C72617DA700021616B /* TopSecretApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 789FC2C62617DA700021616B /* TopSecretApp.swift */; };
 		789FC2CB2617DA720021616B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 789FC2CA2617DA720021616B /* Assets.xcassets */; };
@@ -54,6 +55,9 @@
 		78D1A75626DEFE4F0083FE2C /* GroupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D1A75526DEFE4F0083FE2C /* GroupViewModel.swift */; };
 		78D1A75926DEFE750083FE2C /* GroupModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D1A75826DEFE750083FE2C /* GroupModel.swift */; };
 		78D1A75D26DF16D50083FE2C /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D1A75C26DF16D50083FE2C /* ChatView.swift */; };
+		78E938D226FCB573006D630F /* GroupListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78E938D126FCB573006D630F /* GroupListCell.swift */; };
+		78E938D526FCC907006D630F /* GroupProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78E938D426FCC907006D630F /* GroupProfileView.swift */; };
+		78E938D826FE3722006D630F /* GroupUsersListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78E938D726FE3722006D630F /* GroupUsersListCell.swift */; };
 		78F758E026F0F50900EBF489 /* TestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F758DF26F0F50900EBF489 /* TestModel.swift */; };
 		78F758E326F0F5A700EBF489 /* TestViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F758E226F0F5A700EBF489 /* TestViewModel.swift */; };
 /* End PBXBuildFile section */
@@ -71,6 +75,7 @@
 		62CE5AE126DEE48600AE6ACC /* HomeScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenView.swift; sourceTree = "<group>"; };
 		62CE5AE326DEE62300AE6ACC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../TopSecret/TopSecret/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7839C05526E9084E000B8722 /* ChatModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatModel.swift; sourceTree = "<group>"; };
+		787E2DA226FB9CCB00670DA4 /* ChatInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatInfoView.swift; sourceTree = "<group>"; };
 		7894BD3326EB9814008FCE55 /* TextArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextArea.swift; sourceTree = "<group>"; };
 		789FC2C32617DA700021616B /* TopSecret.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TopSecret.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		789FC2C62617DA700021616B /* TopSecretApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSecretApp.swift; sourceTree = "<group>"; };
@@ -101,6 +106,9 @@
 		78D1A75526DEFE4F0083FE2C /* GroupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupViewModel.swift; sourceTree = "<group>"; };
 		78D1A75826DEFE750083FE2C /* GroupModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupModel.swift; sourceTree = "<group>"; };
 		78D1A75C26DF16D50083FE2C /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
+		78E938D126FCB573006D630F /* GroupListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupListCell.swift; sourceTree = "<group>"; };
+		78E938D426FCC907006D630F /* GroupProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupProfileView.swift; sourceTree = "<group>"; };
+		78E938D726FE3722006D630F /* GroupUsersListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupUsersListCell.swift; sourceTree = "<group>"; };
 		78F758DF26F0F50900EBF489 /* TestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestModel.swift; sourceTree = "<group>"; };
 		78F758E226F0F5A700EBF489 /* TestViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -304,6 +312,7 @@
 				78D1A74126DEDF320083FE2C /* MessageListView.swift */,
 				78D1A75C26DF16D50083FE2C /* ChatView.swift */,
 				78B7C77226F4D4CA001244D7 /* AddChatView.swift */,
+				787E2DA226FB9CCB00670DA4 /* ChatInfoView.swift */,
 			);
 			path = ChatTab;
 			sourceTree = "<group>";
@@ -313,6 +322,8 @@
 			children = (
 				78D1A74A26DEF08F0083FE2C /* ChatListCell.swift */,
 				78B8DFF826E551D300C99DAD /* MessageCell.swift */,
+				78E938D126FCB573006D630F /* GroupListCell.swift */,
+				78E938D726FE3722006D630F /* GroupUsersListCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -321,6 +332,7 @@
 			isa = PBXGroup;
 			children = (
 				78D1A75126DEFE370083FE2C /* CreateGroupView.swift */,
+				78E938D426FCC907006D630F /* GroupProfileView.swift */,
 			);
 			path = Groups;
 			sourceTree = "<group>";
@@ -411,6 +423,7 @@
 				78D1A74226DEDF320083FE2C /* MessageListView.swift in Sources */,
 				78D1A73426DEC56F0083FE2C /* EnterBirthday.swift in Sources */,
 				62CE5ADA26DEE44E00AE6ACC /* VotingView.swift in Sources */,
+				787E2DA326FB9CCB00670DA4 /* ChatInfoView.swift in Sources */,
 				78D1A75D26DF16D50083FE2C /* ChatView.swift in Sources */,
 				7839C05626E9084E000B8722 /* ChatModel.swift in Sources */,
 				78D1A75226DEFE370083FE2C /* CreateGroupView.swift in Sources */,
@@ -424,6 +437,7 @@
 				6297110526E6CB7000A90E61 /* KeyboardReadable.swift in Sources */,
 				62CE5AE226DEE48600AE6ACC /* HomeScreenView.swift in Sources */,
 				78D1A75926DEFE750083FE2C /* GroupModel.swift in Sources */,
+				78E938D826FE3722006D630F /* GroupUsersListCell.swift in Sources */,
 				78A61F0D26B9B79800671021 /* LoginView.swift in Sources */,
 				629710FA26E563E400A90E61 /* FullScreenPostView.swift in Sources */,
 				629710FC26E5662E00A90E61 /* PostViewFilterOptions.swift in Sources */,
@@ -436,7 +450,9 @@
 				78B8DFF926E551D300C99DAD /* MessageCell.swift in Sources */,
 				789FC2C72617DA700021616B /* TopSecretApp.swift in Sources */,
 				78B2379526DD159100052E69 /* ContentView.swift in Sources */,
+				78E938D526FCC907006D630F /* GroupProfileView.swift in Sources */,
 				78D1A73126DEC3D50083FE2C /* EnterFullName.swift in Sources */,
+				78E938D226FCB573006D630F /* GroupListCell.swift in Sources */,
 				78F758E026F0F50900EBF489 /* TestModel.swift in Sources */,
 				78D1A72E26DEA1590083FE2C /* CreateUsername.swift in Sources */,
 				78D1A74E26DEF0BD0083FE2C /* TabToolbarItemView.swift in Sources */,

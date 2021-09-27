@@ -16,6 +16,7 @@ class GroupViewModel: ObservableObject {
     @Published var groupChat : ChatModel?
     
     var userVM: UserAuthViewModel?
+    var chatVM = ChatViewModel()
     
     
     
@@ -28,38 +29,15 @@ class GroupViewModel: ObservableObject {
         
     }
     
-    func createChat(group: Group){
-        
-        
-        
-        let data = ["name": group.groupName ?? " ",
-                    "memberAmount":group.memberAmount,
-                    "dateCreated":Date(),
-                    "users":[userVM?.user?.id], "id":UUID().uuidString] as [String : Any]
-        
-        let chat = ChatModel(dictionary: data)
-        
-        COLLECTION_CHAT.document(chat.id).setData(data) { (err) in
-            if let err = err{
-                print("Error")
-                return
-            }
-        }
-       
-        COLLECTION_CHAT.document(chat.id).updateData(["id":chat.id])
-        COLLECTION_GROUP.document(group.id).updateData(["chatID":chat.id])
-
-     
-        
-    }
-    func joinChat(chatID: String){
-      
-        COLLECTION_CHAT.document(chatID).updateData(["users":FieldValue.arrayUnion([userVM?.user?.id ?? ""])])
-        
+    func setupChatVM(_ chatVM: ChatViewModel){
+        self.chatVM = chatVM
     }
     
     
-    func joinGroup(publicID: String){
+   
+    
+    
+    func joinGroup(publicID: String, userID: String){
         
         
         //this finds the group in group list and adds user to its user list
@@ -81,11 +59,11 @@ class GroupViewModel: ObservableObject {
                 let group = Group(dictionary: document.data())
                 
                 //updates the list of users
-                document.reference.updateData(["users":FieldValue.arrayUnion([userVM?.user?.id ?? " "])])
-                document.reference.updateData(["memberAmount": group.memberAmount+1])
+                document.reference.updateData(["users":FieldValue.arrayUnion([userID])])
+                document.reference.updateData(["memberAmount": FieldValue.increment(Int64(1))])
                 
                 print("sucesfully added user to group")
-                joinChat(chatID: group.chatID ?? " ")
+                chatVM.joinChat(chatID: group.chatID ?? " ", userID: userID)
                 
                 
             }
@@ -97,35 +75,61 @@ class GroupViewModel: ObservableObject {
        
     }
     
-    func leaveGroup(){
-        let groupQuery = COLLECTION_GROUP.whereField("users", arrayContains: userVM?.user?.id ?? "")
+//    func displayGroupList(){
+//        let uid = userVM?.user?.id
+//        COLLECTION_GROUP.whereField("users", arrayContains: uid).addSnapshotListener { (snapshot, err) in
+//            if err != nil{
+//                print("ERROR")
+//                return
+//            }
+//            for doc in snapshot!.documentChanges{
+//                if doc.type == .added{
+//                    self.userVM?.fetchGroups()
+//                }
+//            }
+//        }
+//    }
+    
+    func leaveGroup(groupID: String, userID: String){
+        COLLECTION_GROUP.document(groupID).updateData(["memberAmount": FieldValue.increment(Int64(-1))])
+        COLLECTION_GROUP.document(groupID).updateData(["users":FieldValue.arrayRemove([userID])])
+        userVM?.fetchGroups()
         
-        groupQuery.getDocuments { [self]  (querySnapshot, err) in
-            if let err = err {
-                print("DEBUG: \(err.localizedDescription)")
+        COLLECTION_GROUP.document(groupID).getDocument { (snapshot, err) in
+            if err != nil{
+                print("ERROR")
                 return
             }
+            let groupChatID = snapshot?.get("chatID") as? String ?? " "
+            self.chatVM.leaveChat(chatID: groupChatID, userID: userID)
+
+        }
+        
+
+        COLLECTION_GROUP.document(groupID).getDocument { (snapshot, err) in
+            if err != nil{
+                print("ERROR")
+                return
+            }
+            let users = snapshot?.get("users") as? [String] ?? []
             
-            for document in querySnapshot!.documents{
-                
-                let group = Group(dictionary: document.data())
-                
-                
-                //updates the list of users
-                document.reference.updateData(["users":FieldValue.arrayRemove([userVM?.user?.id ?? " "])])
-                document.reference.updateData(["memberAmount": group.memberAmount-1])
-                
-                print("sucesfully removed user from group")
-                
-                
+            if users.count <= 0{
+                COLLECTION_GROUP.document(groupID).delete() { err in
+                    
+                    if err != nil {
+                        print("Unable to delete document")
+                    }else{
+                        print("sucessfully deleted document")
+                    }
+                    
+                }
             }
         }
         
-        
-        
-        
+
     }
     
+
     
     func createGroup(groupName: String, memberLimit: Int, dateCreated: Date, publicID: String){
         
@@ -136,7 +140,7 @@ class GroupViewModel: ObservableObject {
                     "memberLimit" : memberLimit,
                     "publicID" : publicID,
                     "users" : [userVM?.user?.id] ,
-                    "memberAmount": group?.memberAmount ?? 0, "id":UUID().uuidString, "chatID": " "
+                    "memberAmount": 1, "id":UUID().uuidString, "chatID": " "
         ] as [String:Any]
         
         let group = Group(dictionary: data)
@@ -144,12 +148,15 @@ class GroupViewModel: ObservableObject {
         
         //adds group to db
         COLLECTION_GROUP.document(group.id).setData(data)
-        COLLECTION_GROUP.document(group.id).updateData(["id":group.id])
-        createChat(group: group)
+        
+        
+        
+        let chatID = chatVM.createChat(name: group.groupName ?? "",userID: userVM?.user?.id ?? " ")
+        COLLECTION_GROUP.document(group.id).updateData(["chatID":chatID ])
+
 
         
-        //adds user to group
-        joinGroup(publicID: group.publicID ?? " ")
+    
         
         
         

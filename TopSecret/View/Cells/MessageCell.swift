@@ -10,6 +10,7 @@ import SwiftUI
 struct MessageCell: View {
     var username: String
     var timeStamp: Date
+    var nameColor: String
     var text: String
     
     var body: some View {
@@ -18,7 +19,7 @@ struct MessageCell: View {
                 .frame(width:50,height:50).foregroundColor(Color("AccentColor"))
             VStack(alignment: .leading){
                 HStack{
-                    Text("\(username)")
+                    Text("\(username)").foregroundColor(Color(nameColor))
                     Text("*")
                     Text("\(timeStamp, style: .time)")
                     Spacer()
