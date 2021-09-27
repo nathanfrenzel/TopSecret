@@ -30,7 +30,8 @@ struct ContentView: View {
                                 .foregroundColor(.gray)
                                 .frame(width: 128, height: 128)
                         }.tag(2)
-                        .onAppear { storedTab = 2 }
+                        .onAppear { storedTab = 2
+                        }
                     
                     MessageListView()
                         .tabItem {
