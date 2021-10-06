@@ -19,12 +19,13 @@ struct ChatModel : Identifiable {
     var chatNameColors : [String]?  //Colors
     var nextColor: Int? //index for colors
     var pickedColors: [String]? //Picked chat name colors
+    var groupID : String?
     
     
     
     init(dictionary:[String:Any]){
         self.id = dictionary["id"] as? String ?? " "
-        self.name = dictionary["name"] as? String ?? ""
+        self.name = dictionary["name"] as? String ?? " "
         self.memberAmount = dictionary["memberAmount"] as? Int ?? 1
         self.users = dictionary["users"] as? [User.ID] ?? []
         self.dateCreated = dictionary["dateCreated"] as? Date ?? Date()
@@ -33,6 +34,7 @@ struct ChatModel : Identifiable {
         self.chatNameColors = dictionary["chatNameColors"] as? [String] ?? []
         self.nextColor = dictionary["nextColor"] as? Int ?? 0
         self.pickedColors = dictionary["pickedColors"] as? [String] ?? []
+        self.groupID = dictionary["groupID"] as? String ?? " "
     }
     init(){
         self.id = UUID().uuidString

@@ -9,7 +9,9 @@ import SwiftUI
 
 struct GroupProfileView: View {
     @Environment(\.presentationMode) var presentationMode
-    @ObservedObject var groupVM = GroupViewModel()
+    @StateObject var groupVM = GroupViewModel()
+    @StateObject var pollVM = PollViewModel()
+    @State var question = ""
     @EnvironmentObject var userVM: UserAuthViewModel
     var group: Group
     var body: some View {
@@ -19,6 +21,15 @@ struct GroupProfileView: View {
             VStack{
                 Spacer()
                 Text(group.groupName ?? "").foregroundColor(Color("Foreground"))
+                
+                TextField("Question", text: $question)
+                
+                Button(action:{
+                    pollVM.createPoll(creator: userVM.user?.username ?? "", question: question, group: group)
+                },label:{
+                    Text("Create Poll")
+                })
+                
             Button(action:{
                 presentationMode.wrappedValue.dismiss()
             },label:{

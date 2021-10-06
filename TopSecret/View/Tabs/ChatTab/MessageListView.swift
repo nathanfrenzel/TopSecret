@@ -45,7 +45,7 @@ struct MessageListView: View {
                             Image(systemName: "plus.message")
                         }).padding(.trailing,20)
                         .sheet(isPresented: $showAddChat, content: {
-                            AddChatView()
+                            AddChatView(chatVM: messageVM)
                         })
                     }
                 }.padding(.top,50)
@@ -67,7 +67,7 @@ struct MessageListView: View {
                             ForEach(userVM.user?.chats ?? [], id: \.id){ chat in
                                 if !chat.isPersonal{
                                     NavigationLink(
-                                        destination: ChatView(uid: userVM.user?.id ?? "", isPersonal: chat.isPersonal, messageVM: messageVM, chat: chat),
+                                        destination: ChatView(groupVM: groupVM, uid: userVM.user?.id ?? "",  chatVM: messageVM, chat: chat),
                                         label: {
                                             ChatListCell(chat: chat)
                                         })
@@ -80,7 +80,7 @@ struct MessageListView: View {
                             ForEach(userVM.user?.chats ?? [], id: \.id){ chat in
                                 if chat.isPersonal{
                                     NavigationLink(
-                                        destination: ChatView(uid: userVM.user?.id ?? "", isPersonal: chat.isPersonal, messageVM: messageVM, chat: chat),
+                                        destination: ChatView(groupVM: groupVM, uid: userVM.user?.id ?? "",  chatVM: messageVM, chat: chat),
                                         label: {
                                             ChatListCell(chat: chat)
                                         })

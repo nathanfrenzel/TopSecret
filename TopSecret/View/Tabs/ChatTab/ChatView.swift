@@ -6,20 +6,24 @@
 //
 
 import SwiftUI
-
+import Firebase
 struct ChatView: View {
     @Environment(\.presentationMode) var presentationMode
-    @ObservedObject var groupVM = GroupViewModel()
+    var groupVM : GroupViewModel
     @EnvironmentObject var userVM : UserAuthViewModel
-    var uid: String
-    var isPersonal: Bool
-    var messageVM: ChatViewModel
-    @State var infoScreen: Bool = false
-    var chat: ChatModel
+    
+    
     @State var value: CGFloat = 0
     @State var text = ""
+    @State var infoScreen: Bool = false
+    @State var showOverlay: Bool = false
+
+    var uid: String
+    var chatVM: ChatViewModel
+    var chat: ChatModel
     
     var body: some View {
+        
         
         ZStack(alignment: .topLeading){
             Color("Background")
@@ -28,8 +32,10 @@ struct ChatView: View {
             },label:{
                 Text("Back")
             }).padding().padding(.top,30)
+            
+            ZStack{
             VStack{
-                VStack{
+                
                   
                     HStack{
                        Spacer()
@@ -41,22 +47,24 @@ struct ChatView: View {
                             Text("\(chat.memberAmount) members").foregroundColor(.gray).opacity(0.5)
                         }.padding(.leading,10)
 
-                           Spacer()
-                       
-                        Button(action:{
-                            infoScreen.toggle()
-                        },label:{
-                            Text("Info")
-                        }).fullScreenCover(isPresented: $infoScreen, content: {
-                            ChatInfoView(chat: chat)
-                        }).padding(.trailing,20)
-                    }
+                          Spacer()
+                        
+                         Button(action:{
+                             infoScreen.toggle()
+                         },label:{
+                             Text("Info")
+                         }).fullScreenCover(isPresented: $infoScreen, content: {
+                            ChatInfoView(chat: chat, chatVM: chatVM, groupVM: groupVM)
+                         }).padding(.trailing,20).padding(.top,20)
+                        
+                    }.padding(.top,20)
                     Divider()
-                }.padding(.top,40)
+                
                 ScrollView(showsIndicators: false){
-                    ForEach(messageVM.messages){ message in
-                        MessageCell(username: message.username ?? "", timeStamp: message.timeStamp ?? Date(), nameColor: message.nameColor ?? "red", text: message.text ?? "")
+                    ForEach(chatVM.messages){ message in
+                        MessageCell(username: message.username ?? "", timeStamp: message.timeStamp ?? Timestamp(), nameColor: message.nameColor ?? "red", showOverlay: $showOverlay, text: message.text ?? "")
                     }
+                    
                 }
                
                 VStack{
@@ -65,7 +73,9 @@ struct ChatView: View {
                    
                     TextField("message", text: $text)
                     Button(action:{
-                        messageVM.sendMessage(message: Message(dictionary: ["text":text,"username":userVM.user?.username ?? "","timeStamp":Date(), "nameColor":messageVM.colors[chat.users.firstIndex(of: uid) ?? 0]]), chatID: chat.id)
+                        if text != ""{
+                        chatVM.sendMessage(message: Message(dictionary: ["text":text,"username":userVM.user?.username ?? "","timeStamp":Date(), "nameColor":chatVM.colors[chat.users.firstIndex(of: uid) ?? 0]]), chatID: chat.id)
+                        }
                         text = ""
                   
                     },label:{
@@ -87,16 +97,22 @@ struct ChatView: View {
                     }
                 }
                 
+                   
                 
             }.padding(.top,20)
             .navigationBarHidden(true)
-            
+                if showOverlay {
+                    
+                    MessagePopup(isPresented: showOverlay)
+                }
+            }
             
         }
         .onAppear{self.groupVM.setupUserVM(self.userVM)
-            messageVM.setupUserVM(self.userVM)
-            messageVM.readAllMessages(chatID: chat.id )
-            print("read messages")
+            chatVM.setupUserVM(self.userVM)
+            chatVM.readAllMessages(chatID: chat.id )
+         
+            
          
             
         }.edgesIgnoringSafeArea(.all)
@@ -105,6 +121,6 @@ struct ChatView: View {
 
 //struct ChatView_Previews: PreviewProvider {
 //    static var previews: some View {
-//        ChatView(chat: ChatModel(dictionary: ))
+//        ChatView(chat: ChatModel())
 //    }
 //}

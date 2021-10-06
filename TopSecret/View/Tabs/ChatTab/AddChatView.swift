@@ -11,8 +11,7 @@ struct AddChatView: View {
     @State var name: String = ""
     @Environment(\.presentationMode) var dismiss
 
-    @State var isPersonal: Bool = false
-    @ObservedObject var chatVM = ChatViewModel()
+    var chatVM : ChatViewModel
     @EnvironmentObject var userVM: UserAuthViewModel
     var body: some View {
         ZStack{
@@ -27,7 +26,6 @@ struct AddChatView: View {
                 Spacer()
                 TextField("name",text:$name)
                 
-            Toggle("isPersonal", isOn: $isPersonal)
                 
                 Button(action:{
                     chatVM.createChat(name: name, userID: userVM.user?.id ?? " ")
@@ -43,8 +41,8 @@ struct AddChatView: View {
     }
 }
 
-struct AddChatView_Previews: PreviewProvider {
-    static var previews: some View {
-        AddChatView()
-    }
-}
+//struct AddChatView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        AddChatView()
+//    }
+//}

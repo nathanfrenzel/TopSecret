@@ -21,7 +21,7 @@ class GroupViewModel: ObservableObject {
     
     
     init(){
-        userVM?.fetchGroups()
+        listen()
     }
     
     func setupUserVM(_ userVM: UserAuthViewModel){
@@ -34,7 +34,61 @@ class GroupViewModel: ObservableObject {
     }
     
     
-   
+    
+    func listen(){
+        COLLECTION_GROUP.addSnapshotListener { (snapshot, err) in
+            if err != nil{
+                print("Error")
+                return
+            }
+            for doc in snapshot!.documentChanges{
+                if doc.type == .removed{
+                    self.userVM?.user?.groups = []
+                    COLLECTION_GROUP.getDocuments { [self] (snapshot, err) in
+                            if err != nil {
+                                print("Error")
+                                return
+                            }
+                            guard let documents = snapshot?.documents else{
+                                print("No documents")
+                                return
+                            }
+                            
+                            for document in documents{
+                                let data = document.data()
+                                userVM?.user?.groups.append(Group(dictionary: data))
+                            }
+
+                        }
+                    
+                    print("New Group!")
+                }
+                if doc.type == .modified{
+                    self.userVM?.user?.groups = []
+
+                    COLLECTION_GROUP.getDocuments { [self] (snapshot, err) in
+                            if err != nil {
+                                print("Error")
+                                return
+                            }
+                            guard let documents = snapshot?.documents else{
+                                print("No documents")
+                                return
+                            }
+                            
+                            for document in documents{
+                                let data = document.data()
+                                userVM?.user?.groups.append(Group(dictionary: data))
+                            }
+
+                        }
+                    
+                    print("Group Gone!")
+                }
+
+            }
+        }
+    }
     
     
     func joinGroup(publicID: String, userID: String){
@@ -75,21 +129,7 @@ class GroupViewModel: ObservableObject {
        
     }
     
-//    func displayGroupList(){
-//        let uid = userVM?.user?.id
-//        COLLECTION_GROUP.whereField("users", arrayContains: uid).addSnapshotListener { (snapshot, err) in
-//            if err != nil{
-//                print("ERROR")
-//                return
-//            }
-//            for doc in snapshot!.documentChanges{
-//                if doc.type == .added{
-//                    self.userVM?.fetchGroups()
-//                }
-//            }
-//        }
-//    }
-    
+
     func leaveGroup(groupID: String, userID: String){
         COLLECTION_GROUP.document(groupID).updateData(["memberAmount": FieldValue.increment(Int64(-1))])
         COLLECTION_GROUP.document(groupID).updateData(["users":FieldValue.arrayRemove([userID])])
@@ -151,7 +191,7 @@ class GroupViewModel: ObservableObject {
         
         
         
-        let chatID = chatVM.createChat(name: group.groupName ?? "",userID: userVM?.user?.id ?? " ")
+        let chatID = chatVM.createChat(name: group.groupName ?? "",userID: userVM?.user?.id ?? " ", groupID: group.id)
         COLLECTION_GROUP.document(group.id).updateData(["chatID":chatID ])
 
 

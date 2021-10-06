@@ -42,7 +42,7 @@ struct HomeScreenView: View {
                         Button(action: {
                             showCreateGroupView.toggle()
                         }, label: {
-                            Image(systemName: "person.3.fill")
+                            Image("addGroup")
                                 .resizable()
                                 .frame(width: 32, height: 32)
                         })            .sheet(isPresented: $showCreateGroupView, content: {
@@ -74,7 +74,7 @@ struct HomeScreenView: View {
                     }
                 }.padding(.top,120)
             }else{
-                Text("no groups")
+                Text("It appears that you are not in any groups!")
             }
             
             

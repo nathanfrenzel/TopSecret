@@ -18,12 +18,67 @@ class ChatViewModel : ObservableObject {
     
     
     init(){
-        userVM?.fetchChats()
+        listen()
         
     }
     
     func setupUserVM(_ userVM: UserAuthViewModel){
         self.userVM = userVM
+    }
+    
+    func listen(){
+        COLLECTION_CHAT.addSnapshotListener { (snapshot, err) in
+            if err != nil{
+                print("Error")
+                return
+            }
+            for doc in snapshot!.documentChanges{
+                if doc.type == .removed{
+                    self.userVM?.user?.chats = []
+                    COLLECTION_CHAT.getDocuments { [self] (snapshot, err) in
+                            if err != nil {
+                                print("Error")
+                                return
+                            }
+                            guard let documents = snapshot?.documents else{
+                                print("No documents")
+                                return
+                            }
+                            
+                            for document in documents{
+                                let data = document.data()
+                                userVM?.user?.chats.append(ChatModel(dictionary: data))
+                            }
+
+                        }
+                    
+                    print("New Chat!")
+                }
+                if doc.type == .modified{
+                    self.userVM?.user?.chats = []
+
+                    COLLECTION_CHAT.getDocuments { [self] (snapshot, err) in
+                            if err != nil {
+                                print("Error")
+                                return
+                            }
+                            guard let documents = snapshot?.documents else{
+                                print("No documents")
+                                return
+                            }
+                            
+                            for document in documents{
+                                let data = document.data()
+                                userVM?.user?.chats.append(ChatModel(dictionary: data))
+                            }
+
+                        }
+                    
+                    print("Chat Gone!")
+                }
+
+            }
+        }
     }
     
     func getUsers(userID: String){
@@ -44,47 +99,12 @@ class ChatViewModel : ObservableObject {
             }
         
     }
-    
-    //    func getUser(userID: String) -> User{
-    //
-    //        var user : User = User()
-    //
-    //        COLLECTION_USER.document(userID).getDocument { (snap, err) in
-    //            if err != nil{
-    //                print("ERROR")
-    //                return
-    //            }
-    //            let username = snap?.get("username") as? String ?? " "
-    //            let birthday = snap?.get("birthday") as? Date ?? Date()
-    //            let fullName = snap?.get("fullname") as? String ?? " "
-    //            let uid = snap?.get("uid") as? String ?? " "
-    //            let email = snap?.get("email") as? String ?? " "
-    //            user = User(dictionary: ["username":username,"birthday":birthday,"fullname":fullName,"uid":uid,"email":email])
-    //
-    //        }
-    //        return user
-    //
-    //    }
-    //
-    //    func getUsers(chatID: String){
-    //
-    //        COLLECTION_CHAT.document(chatID).getDocument { (snapshot, err) in
-    //            if err != nil{
-    //                print("ERROR")
-    //                return
-    //            }
-    //            let users = snapshot?.get("users") as? [String] ?? []
-    //            for user in users {
-    //                self.userList.append(self.getUser(userID: user))
-    //            }
-    //        }
-    //    }
-    //
+
     
     
     func readAllMessages(chatID: String){
         
-        COLLECTION_CHAT.document(chatID).collection("Messages").addSnapshotListener { (snapshot, err) in
+        COLLECTION_CHAT.document(chatID).collection("Messages").order(by: "timeStamp",descending: false).addSnapshotListener { (snapshot, err) in
             
             if err != nil {
                 print(err!.localizedDescription)
@@ -101,7 +121,7 @@ class ChatViewModel : ObservableObject {
                     let username = doc.document.get("username") as! String
                     let nameColor = doc.document.get("nameColor") as! String
                     let text = doc.document.get("text") as! String
-                    let timeStamp = doc.document.get("timeStamp") as? Date ?? Date()
+                    let timeStamp = doc.document.get("timeStamp") as? Timestamp ?? Timestamp()
                     let id = doc.document.documentID
                     
                     self.messages.append(Message(dictionary: ["username":username, "text":text,"timeStamp":timeStamp,"id":id, "nameColor":nameColor]))
@@ -194,6 +214,31 @@ class ChatViewModel : ObservableObject {
         
     }
     
+    func createChat(name: String, userID: String, groupID: String) -> String{
+        
+        let id = UUID().uuidString
+        
+        
+        let data = ["name": name,
+                    "memberAmount":1,
+                    "dateCreated":Date(),
+                    "users":[userID], "id":id, "chatNameColors":[], "pickedColors":[], "nextColor":0, "groupID":groupID] as [String : Any]
+        
+        let chat = ChatModel(dictionary: data)
+        
+        COLLECTION_CHAT.document(chat.id).setData(data) { (err) in
+            if err != nil{
+                print("Error")
+                return
+            }
+        }
+        
+        COLLECTION_CHAT.document(chat.id).updateData(["id":chat.id])
+        pickColor(chatID: chat.id, picker: 0)
+        
+        return chat.id
+        
+    }
     func createChat(name: String, userID: String) -> String{
         
         let id = UUID().uuidString

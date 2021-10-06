@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var vm : UserAuthViewModel
+    @StateObject var pollVM = PollViewModel()
     @State var isShowingNewPostView = true
     @State var selectedTab = 0
     @State var storedTab = 0
@@ -23,15 +24,16 @@ struct ContentView: View {
             
             NavigationView {
                 TabView(selection: $selectedTab) {
-                    VotingView()
+                    VotingView().onAppear { storedTab = 2
+                        vm.fetchPolls()
+                    }
                         .tabItem {
                             Image(systemName: "checkmark")
                                 .scaledToFill()
                                 .foregroundColor(.gray)
                                 .frame(width: 128, height: 128)
                         }.tag(2)
-                        .onAppear { storedTab = 2
-                        }
+                        
                     
                     MessageListView()
                         .tabItem {
@@ -41,7 +43,6 @@ struct ContentView: View {
                                 .frame(width: 128, height: 128)
                         }.tag(1)
                         .onAppear { storedTab = 1
-                            vm.fetchChats()
                         }
                     
                     HomeScreenView(userVM: _vm)
@@ -52,7 +53,7 @@ struct ContentView: View {
                                 .frame(width: 128, height: 128)
                         }.tag(0)
                         .onAppear { storedTab = 0
-                            vm.fetchGroups()
+                            
                         }
                     
                     EventView()
@@ -73,11 +74,10 @@ struct ContentView: View {
                         }.tag(4)
                         .onAppear { isShowingNewPostView = true }
                     
-                }.accentColor(Color("TabColor"))
-                .background(Color("TabBarColor"))
+                }
             }
             
-        } else {
+        }else {
             LoginView()
         }
     }

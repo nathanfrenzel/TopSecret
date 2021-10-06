@@ -22,12 +22,14 @@ class UserAuthViewModel: ObservableObject {
     @Published var username: String?
     @Published var fullName: String?
     @Published var birthday: Date?
+
     
     static let shared = UserAuthViewModel()
     
     init(){
         userSession = Auth.auth().currentUser
         fetchUser()
+    
         
     }
     
@@ -95,9 +97,33 @@ class UserAuthViewModel: ObservableObject {
             let user = User(dictionary: data)
             self.user = user
             print("Fetched User Data!")
+            self.fetchGroups()
+            self.fetchChats()
         }
         
     }
+    
+    func fetchPolls(){
+        user?.polls = []
+        COLLECTION_POLLS.getDocuments { (snapshot, err) in
+            if err != nil {
+                print("Error")
+                return
+            }
+            guard let documents = snapshot?.documents else {
+                print("No Documents")
+                return
+            }
+            self.user?.polls = documents.map({ (queryDocumentSnapshot) -> PollModel in
+                let data = queryDocumentSnapshot.data()
+                
+                let poll = PollModel(dictionary: data)
+                
+                return poll
+            })
+        }
+    }
+
     
     func fetchChats(){
         guard let uid = userSession?.uid  else{return}
@@ -123,7 +149,11 @@ class UserAuthViewModel: ObservableObject {
             }
             
         }
+        print("Fetched User Chats")
+        
     }
+    
+   
     
     func fetchGroups(){
         guard let uid = userSession?.uid else {return}
@@ -149,7 +179,8 @@ class UserAuthViewModel: ObservableObject {
             
         }
         
-
+        
+        print("Fetched User Groups")
         
     }
 }

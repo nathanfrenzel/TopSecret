@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+
+
 struct GroupUsersListCell: View {
     var user : User
     var isCurrentUser : Bool
@@ -17,12 +19,20 @@ struct GroupUsersListCell: View {
             HStack{
                 Circle()
                     .frame(width:50,height:50).foregroundColor(Color("AccentColor"))
-                Text("\(user.username ?? "jack")").foregroundColor(Color(nameColor))
+                VStack(alignment: .leading){
+                    if isCurrentUser{
+                    Text("\(user.fullname ?? "") \( "(Me)")").foregroundColor(Color(nameColor))
+                    }else{
+                        Text("\(user.fullname ?? "") ").foregroundColor(Color(nameColor))
+                    }
+                    Text("@\(user.username ?? "") ").foregroundColor(.gray).opacity(0.5)
+                }
+           
                 Spacer()
                 Button(action:{
                     
                 },label:{
-                    Text("<")
+                    Text(">")
                 }).padding(.trailing,30)
             }
             Divider()
