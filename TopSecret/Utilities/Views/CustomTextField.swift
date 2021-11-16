@@ -39,7 +39,7 @@ struct CustomTextField: View {
                         }
                     }
                     
-                }.background(RoundedRectangle(cornerRadius: 20).stroke(lineWidth: 2)).foregroundColor(Color("Foreground")).padding(.horizontal)
+                }.background(RoundedRectangle(cornerRadius: 20).stroke(lineWidth: 2)).foregroundColor(FOREGROUNDCOLOR).padding(.horizontal)
             }
         }
     }

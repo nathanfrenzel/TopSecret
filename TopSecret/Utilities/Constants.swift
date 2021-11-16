@@ -7,6 +7,7 @@
 
 import Foundation
 import Firebase
+import SwiftUI
 
 
 let COLLECTION_USER = Firestore.firestore().collection("Users")
@@ -15,3 +16,5 @@ let COLLECTION_GROUP = Firestore.firestore().collection("Groups")
 let COLLECTION_CHAT = Firestore.firestore().collection("Chats")
 let COLLECTION_POLLS = Firestore.firestore().collection("Polls")
 
+let FOREGROUNDCOLOR : Color = Color("Foreground")
+let BACKGROUNDCOLOR : Color = Color("Background")

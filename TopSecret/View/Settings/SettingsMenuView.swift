@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SettingsMenuView: View {
     @Environment(\.presentationMode) var dismiss
-    @EnvironmentObject var vm: UserAuthViewModel
+    @EnvironmentObject var userAuthVM: UserViewModel
     var body: some View {
         VStack{
             Button(action: {
@@ -23,7 +23,7 @@ struct SettingsMenuView: View {
             Button(action: {
                 self.dismiss.wrappedValue.dismiss()
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    vm.signOut()
+                    userAuthVM.signOut()
                 }
             }, label:{
                 Text("Sign Out")

@@ -9,8 +9,8 @@ import SwiftUI
 
 struct CreateGroupView: View {
     
-    @EnvironmentObject var userVM : UserAuthViewModel
-    @ObservedObject var groupVM = GroupViewModel()
+    @EnvironmentObject var userVM : UserViewModel
+    @StateObject var groupVM = GroupViewModel()
     @State var groupName: String = ""
     @State var memberLimit: Int = 0
     @State var publicID : String = ""
@@ -28,11 +28,8 @@ struct CreateGroupView: View {
             
             
             Button(action:{
-                groupVM.createGroup(groupName: groupName, memberLimit: memberLimit, dateCreated: Date(), publicID: publicID)
-                userVM.fetchGroups()
-                userVM.fetchChats()
-                userVM.fetchUser()
-                
+                groupVM.createGroup(groupName: groupName, memberLimit: memberLimit, dateCreated: Date(), publicID: publicID, userID: userVM.user?.id ?? "")
+       
             },label:{
                 Text("Create Group")
             })
@@ -53,7 +50,7 @@ struct CreateGroupView: View {
             Button(action:{
              
                 groupVM.joinGroup(publicID: joinPublicID, userID: userVM.user?.id ?? "")
-                userVM.fetchUser()
+                userVM.fetchUserGroups()
                 
             },label:{
                 Text("Join Group")
@@ -63,7 +60,7 @@ struct CreateGroupView: View {
             
         }
         .onAppear{
-            self.groupVM.setupUserVM(userVM)
+            self.groupVM.setupUserVM(userVM: userVM)
         }
     }
 }

@@ -11,7 +11,7 @@ struct RegisterEmailView: View {
     @State var email = ""
     @State var isNext:Bool = false
     @State var usingEmail:Bool = true
-    @EnvironmentObject var vm: UserAuthViewModel
+    @EnvironmentObject var userAuthVM: UserViewModel
 
     
     
@@ -45,7 +45,7 @@ struct RegisterEmailView: View {
                         
                         Button(action: {
                             self.isNext.toggle()
-                            vm.email = email
+                            userAuthVM.email = email
                         }, label: {
                             Text("Next")
                                 .foregroundColor(Color("Foreground"))
@@ -76,7 +76,7 @@ struct RegisterEmailView: View {
     struct RegisterEmailView_Previews: PreviewProvider {
         static var previews: some View {
             
-            RegisterEmailView().preferredColorScheme(.dark).environmentObject(UserAuthViewModel())
+            RegisterEmailView().preferredColorScheme(.dark).environmentObject(UserViewModel())
             
         }
     }

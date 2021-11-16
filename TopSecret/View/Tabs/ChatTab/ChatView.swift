@@ -9,9 +9,11 @@ import SwiftUI
 import Firebase
 struct ChatView: View {
     @Environment(\.presentationMode) var presentationMode
-    var groupVM : GroupViewModel
-    @EnvironmentObject var userVM : UserAuthViewModel
+    @EnvironmentObject var userVM : UserViewModel
     
+    @StateObject var chatVM = ChatViewModel()
+    @StateObject var messageVM = MessageViewModel()
+    @StateObject var groupVM = GroupViewModel()
     
     @State var value: CGFloat = 0
     @State var text = ""
@@ -19,8 +21,9 @@ struct ChatView: View {
     @State var showOverlay: Bool = false
 
     var uid: String
-    var chatVM: ChatViewModel
     var chat: ChatModel
+   
+
     
     var body: some View {
         
@@ -61,7 +64,7 @@ struct ChatView: View {
                     Divider()
                 
                 ScrollView(showsIndicators: false){
-                    ForEach(chatVM.messages){ message in
+                    ForEach(messageVM.messages){ message in
                         MessageCell(username: message.username ?? "", timeStamp: message.timeStamp ?? Timestamp(), nameColor: message.nameColor ?? "red", showOverlay: $showOverlay, text: message.text ?? "")
                     }
                     
@@ -73,14 +76,25 @@ struct ChatView: View {
                    
                     TextField("message", text: $text)
                     Button(action:{
-                        if text != ""{
-                        chatVM.sendMessage(message: Message(dictionary: ["text":text,"username":userVM.user?.username ?? "","timeStamp":Date(), "nameColor":chatVM.colors[chat.users.firstIndex(of: uid) ?? 0]]), chatID: chat.id)
-                        }
+                        
+                        messageVM.sendMessage(message: Message(dictionary: ["text":text,"username":userVM.user?.username ?? "","timeStamp":Date(), "nameColor":chatVM.colors[chat.users.firstIndex(of: uid) ?? 0]]), chatID: chat.id)
+                        
                         text = ""
+                        
+                        NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { (noti) in
+                            let value = noti.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! CGRect
+                            let height = value.height
+                            self.value = height
+                        }
+                        
+                        NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { (noti) in
+                       
+                            self.value = 0
+                        }
                   
                     },label:{
                         Text("Send")
-                    })
+                    }).disabled(text == "")
                 }.padding()}.padding(.bottom,10).background(Color("Background"))
                 .offset(y: -self.value)
                 .animation(.spring())
@@ -108,9 +122,9 @@ struct ChatView: View {
             }
             
         }
-        .onAppear{self.groupVM.setupUserVM(self.userVM)
-            chatVM.setupUserVM(self.userVM)
-            chatVM.readAllMessages(chatID: chat.id )
+        .onAppear{
+            
+            messageVM.readAllMessages(chatID: chat.id )
          
             
          

@@ -11,7 +11,7 @@ struct RegisterPhoneView: View {
     @State var phoneNumber: String = " "
     @State var isNext:Bool = false
     @Binding var usingEmail: Bool
-    @EnvironmentObject var vm: UserAuthViewModel
+    @EnvironmentObject var vm: UserViewModel
 
     
     var body: some View {
@@ -63,6 +63,6 @@ struct RegisterPhoneView: View {
 
 struct RegisterPhoneView_Previews: PreviewProvider {
     static var previews: some View {
-        RegisterPhoneView(usingEmail: .constant(false)).preferredColorScheme(.dark).environmentObject(UserAuthViewModel())
+        RegisterPhoneView(usingEmail: .constant(false)).preferredColorScheme(.dark).environmentObject(UserViewModel())
     }
 }

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct FullScreenPostView: View, KeyboardReadable {
-    @ObservedObject var viewModel = UserAuthViewModel()
+    @EnvironmentObject var viewModel : UserViewModel
     @Binding var selectedTab: Int
     @Binding var isPresented: Bool
     @Binding var storedTab: Int

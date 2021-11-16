@@ -11,7 +11,7 @@ struct EnterBirthday: View {
     
     @State var isNext:Bool = false
     @State var selectedDate = Date()
-    @EnvironmentObject var vm: UserAuthViewModel
+    @EnvironmentObject var userVM: UserViewModel
 
     var body: some View {
         VStack{
@@ -32,7 +32,7 @@ struct EnterBirthday: View {
             
             Button(action: {
                 self.isNext.toggle()
-                vm.birthday = selectedDate
+                userVM.birthday = selectedDate
             }, label: {
                 Text("Next")
                     .foregroundColor(Color("Foreground"))
@@ -54,6 +54,6 @@ struct EnterBirthday: View {
 
 struct EnterBirthday_Previews: PreviewProvider {
     static var previews: some View {
-        EnterBirthday().preferredColorScheme(.dark).environmentObject(UserAuthViewModel())
+        EnterBirthday().preferredColorScheme(.dark).environmentObject(UserViewModel())
     }
 }

@@ -9,13 +9,17 @@ import SwiftUI
 
 struct MessageListView: View {
     
+    @EnvironmentObject var userVM : UserViewModel
+    @StateObject var chatVM  = ChatViewModel()
+    @StateObject var messageVM = MessageViewModel()
+    @StateObject var groupVM = GroupViewModel()
+
+    
     @State var selectedIndex = 0
     @State private var options = ["Groups","Friends"]
     @State var goNext: Bool = false
     @State var showAddChat = false
-    @ObservedObject var groupVM = GroupViewModel()
-    @EnvironmentObject var userVM : UserAuthViewModel
-    @ObservedObject var messageVM  = ChatViewModel()
+ 
     
     var body: some View {
         
@@ -30,6 +34,7 @@ struct MessageListView: View {
                     HStack{
                         Button(action:{
                             //TODO
+                            userVM.fetchUserChats()
                         },label:{
                             Image(systemName: "gear").resizable().frame(width: 32, height:32).accentColor(Color("AccentColor"))
                         }).padding(.leading,20)
@@ -45,7 +50,7 @@ struct MessageListView: View {
                             Image(systemName: "plus.message")
                         }).padding(.trailing,20)
                         .sheet(isPresented: $showAddChat, content: {
-                            AddChatView(chatVM: messageVM)
+                            AddChatView(chatVM: chatVM)
                         })
                     }
                 }.padding(.top,50)
@@ -54,7 +59,7 @@ struct MessageListView: View {
             VStack{
                 
             
-            if userVM.user?.chats.count != 0{
+            if userVM.chats.count != 0{
                 VStack{
                     Picker("Options",selection: $selectedIndex){
                         ForEach(0..<options.count){ index in
@@ -64,10 +69,10 @@ struct MessageListView: View {
                     Spacer()
                     ScrollView(showsIndicators: false){
                         if selectedIndex == 0{
-                            ForEach(userVM.user?.chats ?? [], id: \.id){ chat in
+                            ForEach(userVM.chats, id: \.id){ chat in
                                 if !chat.isPersonal{
                                     NavigationLink(
-                                        destination: ChatView(groupVM: groupVM, uid: userVM.user?.id ?? "",  chatVM: messageVM, chat: chat),
+                                        destination: ChatView(uid: userVM.user?.id ?? " ", chat: chat),
                                         label: {
                                             ChatListCell(chat: chat)
                                         })
@@ -77,10 +82,10 @@ struct MessageListView: View {
                             }
                             
                         }else{
-                            ForEach(userVM.user?.chats ?? [], id: \.id){ chat in
+                            ForEach(userVM.chats, id: \.id){ chat in
                                 if chat.isPersonal{
                                     NavigationLink(
-                                        destination: ChatView(groupVM: groupVM, uid: userVM.user?.id ?? "",  chatVM: messageVM, chat: chat),
+                                        destination: ChatView(uid: userVM.user?.id ?? " ",chat: chat),
                                         label: {
                                             ChatListCell(chat: chat)
                                         })
@@ -91,7 +96,7 @@ struct MessageListView: View {
                         }
                         
                         Button(action: {
-                            userVM.fetchChats()
+                            userVM.fetchUserChats()
                             
                         }, label: {
                             Text("Refresh")
@@ -116,10 +121,7 @@ struct MessageListView: View {
             }
             
         }
-        .onAppear{
-            self.groupVM.setupUserVM(self.userVM)
-            self.messageVM.setupUserVM(self.userVM)
-        }
+       
             
         }.navigationBarHidden(true)
         .edgesIgnoringSafeArea(.all)

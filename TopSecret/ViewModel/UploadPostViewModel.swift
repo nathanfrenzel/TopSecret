@@ -12,12 +12,14 @@ class UploadPostViewModel: ObservableObject {
     @Binding var isPresented: Bool
     @ObservedObject var viewModel = HomeScreenViewModel()
     
+    @EnvironmentObject var vm : UserViewModel
+    
     init(isPresented: Binding<Bool>) {
         self._isPresented = isPresented
     }
     
     func uploadPost(caption: String, groupName: String) {
-        guard let user =  UserAuthViewModel.shared.user else { return }
+        guard let user =  vm.user else { return }
         let docRef = COLLECTION_POST.document()
         
         let data: [String: Any] = ["uid": user.id,

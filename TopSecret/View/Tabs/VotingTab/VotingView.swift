@@ -9,13 +9,13 @@ import SwiftUI
 import Firebase
 
 struct VotingView: View {
-    @EnvironmentObject var userVM: UserAuthViewModel
+    @EnvironmentObject var userVM: UserViewModel
     @State var goToAddPoll : Bool = false
     @StateObject var pollVM = PollViewModel()
     var body: some View {
         ZStack{
             Color("Background")
-            if userVM.user?.polls.count != 0{
+            if userVM.polls.count != 0{
                 VStack{
                     HStack(spacing: 20){
                         Button(action: {  }, label: {
@@ -33,7 +33,7 @@ struct VotingView: View {
                             Text("+")
                         })
                         .padding(.trailing,20).sheet(isPresented: $goToAddPoll, content: {
-                            AddPollView(userVM: userVM, pollVM: pollVM)
+                            AddPollView(pollVM: pollVM)
                         })
 
                         
@@ -44,7 +44,7 @@ struct VotingView: View {
                     
                     
                     ScrollView(showsIndicators: false){
-                        ForEach(userVM.user?.polls ?? []){ poll in
+                        ForEach(userVM.polls){ poll in
                             PollCell(username: poll.creator ?? "", groupName: poll.groupName ?? "", dateCreated: poll.dateCreated ?? Timestamp(), question: poll.question ?? "")
                             
                         }
@@ -68,7 +68,7 @@ struct VotingView: View {
                             Text("+")
                         })
                         .padding(.trailing,20).sheet(isPresented: $goToAddPoll, content: {
-                            AddPollView(userVM: userVM, pollVM: pollVM)
+                            AddPollView(pollVM: pollVM)
                         })
                         
                     }.padding(.top,50)
@@ -79,10 +79,7 @@ struct VotingView: View {
                 }.padding()
               
             }
-        }.edgesIgnoringSafeArea(.all).navigationBarHidden(true).onAppear{
-            pollVM.setupUserVM(userVM)
-        
-        }
+        }.edgesIgnoringSafeArea(.all).navigationBarHidden(true)
     }
 }
 

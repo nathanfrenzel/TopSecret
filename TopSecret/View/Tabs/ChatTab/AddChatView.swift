@@ -8,11 +8,13 @@
 import SwiftUI
 
 struct AddChatView: View {
+    @EnvironmentObject var userVM: UserViewModel
+
+    
     @State var name: String = ""
     @Environment(\.presentationMode) var dismiss
 
     var chatVM : ChatViewModel
-    @EnvironmentObject var userVM: UserAuthViewModel
     var body: some View {
         ZStack{
             Color("Background")
@@ -28,15 +30,12 @@ struct AddChatView: View {
                 
                 
                 Button(action:{
-                    chatVM.createChat(name: name, userID: userVM.user?.id ?? " ")
-                    userVM.fetchChats()
+                 //TODO
+                    userVM.fetchUserChats()
                 },label:{
                     Text("Create Chat")
                 })
             }
-        }.onAppear{
-            self.chatVM.setupUserVM(userVM)
-            
         }
     }
 }

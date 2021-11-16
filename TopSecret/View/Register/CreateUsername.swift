@@ -11,7 +11,7 @@ struct CreateUsername: View {
     
     @State var username:String = ""
     @State var isNext:Bool = false
-    @EnvironmentObject var vm: UserAuthViewModel
+    @EnvironmentObject var userAuthVM: UserViewModel
 
     
     var body: some View {
@@ -29,8 +29,7 @@ struct CreateUsername: View {
             
             Button(action: {
                 self.isNext.toggle()
-                vm.username = username
-                print(vm.email ?? "")
+                userAuthVM.username = username
             }, label: {
                 Text("Next")
                     .foregroundColor(Color("Foreground"))
@@ -53,6 +52,6 @@ struct CreateUsername: View {
 struct CreateUsername_Previews: PreviewProvider {
     static var previews: some View {
         CreateUsername().preferredColorScheme(.dark)
-            .environmentObject(UserAuthViewModel())
+            .environmentObject(UserViewModel())
     }
 }

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CreatePassword: View {
     @State var password: String = ""
-    @EnvironmentObject var vm : UserAuthViewModel
+    @EnvironmentObject var userVM : UserViewModel
     
     var body: some View {
         VStack{
@@ -27,7 +27,7 @@ struct CreatePassword: View {
             
             
             Button(action: {
-                vm.registerUser(email: vm.email ?? "", password: password, username: vm.username ?? "", fullname: vm.fullName ?? "", birthday: vm.birthday ?? Date())
+                userVM.createUser(email: userVM.email ?? "", password: password, username: userVM.username ?? "", fullname: userVM.fullName ?? "", birthday: userVM.birthday ?? Date())
                 
             }, label: {
                 Text("Create Account")
@@ -45,6 +45,6 @@ struct CreatePassword: View {
 
 struct CreatePassword_Previews: PreviewProvider {
     static var previews: some View {
-        CreatePassword().preferredColorScheme(.dark).environmentObject(UserAuthViewModel())
+        CreatePassword().preferredColorScheme(.dark).environmentObject(UserViewModel())
     }
 }

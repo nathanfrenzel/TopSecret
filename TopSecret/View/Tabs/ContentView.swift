@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject var vm : UserAuthViewModel
+    @EnvironmentObject var userVM : UserViewModel
     @StateObject var pollVM = PollViewModel()
     @State var isShowingNewPostView = true
     @State var selectedTab = 0
@@ -18,14 +18,14 @@ struct ContentView: View {
     
     var body: some View {
         //if there is a user signed in then go to the Tab View else go to the register view
-        if vm.userSession != nil {
+        if userVM.userSession != nil {
             
             //I put your commented-out thing at the bottom of the file
             
             NavigationView {
                 TabView(selection: $selectedTab) {
                     VotingView().onAppear { storedTab = 2
-                        vm.fetchPolls()
+                        userVM.listenToUserPolls()
                     }
                         .tabItem {
                             Image(systemName: "checkmark")
@@ -43,9 +43,10 @@ struct ContentView: View {
                                 .frame(width: 128, height: 128)
                         }.tag(1)
                         .onAppear { storedTab = 1
+                            userVM.listenToUserChats()
                         }
                     
-                    HomeScreenView(userVM: _vm)
+                    HomeScreenView()
                         .tabItem {
                             Image(systemName: "house")
                                 .scaledToFill()
@@ -53,7 +54,7 @@ struct ContentView: View {
                                 .frame(width: 128, height: 128)
                         }.tag(0)
                         .onAppear { storedTab = 0
-                            
+                            userVM.listenToUserGroups()
                         }
                     
                     EventView()

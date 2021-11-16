@@ -10,7 +10,7 @@ import SwiftUI
 struct LoginView: View {
     @State var email = ""
     @State var password = ""
-    @EnvironmentObject var vm: UserAuthViewModel
+    @EnvironmentObject var userAuthVM: UserViewModel
     @State var showForgotPasswordView = false
     @State var beginRegisterView: Bool = false
     @State var value: CGFloat = 0
@@ -65,7 +65,7 @@ struct LoginView: View {
                         
 
                     Button(action: {
-                        vm.signIn(withEmail: email, password: password)
+                        userAuthVM.signIn(withEmail: email, password: password)
                     }, label: {
                         Text("Login")   .foregroundColor(Color("Foreground"))
                             .padding(.vertical)
@@ -94,7 +94,7 @@ struct LoginView: View {
                 }
                 
                 NavigationLink(
-                    destination: RegisterEmailView(vm: _vm),
+                    destination: RegisterEmailView(),
                     isActive: $beginRegisterView,
                     label: {
                         EmptyView()
@@ -120,7 +120,7 @@ struct LoginView: View {
 
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
-        LoginView().preferredColorScheme(.dark).environmentObject(UserAuthViewModel())
+        LoginView().preferredColorScheme(.dark).environmentObject(UserViewModel())
     }
 }
 

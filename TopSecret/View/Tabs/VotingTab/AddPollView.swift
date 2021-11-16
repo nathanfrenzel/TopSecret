@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct AddPollView: View {
-    var userVM : UserAuthViewModel
+    @EnvironmentObject var userVM : UserViewModel
     @Environment(\.presentationMode) var presentationMode
-    var pollVM : PollViewModel
+    @ObservedObject var pollVM : PollViewModel
     @State var selectedGroup : Group = Group()
     @State var question = ""
     
@@ -31,10 +31,10 @@ struct AddPollView: View {
                 TextField("Question",text: $question)
                 Text("Selected Group: \(selectedGroup.groupName )")
                 ScrollView(showsIndicators: false){
-                    if userVM.user?.groups.count == 0 {
+                    if userVM.groups.count == 0 {
                         Text("You have no groups to create a poll!")
                     }else{
-                    ForEach(userVM.user?.groups ?? []){ group in
+                    ForEach(userVM.groups ?? []){ group in
                         Button(action:{
                             selectedGroup = group
                         },label:{
@@ -52,9 +52,6 @@ struct AddPollView: View {
                 Spacer()
             }
             
-        }.onAppear{
-            pollVM.setupUserVM(userVM)
-            userVM.fetchGroups()
         }
     }
 }

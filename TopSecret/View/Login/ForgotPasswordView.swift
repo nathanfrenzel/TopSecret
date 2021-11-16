@@ -12,7 +12,7 @@ struct ForgotPasswordView: View {
     @Binding var showForgotPasswordView: Bool
     @State var email: String = ""
     @State var isNext: Bool = false
-    @EnvironmentObject var vm: UserAuthViewModel
+    @EnvironmentObject var userAuthVM: UserViewModel
 
     
     var body: some View {
@@ -30,7 +30,7 @@ struct ForgotPasswordView: View {
                 
                 Button(action: {
                     self.isNext.toggle()
-                    vm.resetPassword(email: email)
+                    userAuthVM.resetPassword(email: email)
                 }, label: {
                     Text("Next")
                         .foregroundColor(Color("Foreground"))
@@ -55,6 +55,6 @@ struct ForgotPasswordView: View {
 
 struct ForgotPasswordView_Previews: PreviewProvider {
     static var previews: some View {
-        ForgotPasswordView(showForgotPasswordView: .constant(true)).preferredColorScheme(.dark).environmentObject(UserAuthViewModel())
+        ForgotPasswordView(showForgotPasswordView: .constant(true)).preferredColorScheme(.dark).environmentObject(UserViewModel())
     }
 }

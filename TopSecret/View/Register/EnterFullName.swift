@@ -11,7 +11,7 @@ struct EnterFullName: View {
     
     @State var fullName: String = ""
     @State var isNext: Bool = false
-    @EnvironmentObject var vm: UserAuthViewModel
+    @EnvironmentObject var userAuthVM: UserViewModel
 
     
     var body: some View {
@@ -31,7 +31,7 @@ struct EnterFullName: View {
             
             Button(action: {
                 self.isNext.toggle()
-                vm.fullName = fullName
+                userAuthVM.fullName = fullName
             }, label: {
                 Text("Next")
                     .foregroundColor(Color("Foreground"))
@@ -54,6 +54,6 @@ struct EnterFullName: View {
 struct EnterFullName_Previews: PreviewProvider {
     static var previews: some View {
         EnterFullName().preferredColorScheme(.dark)
-            .environmentObject(UserAuthViewModel())
+            .environmentObject(UserViewModel())
     }
 }

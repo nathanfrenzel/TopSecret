@@ -9,12 +9,12 @@ import SwiftUI
 
 struct ChatInfoView: View {
     var chat: ChatModel
-    var chatVM : ChatViewModel
-    var groupVM : GroupViewModel
+    @ObservedObject var chatVM : ChatViewModel
+    @ObservedObject var groupVM : GroupViewModel
     @Environment(\.presentationMode) var presentationMode
     @State var messageNotificationsOn: Bool = false
     @State var pinnedMessageNotifactionsOn: Bool = false
-    @EnvironmentObject var userVM : UserAuthViewModel
+    @EnvironmentObject var userVM : UserViewModel
     
     var body: some View {
         ZStack{
@@ -98,8 +98,6 @@ struct ChatInfoView: View {
                 }.padding()
             
         }.edgesIgnoringSafeArea(.all)        .onAppear{
-            self.chatVM.setupUserVM(userVM)
-            self.groupVM.setupUserVM(userVM)
             for user in chat.users{
                 self.chatVM.getUsers(userID: user ?? " ")
             }

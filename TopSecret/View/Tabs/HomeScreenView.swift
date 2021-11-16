@@ -10,9 +10,10 @@ import SwiftUI
 struct HomeScreenView: View {
     
     
-    @EnvironmentObject var userVM : UserAuthViewModel
-    @ObservedObject var groupVM = GroupViewModel()
+    @EnvironmentObject var userVM : UserViewModel
+    @StateObject var groupVM = GroupViewModel()
     @State var settingsOpen: Bool = false
+    @State var isAnimated : Bool = false
     @State var showCreateGroupView: Bool = false
     
     var body: some View {
@@ -31,13 +32,17 @@ struct HomeScreenView: View {
                         }).padding(.leading,20)
                         Spacer()
                         
+                        
+                        //TOP SECRET ICON
+                        
                         Button(action:{
-                            userVM.fetchGroups()
+                            userVM.listenToUserGroups()
                         }, label:{
                             Image("FinishedIcon")
                                 .resizable()
                                 .frame(width: 64, height: 64)
                         })
+                        
                         Spacer()
                         Button(action: {
                             showCreateGroupView.toggle()
@@ -58,11 +63,11 @@ struct HomeScreenView: View {
 
             }
             
-            if userVM.user?.groups.count != 0{
+            if userVM.groups.count != 0{
                 Spacer()
                 VStack(alignment: .leading){
                     ScrollView(showsIndicators: false){
-                        ForEach(userVM.user?.groups ?? [Group()]){ group in
+                        ForEach(userVM.groups){ group in
                             NavigationLink(
                                 destination: GroupProfileView(group: group),
                                 label: {
@@ -79,15 +84,13 @@ struct HomeScreenView: View {
             
             
             
-        }.edgesIgnoringSafeArea(.all).navigationBarHidden(true).onAppear{
-            groupVM.setupUserVM(userVM)
-        }
+        }.edgesIgnoringSafeArea(.all).navigationBarHidden(true)
     }
     
     
     struct HomeScreenView_Previews: PreviewProvider {
         static var previews: some View {
-            HomeScreenView().preferredColorScheme(.dark).environmentObject(UserAuthViewModel())
+            HomeScreenView().preferredColorScheme(.dark).environmentObject(UserViewModel())
         }
     }
 

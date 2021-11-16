@@ -16,7 +16,7 @@ struct GroupListCell: View {
         HStack(alignment: .firstTextBaseline){
                 Circle()
                     .frame(width:50,height:50).foregroundColor(Color("AccentColor"))
-            Text(group.groupName ?? "").foregroundColor(Color("Foreground"))
+            Text(group.groupName).foregroundColor(Color("Foreground"))
             Spacer()
             Text("\(group.memberAmount)").foregroundColor(Color("Foreground"))
         }.padding(.horizontal)

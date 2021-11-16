@@ -12,7 +12,7 @@ struct GroupProfileView: View {
     @StateObject var groupVM = GroupViewModel()
     @StateObject var pollVM = PollViewModel()
     @State var question = ""
-    @EnvironmentObject var userVM: UserAuthViewModel
+    @EnvironmentObject var userVM: UserViewModel
     var group: Group
     var body: some View {
         ZStack{
