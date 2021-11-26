@@ -33,7 +33,7 @@ struct VotingView: View {
                             Text("+")
                         })
                         .padding(.trailing,20).sheet(isPresented: $goToAddPoll, content: {
-                            AddPollView(pollVM: pollVM)
+                            AddPollView(pollVM: pollVM).environmentObject(userVM)
                         })
 
                         
@@ -79,6 +79,8 @@ struct VotingView: View {
                 }.padding()
               
             }
+          
+
         }.edgesIgnoringSafeArea(.all).navigationBarHidden(true)
     }
 }

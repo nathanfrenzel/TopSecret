@@ -10,6 +10,7 @@ import SwiftUI
 struct CreateGroupView: View {
     
     @EnvironmentObject var userVM : UserViewModel
+    @Environment(\.presentationMode) var presentationMode
     @StateObject var groupVM = GroupViewModel()
     @State var groupName: String = ""
     @State var memberLimit: Int = 0
@@ -29,7 +30,7 @@ struct CreateGroupView: View {
             
             Button(action:{
                 groupVM.createGroup(groupName: groupName, memberLimit: memberLimit, dateCreated: Date(), publicID: publicID, userID: userVM.user?.id ?? "")
-       
+                presentationMode.wrappedValue.dismiss()
             },label:{
                 Text("Create Group")
             })

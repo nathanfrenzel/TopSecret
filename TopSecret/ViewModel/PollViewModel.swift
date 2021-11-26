@@ -11,7 +11,7 @@ import Firebase
 class PollViewModel : ObservableObject{
     
     @EnvironmentObject var userVM: UserViewModel
-    @Published var pollRepository = PollRepository()
+    @ObservedObject var pollRepository = PollRepository()
     
     
     init(){

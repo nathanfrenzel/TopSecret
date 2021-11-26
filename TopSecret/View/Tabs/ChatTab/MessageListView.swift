@@ -23,9 +23,9 @@ struct MessageListView: View {
     
     var body: some View {
         
-        
-        
+      
         ZStack{
+            
             Color("Background")
             
             VStack{
@@ -117,6 +117,8 @@ struct MessageListView: View {
                 }
                 
             }
+               
+
             
             }
             

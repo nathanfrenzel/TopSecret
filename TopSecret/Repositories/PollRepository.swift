@@ -23,7 +23,19 @@ class PollRepository : ObservableObject {
             }
             
         }
- 
+        
     }
-
+    
+//    func deletePoll(username: String, pollID: String, groupID: String){
+//        COLLECTION_GROUP.document(groupID).collection("Polls").document(pollID).getDocument(completion: { (snapshot, err) in
+//            if err != nil {
+//                print("ERROR")
+//                return
+//            }
+//            if snapshot?.get("creator") as! String == username {
+//                COLLECTION_GROUP.document(groupID).collection("Polls").document(pollID).delete()
+//            }
+//        })
+//    }
+    
 }

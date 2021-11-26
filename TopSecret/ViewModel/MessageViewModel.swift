@@ -22,6 +22,10 @@ class MessageViewModel : ObservableObject {
             .store(in: &cancellables)
     }
     
+    func readLastMessage() -> Message{
+        return messageRepository.readLastMessage()
+    }
+    
     func readAllMessages(chatID: String){
         messageRepository.readAllMessages(chatID: chatID)
     }

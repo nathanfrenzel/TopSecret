@@ -9,8 +9,8 @@ import SwiftUI
 
 struct ChatInfoView: View {
     var chat: ChatModel
-    @ObservedObject var chatVM : ChatViewModel
-    @ObservedObject var groupVM : GroupViewModel
+    @StateObject var chatVM = ChatViewModel()
+    @StateObject var groupVM = GroupViewModel()
     @Environment(\.presentationMode) var presentationMode
     @State var messageNotificationsOn: Bool = false
     @State var pinnedMessageNotifactionsOn: Bool = false

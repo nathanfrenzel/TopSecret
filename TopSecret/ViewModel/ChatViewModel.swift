@@ -25,6 +25,7 @@ class ChatViewModel : ObservableObject {
             .store(in: &cancellables)
     }
     
+  
     func getUsers(userID: String){
         chatRepository.getUsers(userID: userID)
     }

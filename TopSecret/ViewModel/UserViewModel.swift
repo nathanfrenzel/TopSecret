@@ -25,6 +25,7 @@ class UserViewModel : ObservableObject {
     @Published var groups: [Group] = []
     @Published var chats: [ChatModel] = []
     @Published var polls: [PollModel] = []
+    @Published var isConnected : Bool = false
 
     
     private var cancellables : Set<AnyCancellable> = []
@@ -45,6 +46,10 @@ class UserViewModel : ObservableObject {
         userRepository.$polls
             .assign(to: \.polls, on: self)
             .store(in: &cancellables)
+        userRepository.$isConnected
+            .assign(to: \.isConnected, on: self)
+            .store(in: &cancellables)
+        listenToAll()
     }
     
     func fetchUserChats(){
@@ -72,6 +77,9 @@ class UserViewModel : ObservableObject {
     
     func listenToUserPolls(){
         userRepository.listenToUserPolls()
+    }
+    func listenToAll(){
+        userRepository.listenToAll()
     }
     
     func createUser(email: String, password: String, username: String, fullname: String, birthday: Date){

@@ -11,11 +11,14 @@ import Combine
 import SwiftUI
 
 class UserRepository : ObservableObject {
+    
+    
     @Published var user : User?
     @Published var userSession : FirebaseAuth.User?
     @Published var groups: [Group] = []
     @Published var chats: [ChatModel] = []
     @Published var polls: [PollModel] = []
+    @Published var isConnected : Bool = false
     
     private var cancellables : Set<AnyCancellable> = []
     let store = Firestore.firestore()
@@ -28,13 +31,28 @@ class UserRepository : ObservableObject {
     }
     
     
+    
     func listenToUserChats(){
         
         COLLECTION_CHAT.whereField("users", arrayContains: self.user?.id ?? " ").addSnapshotListener { (snapshot, err) in
+            
+            guard let source = snapshot?.metadata.isFromCache else{
+                print("error")
+                return
+            }
+            if source {
+                self.isConnected = false
+                print("You are not connected, your data may not be up to date!")
+            }else{
+                self.isConnected = true
+                print("You are connected!")
+            }
+            
             guard let documents = snapshot?.documents else {
                 print("No document!")
                 return
             }
+            
             self.chats = documents.map{ queryDocumentSnapshot -> ChatModel in
                 let data = queryDocumentSnapshot.data()
                 let chatNameColors = data["chatNameColors"] as? [String] ?? []
@@ -59,6 +77,20 @@ class UserRepository : ObservableObject {
     func listenToUserGroups(){
         
         COLLECTION_GROUP.whereField("users", arrayContains: self.user?.id ?? " ").addSnapshotListener { (snapshot, err) in
+            
+         
+            guard let source = snapshot?.metadata.isFromCache else{
+                print("error")
+                return
+            }
+            if source {
+                self.isConnected = false
+                print("You are not connected, your data may not be up to date!")
+            }else{
+                self.isConnected = true
+                print("You are connected!")
+            }
+            
             guard let documents = snapshot?.documents else {
                 print("No document!")
                 return
@@ -85,6 +117,20 @@ class UserRepository : ObservableObject {
     func listenToUserPolls(){
         for group in self.groups{
             COLLECTION_GROUP.document(group.id).collection("Polls").order(by: "dateCreated",descending: true).addSnapshotListener { (snapshot, err) in
+                
+                guard let source = snapshot?.metadata.isFromCache else{
+                    print("error")
+                    return
+                }
+                if source {
+                    self.isConnected = false
+                    print("You are not connected, your data may not be up to date!")
+                }else{
+                    self.isConnected = true
+                    print("You are connected!")
+                }
+                
+                
                 guard let documents = snapshot?.documents else {
                     print("No document!")
                     return
@@ -125,6 +171,45 @@ class UserRepository : ObservableObject {
     
     func fetchUserGroups(){
         //TODO
+        COLLECTION_GROUP.whereField("users", arrayContains: user?.id ?? "").getDocuments { (snapshot, err) in
+            if err != nil {
+                print("ERROR \(err!.localizedDescription)")
+                return
+            }
+            for document in snapshot!.documents {
+                let source = document.metadata.isFromCache
+                if source{
+                    print("You are offline!")
+                }else{
+                    print("You are online!")
+                }
+            }
+            
+            guard let documents = snapshot?.documents else {
+                print("No document!")
+                return
+            }
+            
+            self.groups = documents.map{ queryDocumentSnapshot -> Group in
+                let data = queryDocumentSnapshot.data()
+                let chatID = data["chatID"] as? String ?? ""
+                let groupName = data["groupName"] as? String ?? ""
+                let memberAmount = data["memberAmount"] as? Int ?? 0
+                let memberLimit = data["memberLimit"] as? Int ?? 0
+                let publicID = data["publicID"] as? String ?? ""
+                let users = data["users"] as? [User.ID] ?? []
+                let id = data["id"] as? String ?? ""
+                print("Fetched Groups!")
+                
+                print("Fetched User Groups!")
+
+                return Group(dictionary: ["chatID":chatID,"groupName":groupName,"memberAmount":memberAmount,"memberLimit":memberLimit,"publicID":publicID,"users":users,"id":id])
+                
+            }
+            
+            
+            
+        }
     }
     func fetchUserPolls(){
         //TODO
@@ -172,10 +257,19 @@ class UserRepository : ObservableObject {
     func signIn(withEmail email: String, password: String){
         
         Auth.auth().signIn(withEmail: email, password: password) { (result,err) in
-            if let err = err {
-                print("DEBUG: Failed to login: \(err.localizedDescription)")
-                return
+            
+            if let x = err {
+                  let error = x as NSError
+                  switch error.code {
+                  case AuthErrorCode.networkError.rawValue:
+                      print("There was a network error dumbass")
+                  default:
+                      print("unknown error: \(error.localizedDescription)")
+                  }
+            }else{
+                print("You are connected")
             }
+            
             self.userSession = result?.user
             self.fetchUser()
             

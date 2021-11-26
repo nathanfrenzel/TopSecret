@@ -77,7 +77,7 @@ struct ChatView: View {
                     TextField("message", text: $text)
                     Button(action:{
                         
-                        messageVM.sendMessage(message: Message(dictionary: ["text":text,"username":userVM.user?.username ?? "","timeStamp":Date(), "nameColor":chatVM.colors[chat.users.firstIndex(of: uid) ?? 0]]), chatID: chat.id)
+                        messageVM.sendMessage(message: Message(dictionary: ["text":text,"username":userVM.user?.username ?? "","timeStamp":Date(), "nameColor":chatVM.colors[chat.users.firstIndex(of: uid) ?? 0], "id":UUID().uuidString]), chatID: chat.id)
                         
                         text = ""
                         

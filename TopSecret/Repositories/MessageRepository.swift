@@ -37,7 +37,7 @@ class MessageRepository : ObservableObject {
                     let nameColor = doc.document.get("nameColor") as! String
                     let text = doc.document.get("text") as! String
                     let timeStamp = doc.document.get("timeStamp") as? Timestamp ?? Timestamp()
-                    let id = doc.document.documentID
+                    let id = doc.document.get("id") as? String ?? ""
                     
                     self.messages.append(Message(dictionary: ["username":username, "text":text,"timeStamp":timeStamp,"id":id, "nameColor":nameColor]))
                     
@@ -50,8 +50,15 @@ class MessageRepository : ObservableObject {
         }
     }
     
+    func readLastMessage() -> Message{
+        return messages.last ?? Message()
+    }
+    
+    
     func sendMessage(message: Message,chatID: String){
-        COLLECTION_CHAT.document(chatID).collection("Messages").addDocument(data: ["text":message.text!,"username":message.username!,"timeStamp":message.timeStamp, "nameColor":message.nameColor!])
+        COLLECTION_CHAT.document(chatID).collection("Messages").document(message.id).setData(["text":message.text!,"username":message.username!,"timeStamp":message.timeStamp!, "nameColor":message.nameColor!, "id":message.id])
+            
+         
     }
     
     

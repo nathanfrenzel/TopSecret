@@ -8,6 +8,8 @@
 import SwiftUI
 
 import Firebase
+import Combine
+
 
 
 class GroupViewModel: ObservableObject {
@@ -15,10 +17,20 @@ class GroupViewModel: ObservableObject {
     
     var userVM: UserViewModel?
     @ObservedObject var chatVM = ChatViewModel()
-    @Published var groupRepository = GroupRepository()
+    @ObservedObject var groupRepository = GroupRepository()
+    @Published var groupChat : ChatModel = ChatModel()
+    
+    private var cancellables : Set<AnyCancellable> = []
+
     
     init(){
-        
+        groupRepository.$groupChat
+            .assign(to: \.groupChat, on: self)
+            .store(in: &cancellables)
+            
+    }
+    func getChat(chatID: String){
+        groupRepository.getChat(chatID: chatID)
     }
     
     func setupUserVM(userVM: UserViewModel){

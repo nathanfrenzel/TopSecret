@@ -9,9 +9,10 @@ import SwiftUI
 
 struct CreateUsername: View {
     
-    @State var username:String = ""
+    @State var username: String = ""
     @State var isNext:Bool = false
     @EnvironmentObject var userAuthVM: UserViewModel
+    @StateObject var registerValidation = RegisterValidationViewModel()
 
     
     var body: some View {
@@ -24,12 +25,16 @@ struct CreateUsername: View {
             
             
             CustomTextField(text: $username, placeholder: "Username", isSecure: false, hasSymbol: true,symbol: "person").padding(.horizontal,20)
-            
-            
+//            if registerValidation.usernameIsAvailable{
+//                Text("Username is long enough!")
+//            }else{
+//                Text("Username is not long enough!")
+//            }
             
             Button(action: {
                 self.isNext.toggle()
-                userAuthVM.username = username
+               //TODO
+                self.userAuthVM.username = username
             }, label: {
                 Text("Next")
                     .foregroundColor(Color("Foreground"))
