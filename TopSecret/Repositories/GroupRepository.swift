@@ -16,6 +16,7 @@ class GroupRepository : ObservableObject {
     @ObservedObject var pollRepository = PollRepository()
     @ObservedObject var userRepository = UserRepository()
     @Published var groupChat : ChatModel = ChatModel()
+    @Published var groupProfileImage = ""
     
     
     
@@ -108,7 +109,7 @@ class GroupRepository : ObservableObject {
 
     }
     
-    func createGroup(groupName: String, memberLimit: Int, dateCreated: Date, publicID: String, userID: String){
+    func createGroup(groupName: String, memberLimit: Int, dateCreated: Date, publicID: String, userID: String, image: UIImage){
         
         
         let id = UUID().uuidString
@@ -119,7 +120,7 @@ class GroupRepository : ObservableObject {
                     "memberLimit" : memberLimit,
                     "publicID" : publicID,
                     "users" : [userID] ,
-                    "memberAmount": 1, "id":id, "chatID": " ", "dateCreated":Timestamp()
+                    "memberAmount": 1, "id":id, "chatID": " ", "dateCreated":Timestamp(), "groupProfileImage": " "
         ] as [String:Any]
                 
         COLLECTION_GROUP.document(id).setData(data) { (err) in
@@ -127,9 +128,40 @@ class GroupRepository : ObservableObject {
                 print("ERROR \(err!.localizedDescription)")
                 return
             }
+            self.persistImageToStorage(groupID: id,image: image)
         }
         userRepository.fetchUserChats()
         chatRepository.createGroupChat(name: groupName, userID: userID, groupID: id)
         
     }
+    func persistImageToStorage(groupID: String, image: UIImage) {
+       let fileName = "groupImages/\(groupID)"
+        let ref = Storage.storage().reference(withPath: fileName)
+        guard let imageData = image.jpegData(compressionQuality: 0.5) else { return }
+        ref.putData(imageData, metadata: nil) { (metadata, err) in
+            if err != nil{
+                print("ERROR")
+                return
+            }
+               ref.downloadURL { (url, err) in
+                if err != nil{
+                    print("ERROR: Failed to retreive download URL")
+                    return
+                }
+                print("Successfully stored image in database")
+                let imageURL = url?.absoluteString ?? ""
+                COLLECTION_GROUP.document(groupID).updateData(["groupProfileImage":imageURL])
+            }
+        }
+      
+    }
+//    func loadGroupProfileImage(groupID: String){
+//        COLLECTION_GROUP.document(groupID).getDocument { (snapshot, err) in
+//            if err != nil {
+//                print("ERROR")
+//                return
+//            }
+//            let image = snapshot?.get("groupProfileImage") as! String
+//        }
+//    }
 }

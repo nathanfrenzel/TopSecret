@@ -74,7 +74,7 @@ struct HomeScreenView: View {
                                     NavigationLink(
                                         destination: GroupHomeScreenView(group: group),
                                         label: {
-                                            HomescreenGroupCell(groupName: group.groupName, memberAmount: group.memberAmount, motd: "camilo is a furry")
+                                            HomescreenGroupCell(groupName: group.groupName, memberAmount: group.memberAmount, motd: "camilo is a furry", group: group)
                                         })
                                     
                                 }

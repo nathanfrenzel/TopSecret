@@ -19,6 +19,8 @@ class GroupViewModel: ObservableObject {
     @ObservedObject var chatVM = ChatViewModel()
     @ObservedObject var groupRepository = GroupRepository()
     @Published var groupChat : ChatModel = ChatModel()
+    @Published var groupProfileImage = ""
+
     
     private var cancellables : Set<AnyCancellable> = []
 
@@ -26,6 +28,9 @@ class GroupViewModel: ObservableObject {
     init(){
         groupRepository.$groupChat
             .assign(to: \.groupChat, on: self)
+            .store(in: &cancellables)
+        groupRepository.$groupProfileImage
+            .assign(to: \.groupProfileImage, on: self)
             .store(in: &cancellables)
             
     }
@@ -55,11 +60,13 @@ class GroupViewModel: ObservableObject {
     
     
     
-    func createGroup(groupName: String, memberLimit: Int, dateCreated: Date, publicID: String, userID: String){
+    func createGroup(groupName: String, memberLimit: Int, dateCreated: Date, publicID: String, userID: String, image: UIImage){
         
-        groupRepository.createGroup(groupName: groupName, memberLimit: memberLimit, dateCreated: dateCreated, publicID: publicID, userID: userID)
+        groupRepository.createGroup(groupName: groupName, memberLimit: memberLimit, dateCreated: dateCreated, publicID: publicID, userID: userID, image: image)
         
     }
+    
+  
     
 //    func listen(){
 //        COLLECTION_GROUP.whereField("users", arrayContains: userVM.user?.id ?? " ").addSnapshotListener { (snapshot, err) in

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Firebase
+import SDWebImageSwiftUI
 struct ChatView: View {
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var userVM : UserViewModel
@@ -44,8 +45,12 @@ struct ChatView: View {
                        Spacer()
                        
                         VStack{
-                            Circle()
-                                .frame(width:50,height:50).foregroundColor(Color("AccentColor"))
+                            WebImage(url: URL(string: chatVM.group.groupProfileImage ?? ""))
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width:75,height:75)
+                                .clipShape(Circle())
+                                .padding()
                             Text("\(chat.name ?? "")")
                             Text("\(chat.memberAmount) members").foregroundColor(.gray).opacity(0.5)
                         }.padding(.leading,10)
@@ -125,7 +130,7 @@ struct ChatView: View {
         .onAppear{
             
             messageVM.readAllMessages(chatID: chat.id )
-         
+            chatVM.getGroup(groupID: chat.groupID ?? "")
             
          
             

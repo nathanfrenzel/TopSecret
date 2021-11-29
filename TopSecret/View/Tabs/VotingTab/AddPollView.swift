@@ -34,7 +34,7 @@ struct AddPollView: View {
                     if userVM.groups.count == 0 {
                         Text("You have no groups to create a poll!")
                     }else{
-                    ForEach(userVM.groups ?? []){ group in
+                    ForEach(userVM.groups){ group in
                         Button(action:{
                             selectedGroup = group
                         },label:{
@@ -45,7 +45,9 @@ struct AddPollView: View {
                 }
                 Button(action:{
                     pollVM.createPoll(creator: userVM.user?.username ?? "", question: question, group: selectedGroup)
-                    presentationMode.wrappedValue.dismiss()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        presentationMode.wrappedValue.dismiss()
+                    }
                 },label:{
                     Text("Create Poll")
                 }).disabled(selectedGroup.groupName == "")

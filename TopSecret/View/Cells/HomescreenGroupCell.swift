@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import SDWebImageSwiftUI
 
 
 struct HomescreenGroupCell : View {
@@ -14,7 +15,7 @@ struct HomescreenGroupCell : View {
     var groupName: String
     var memberAmount: Int
     var motd : String
-    
+    var group: Group
     var body : some View {
         ZStack{
             VStack(alignment: .leading){
@@ -27,10 +28,11 @@ struct HomescreenGroupCell : View {
                         .foregroundColor(FOREGROUNDCOLOR)
                         .padding(.top,4)
                         .padding()
-                    Image("Icon")
+                    WebImage(url: URL(string: group.groupProfileImage ?? ""))
                         .resizable()
-                        .scaledToFit()
-                        .frame(width: 65,height:65)
+                        .scaledToFill()
+                        .frame(width:50,height:50)
+                        .clipShape(Circle())
                         .padding()
                     Spacer()
                 }
@@ -63,6 +65,6 @@ struct HomescreenGroupCell : View {
 
 struct HomescreenGroupCell_Previews: PreviewProvider {
     static var previews: some View {
-        HomescreenGroupCell(groupName: "Laotians", memberAmount: 24, motd: "Camilo is a furry")
+        HomescreenGroupCell(groupName: "Laotians", memberAmount: 24, motd: "Camilo is a furry", group: Group())
     }
 }

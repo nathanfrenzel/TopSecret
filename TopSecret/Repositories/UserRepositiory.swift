@@ -63,9 +63,10 @@ class UserRepository : ObservableObject {
                 let nextColor = data["nextColor"] as? Int ?? 0
                 let users = data["users"] as? [User.ID] ?? []
                 let id = data["id"] as? String ?? ""
+                let groupID = data["groupID"] as? String ?? " "
                 print("Fetched Chats!")
                 
-                return ChatModel(dictionary: ["chatNameColors":chatNameColors,"pickedColors":pickedColors,"name":name,"memberAmount":memberAmount,"dateCreated":dateCreated,"nextColor":nextColor,"users":users,"id":id])
+                return ChatModel(dictionary: ["chatNameColors":chatNameColors,"pickedColors":pickedColors,"name":name,"memberAmount":memberAmount,"dateCreated":dateCreated,"nextColor":nextColor,"users":users,"id":id,"groupID":groupID])
                 
                 
             }
@@ -104,10 +105,11 @@ class UserRepository : ObservableObject {
                 let publicID = data["publicID"] as? String ?? ""
                 let users = data["users"] as? [User.ID] ?? []
                 let id = data["id"] as? String ?? ""
+                let groupProfileImage = data["groupProfileImage"] as? String ?? ""
                 print("Fetched Groups!")
                 
-                return Group(dictionary: ["chatID":chatID,"groupName":groupName,"memberAmount":memberAmount,"memberLimit":memberLimit,"publicID":publicID,"users":users,"id":id])
-                
+
+                return Group(dictionary: ["chatID":chatID,"groupName":groupName,"memberAmount":memberAmount,"memberLimit":memberLimit,"publicID":publicID,"users":users,"id":id, "groupProfileImage":groupProfileImage])
                 
             }
             
@@ -199,11 +201,14 @@ class UserRepository : ObservableObject {
                 let publicID = data["publicID"] as? String ?? ""
                 let users = data["users"] as? [User.ID] ?? []
                 let id = data["id"] as? String ?? ""
+                let groupProfileImage = data["groupProfileImage"] as? String ?? ""
+
+                
                 print("Fetched Groups!")
                 
                 print("Fetched User Groups!")
 
-                return Group(dictionary: ["chatID":chatID,"groupName":groupName,"memberAmount":memberAmount,"memberLimit":memberLimit,"publicID":publicID,"users":users,"id":id])
+                return Group(dictionary: ["chatID":chatID,"groupName":groupName,"memberAmount":memberAmount,"memberLimit":memberLimit,"publicID":publicID,"users":users,"id":id,"groupProfileImage":groupProfileImage])
                 
             }
             

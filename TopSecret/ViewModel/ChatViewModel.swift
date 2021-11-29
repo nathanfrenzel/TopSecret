@@ -13,9 +13,10 @@ import Combine
 
 class ChatViewModel : ObservableObject {
     @Published var userList : [User] = []
+    @Published var group : Group = Group()
     var colors: [String] = ["green","red","blue","orange"]
     @EnvironmentObject var userVM: UserViewModel
-    @Published var chatRepository = ChatRepository()
+    @ObservedObject var chatRepository = ChatRepository()
     
     private var cancellables : Set<AnyCancellable> = []
     
@@ -23,11 +24,18 @@ class ChatViewModel : ObservableObject {
         chatRepository.$userList
             .assign(to: \.userList, on: self)
             .store(in: &cancellables)
+        chatRepository.$group
+            .assign(to: \.group, on: self)
+            .store(in: &cancellables)
     }
     
   
     func getUsers(userID: String){
         chatRepository.getUsers(userID: userID)
+    }
+    
+    func getGroup(groupID: String){
+        chatRepository.getGroup(groupID: groupID)
     }
 
     func joinChat(chatID: String, userID: String){

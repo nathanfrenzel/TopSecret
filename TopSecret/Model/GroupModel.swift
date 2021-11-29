@@ -21,6 +21,7 @@ struct Group: Identifiable{
     var users: [User.ID]?
     var polls : [PollModel]?
     var chatID: String?
+    var groupProfileImage: String?
     
     init(dictionary: [String:Any]){
         self.id = dictionary["id"] as? String ?? " "
@@ -32,6 +33,7 @@ struct Group: Identifiable{
         self.users = dictionary["users"] as? [User.ID] ?? []
         self.chatID = dictionary["chatID"] as? String ?? " "
         self.polls = dictionary["polls"] as? [PollModel] ?? []
+        self.groupProfileImage = dictionary["groupProfileImage"] as? String ?? " "
       
     }
     init(){

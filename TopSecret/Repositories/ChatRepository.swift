@@ -13,6 +13,7 @@ import Firebase
 
 class ChatRepository : ObservableObject {
     @Published var userList : [User] = []
+    @Published var group : Group = Group()
     var colors: [String] = ["green","red","blue","orange"]
 
     func getUsers(userID: String){
@@ -37,6 +38,16 @@ class ChatRepository : ObservableObject {
         
     }
     
+    func getGroup(groupID: String){
+        COLLECTION_GROUP.document(groupID).getDocument { (snapshot, err) in
+            if err != nil{
+                print("ERROR")
+                return
+            }
+            let data = snapshot!.data()
+            self.group = Group(dictionary: data!) 
+        }
+    }
    
     
     func createGroupChat(name: String, userID: String, groupID: String){
@@ -47,7 +58,7 @@ class ChatRepository : ObservableObject {
         let data = ["name": name,
                     "memberAmount":1,
                     "dateCreated":Date(),
-                    "users":[userID], "id":id, "chatNameColors":[], "pickedColors":[], "nextColor":0] as [String : Any]
+                    "users":[userID], "id":id, "chatNameColors":[], "pickedColors":[], "nextColor":0,"groupID":groupID] as [String : Any]
         
         let chat = ChatModel(dictionary: data)
         

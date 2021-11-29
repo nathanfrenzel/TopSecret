@@ -54,7 +54,7 @@ struct PollCell: View {
                     }
             }
         
-            }.padding().background(       RoundedRectangle(cornerRadius: 20).fill(Color("LightBackground"))).padding(.horizontal)
+            }.padding().background(       RoundedRectangle(cornerRadius: 20).fill(Color("Background"))).padding(.horizontal)
         }
     }
 }

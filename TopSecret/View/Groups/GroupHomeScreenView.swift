@@ -13,6 +13,7 @@ struct GroupHomeScreenView: View {
     @StateObject var groupVM = GroupViewModel()
     @StateObject var messageVM = MessageViewModel()
     
+    
     var group : Group
     
     @Environment(\.presentationMode) var dismiss
@@ -36,11 +37,12 @@ struct GroupHomeScreenView: View {
                     
                     Spacer()
                     
-                    Button(action:{
-                        
-                    },label:{
-                        Text("Group profile")
-                    }).padding(.trailing)
+                        NavigationLink(
+                            destination: GroupProfileView(group: group),
+                            label: {
+                                Text("Group Profile")
+                            }).padding(.trailing)
+                    
                 }.padding(.top,50)
                 
                 Divider()
