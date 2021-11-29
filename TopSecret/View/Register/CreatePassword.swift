@@ -27,7 +27,7 @@ struct CreatePassword: View {
             
             
             Button(action: {
-                userVM.createUser(email: userVM.email ?? "", password: password, username: userVM.username ?? "", fullname: userVM.fullName ?? "", birthday: userVM.birthday ?? Date())
+                userVM.createUser(email: userVM.email , password: password, username: userVM.username , fullname: userVM.fullName , birthday: userVM.birthday , image: userVM.userProfileImage)
                 
             }, label: {
                 Text("Create Account")

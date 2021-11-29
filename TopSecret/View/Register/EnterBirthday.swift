@@ -41,7 +41,7 @@ struct EnterBirthday: View {
             }).padding()
             
             NavigationLink(
-                destination: CreatePassword(),
+                destination: EnterUserProfilePicture(),
                 isActive: $isNext,
                 label: {
                     EmptyView()

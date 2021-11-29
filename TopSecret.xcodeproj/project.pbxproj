@@ -35,6 +35,7 @@
 		783ADC97275425DC00FD517D /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783ADC96275425DC00FD517D /* ImagePicker.swift */; };
 		783ADC9B27545C1600FD517D /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 783ADC9A27545C1600FD517D /* SDWebImageSwiftUI */; };
 		787E2DA326FB9CCB00670DA4 /* ChatInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787E2DA226FB9CCB00670DA4 /* ChatInfoView.swift */; };
+		788A470727551295003A6232 /* EnterUserProfilePicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 788A470627551295003A6232 /* EnterUserProfilePicture.swift */; };
 		7894BD3426EB9814008FCE55 /* TextArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7894BD3326EB9814008FCE55 /* TextArea.swift */; };
 		789FC2C72617DA700021616B /* TopSecretApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 789FC2C62617DA700021616B /* TopSecretApp.swift */; };
 		789FC2CB2617DA720021616B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 789FC2CA2617DA720021616B /* Assets.xcassets */; };
@@ -105,6 +106,7 @@
 		783ADC932751C27B00FD517D /* GroupProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupProfileView.swift; sourceTree = "<group>"; };
 		783ADC96275425DC00FD517D /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		787E2DA226FB9CCB00670DA4 /* ChatInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatInfoView.swift; sourceTree = "<group>"; };
+		788A470627551295003A6232 /* EnterUserProfilePicture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterUserProfilePicture.swift; sourceTree = "<group>"; };
 		7894BD3326EB9814008FCE55 /* TextArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextArea.swift; sourceTree = "<group>"; };
 		789FC2C32617DA700021616B /* TopSecret.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TopSecret.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		789FC2C62617DA700021616B /* TopSecretApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSecretApp.swift; sourceTree = "<group>"; };
@@ -326,6 +328,7 @@
 				78D1A72D26DEA1590083FE2C /* CreateUsername.swift */,
 				78D1A73026DEC3D50083FE2C /* EnterFullName.swift */,
 				78D1A73326DEC56F0083FE2C /* EnterBirthday.swift */,
+				788A470627551295003A6232 /* EnterUserProfilePicture.swift */,
 				78D1A73626DEC6050083FE2C /* CreatePassword.swift */,
 			);
 			path = Register;
@@ -506,6 +509,7 @@
 				62CE5ADA26DEE44E00AE6ACC /* VotingView.swift in Sources */,
 				787E2DA326FB9CCB00670DA4 /* ChatInfoView.swift in Sources */,
 				7817085F270B327C00975014 /* PollViewModel.swift in Sources */,
+				788A470727551295003A6232 /* EnterUserProfilePicture.swift in Sources */,
 				78D1A75D26DF16D50083FE2C /* ChatView.swift in Sources */,
 				7839C05626E9084E000B8722 /* ChatModel.swift in Sources */,
 				78D1A75226DEFE370083FE2C /* CreateGroupView.swift in Sources */,

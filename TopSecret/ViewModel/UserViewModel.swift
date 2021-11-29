@@ -22,6 +22,7 @@ class UserViewModel : ObservableObject {
     @Published var fullName = ""
     @Published var password = ""
     @Published var birthday = Date()
+    @Published var userProfileImage : UIImage = UIImage()
     @Published var groups: [Group] = []
     @Published var chats: [ChatModel] = []
     @Published var polls: [PollModel] = []
@@ -82,8 +83,8 @@ class UserViewModel : ObservableObject {
         userRepository.listenToAll()
     }
     
-    func createUser(email: String, password: String, username: String, fullname: String, birthday: Date){
-        userRepository.createUser(email: email, password: password, username: username, fullname: fullname, birthday: birthday)
+    func createUser(email: String, password: String, username: String, fullname: String, birthday: Date,image: UIImage){
+        userRepository.createUser(email: email, password: password, username: username, fullname: fullname, birthday: birthday, image: image)
     }
     
     func resetPassword(email: String){
@@ -103,5 +104,9 @@ class UserViewModel : ObservableObject {
     
     func fetchUser(){
         userRepository.fetchUser()
+    }
+    
+    func persistImageToStorage(userID: String, image: UIImage){
+        userRepository.persistImageToStorage(userID: userID, image: image)
     }
 }

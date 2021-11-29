@@ -15,6 +15,7 @@ struct User : Identifiable {
     var password: String?
     var fullname: String?
     var birthday: Date?
+    var profilePicture: String?
     
 
 
@@ -25,6 +26,7 @@ init(dictionary: [String:Any]) {
     self.password = dictionary["password"] as? String ?? ""
     self.fullname = dictionary["fullname"] as? String ?? ""
     self.birthday = dictionary["birthday"] as? Date ?? Date()
+    self.profilePicture = dictionary["profilePicture"] as? String ?? ""
 
  }
 

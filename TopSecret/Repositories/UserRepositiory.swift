@@ -15,6 +15,7 @@ class UserRepository : ObservableObject {
     
     @Published var user : User?
     @Published var userSession : FirebaseAuth.User?
+    @Published var profilePicture : UIImage = UIImage()
     @Published var groups: [Group] = []
     @Published var chats: [ChatModel] = []
     @Published var polls: [PollModel] = []
@@ -30,7 +31,27 @@ class UserRepository : ObservableObject {
         fetchUser()
     }
     
-    
+    func persistImageToStorage(userID: String, image: UIImage) {
+       let fileName = "userProfileImages/\(userID)"
+        let ref = Storage.storage().reference(withPath: fileName)
+        guard let imageData = image.jpegData(compressionQuality: 0.5) else { return }
+        ref.putData(imageData, metadata: nil) { (metadata, err) in
+            if err != nil{
+                print("ERROR")
+                return
+            }
+               ref.downloadURL { (url, err) in
+                if err != nil{
+                    print("ERROR: Failed to retreive download URL")
+                    return
+                }
+                print("Successfully stored image in database")
+                let imageURL = url?.absoluteString ?? ""
+                COLLECTION_USER.document(userID).updateData(["profilePicture":imageURL])
+            }
+        }
+      
+    }
     
     func listenToUserChats(){
         
@@ -227,7 +248,7 @@ class UserRepository : ObservableObject {
     
     
     
-    func createUser(email: String, password: String, username: String, fullname: String, birthday: Date){
+    func createUser(email: String, password: String, username: String, fullname: String, birthday: Date, image:UIImage){
         Auth.auth().createUser(withEmail: email, password: password) { (result, err) in
             if let err = err{
                 print("DEBUG: ERROR: \(err.localizedDescription)")
@@ -240,19 +261,21 @@ class UserRepository : ObservableObject {
                         "username": username,
                         "fullname": fullname,
                         "uid": user.uid,
-                        "birthday": birthday,
+                        "birthday": birthday,"profilePicture":" "
                         
             ] as [String : Any]
+            
             COLLECTION_USER.document(user.uid).setData(data){ _ in
                 self.userSession = user
                 self.fetchUser()
                 print("DEBUG: Succesfully uploaded user data!")
             }
+            self.persistImageToStorage(userID: user.uid, image: image)
+
             
             Auth.auth().currentUser?.sendEmailVerification(completion: { (err) in
                 
             })
-            
             
             
         }

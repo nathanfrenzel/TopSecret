@@ -16,12 +16,14 @@ struct Message : Identifiable{
     var text : String?
     var timeStamp : Timestamp?
     var username : String?
+    var profilePicture: String?
     
     
     init(dictionary: [String:Any]){
         self.text = dictionary["text"] as? String ?? " "
         self.timeStamp = dictionary["timeStamp"] as? Timestamp ?? Timestamp()
         self.username = dictionary["username"] as? String ?? " "
+        self.profilePicture = dictionary["profilePicture"] as? String ?? " "
         self.id = dictionary["id"] as? String ?? " "
         self.nameColor = dictionary["nameColor"] as? String ?? " "
     }

@@ -38,8 +38,10 @@ class MessageRepository : ObservableObject {
                     let text = doc.document.get("text") as! String
                     let timeStamp = doc.document.get("timeStamp") as? Timestamp ?? Timestamp()
                     let id = doc.document.get("id") as? String ?? ""
+                    let profilePicture = doc.document.get("profilePicture") as? String ?? ""
                     
-                    self.messages.append(Message(dictionary: ["username":username, "text":text,"timeStamp":timeStamp,"id":id, "nameColor":nameColor]))
+                    
+                    self.messages.append(Message(dictionary: ["username":username, "text":text,"timeStamp":timeStamp,"id":id, "nameColor":nameColor,"profilePicture":profilePicture]))
                     
                     
                 }
@@ -56,7 +58,7 @@ class MessageRepository : ObservableObject {
     
     
     func sendMessage(message: Message,chatID: String){
-        COLLECTION_CHAT.document(chatID).collection("Messages").document(message.id).setData(["text":message.text!,"username":message.username!,"timeStamp":message.timeStamp!, "nameColor":message.nameColor!, "id":message.id])
+        COLLECTION_CHAT.document(chatID).collection("Messages").document(message.id).setData(["text":message.text!,"username":message.username!,"timeStamp":message.timeStamp!, "nameColor":message.nameColor!, "id":message.id,"profilePicture":message.profilePicture!])
             
          
     }

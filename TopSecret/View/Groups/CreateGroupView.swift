@@ -39,6 +39,8 @@ struct CreateGroupView: View {
                     .frame(width:45,height:45)
                     .clipShape(Circle())
                     .padding()
+            }).fullScreenCover(isPresented: $isShowingPhotoPicker, content: {
+                ImagePicker(avatarImage: $avatarImage)
             })
             
             Button(action:{
@@ -72,9 +74,7 @@ struct CreateGroupView: View {
           
         }
         }
-        .fullScreenCover(isPresented: $isShowingPhotoPicker, content: {
-            ImagePicker(avatarImage: $avatarImage)
-        })
+        
         
         }.onAppear{
             self.groupVM.setupUserVM(userVM: userVM)

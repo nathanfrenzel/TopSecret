@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+import SDWebImageSwiftUI
 
 
 struct GroupUsersListCell: View {
@@ -17,8 +17,12 @@ struct GroupUsersListCell: View {
         ZStack{
             VStack{
             HStack{
-                Circle()
-                    .frame(width:50,height:50).foregroundColor(Color("AccentColor"))
+                WebImage(url: URL(string: user.profilePicture ?? " "))
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width:30,height:30)
+                    .clipShape(Circle())
+                    .padding()
                 VStack(alignment: .leading){
                     if isCurrentUser{
                     Text("\(user.fullname ?? "") \( "(Me)")").foregroundColor(Color(nameColor))
