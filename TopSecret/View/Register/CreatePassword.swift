@@ -10,36 +10,41 @@ import SwiftUI
 struct CreatePassword: View {
     @State var password: String = ""
     @EnvironmentObject var userVM : UserViewModel
+    @ObservedObject var registerVM = RegisterValidationViewModel()
     
     var body: some View {
-        VStack{
-            Text("Create A Password").foregroundColor(Color("Foreground")).font(.largeTitle).fontWeight(.bold).padding(.horizontal)
+        ZStack{
             
-            Text("Make sure your password is secure").font(.headline).padding(.bottom,30)
-            
-         
-            
-            
-            CustomTextField(text: $password, placeholder: "Password", isSecure: true, hasSymbol: true ,symbol: "lock").padding(.horizontal,20)
-            
-        
-            
-            
-            
-            Button(action: {
-                userVM.createUser(email: userVM.email , password: password, username: userVM.username , fullname: userVM.fullName , birthday: userVM.birthday , image: userVM.userProfileImage)
+            Color("Background")
+            VStack{
+                Text("Create A Password").foregroundColor(Color("Foreground")).font(.largeTitle).fontWeight(.bold).padding(.horizontal)
                 
-            }, label: {
-                Text("Create Account")
-                    .foregroundColor(Color("Foreground"))
-                    .padding(.vertical)
-                    .frame(width: UIScreen.main.bounds.width/1.5).background(Color("AccentColor")).cornerRadius(15)
-            }).padding()
-            
-           
-            
-            Spacer()
-        }.padding(.top,100)
+                Text("Make sure your password is secure").font(.headline).padding(.bottom,30)
+                
+                
+                
+                
+                CustomTextField(text: $registerVM.password, placeholder: "Password", isPassword: true, isSecure: true, hasSymbol: true ,symbol: "lock").padding(.horizontal,20)
+                
+                
+                Text(registerVM.passwordErrorMessage).padding(.top,5).foregroundColor(registerVM.passwordErrorMessage == "Password is valid!" ? .green : .red)
+                
+                
+                Button(action: {
+                    userVM.createUser(email: userVM.email , password: registerVM.password, username: userVM.username , fullname: userVM.fullName , birthday: userVM.birthday , image: userVM.userProfileImage)
+                    
+                }, label: {
+                    Text("Create Account")
+                        .foregroundColor(Color("Foreground"))
+                        .padding(.vertical)
+                        .frame(width: UIScreen.main.bounds.width/1.5).background(Color("AccentColor")).cornerRadius(15)
+                }).padding()
+                
+                
+                
+                Spacer()
+            }.padding(.top,100)
+        }.edgesIgnoringSafeArea(.all)
     }
 }
 

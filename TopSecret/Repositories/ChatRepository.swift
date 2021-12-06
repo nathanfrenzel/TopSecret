@@ -13,9 +13,13 @@ import Firebase
 
 class ChatRepository : ObservableObject {
     @Published var userList : [User] = []
+    @Published var usersTypingList : [User] = []
+    @Published var usersIdlingList : [User] = []
     @Published var group : Group = Group()
     var colors: [String] = ["green","red","blue","orange"]
 
+    
+    //this is for chat info tab
     func getUsers(userID: String){
         
         COLLECTION_USER.document(userID).getDocument { (snap, err) in
@@ -25,18 +29,61 @@ class ChatRepository : ObservableObject {
                 }
             let data = snap!.data()
             self.userList.append(User(dictionary: data!))
-//                let username = snap?.get("username") as? String ?? " "
-//                let birthday = snap?.get("birthday") as? Date ?? Date()
-//                let fullName = snap?.get("fullname") as? String ?? " "
-//                let uid = snap?.get("uid") as? String ?? " "
-//                let email = snap?.get("email") as? String ?? " "
-//
-//
-//
-//                self.userList.append(User(dictionary: ["username":username,"birthday":birthday,"fullname":fullName,"uid":uid,"email":email]))
             }
         
     }
+    
+    func getUser(userID: String){
+        
+    }
+    
+    //this is for fetching idle users from database
+    func getUsersIdlingList(chatID: String){
+        COLLECTION_CHAT.document(chatID).addSnapshotListener { (snapshot, err) in
+            if err != nil {
+                print(err!.localizedDescription)
+                return
+            }
+            let data = snapshot!.data()
+            let usersIdling = data!["usersIdlingList"] as? [User.ID] ?? []
+            
+            if ((snapshot?.didChangeValue(forKey: "usersIdlingList")) != nil){
+                self.usersIdlingList.removeAll()
+
+                for user in usersIdling{
+                    COLLECTION_USER.document(user!).getDocument { (snapshot, err) in
+                        if err != nil {
+                            print(err!.localizedDescription)
+                            return
+                        }
+                        self.usersIdlingList.append(User(dictionary: snapshot!.data()!))
+                        
+                    }
+                }
+            }
+            
+          
+            
+           
+            
+           
+           
+        }
+       
+    }
+  
+    
+    func openChat(userID: String, chatID: String){
+        COLLECTION_CHAT.document(chatID).updateData(["usersIdlingList":FieldValue.arrayUnion([userID])])
+        
+        
+    }
+    
+    func exitChat(userID: String, chatID: String){
+        COLLECTION_CHAT.document(chatID).updateData(["usersIdlingList":FieldValue.arrayRemove([userID])])
+    }
+    
+    
     
     func getGroup(groupID: String){
         COLLECTION_GROUP.document(groupID).getDocument { (snapshot, err) in

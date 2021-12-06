@@ -14,6 +14,7 @@ class UserRepository : ObservableObject {
     
     
     @Published var user : User?
+    @Published var loginErrorMessage = ""
     @Published var userSession : FirebaseAuth.User?
     @Published var profilePicture : UIImage = UIImage()
     @Published var groups: [Group] = []
@@ -284,15 +285,24 @@ class UserRepository : ObservableObject {
     
     func signIn(withEmail email: String, password: String){
         
-        Auth.auth().signIn(withEmail: email, password: password) { (result,err) in
+        Auth.auth().signIn(withEmail: email, password: password) { [self] (result,err) in
             
             if let x = err {
                   let error = x as NSError
                   switch error.code {
                   case AuthErrorCode.networkError.rawValue:
-                      print("There was a network error dumbass")
+                      loginErrorMessage = "There was a network error"
+                  case AuthErrorCode.internalError.rawValue:
+                      loginErrorMessage = "There was an internal error"
+                  case AuthErrorCode.invalidEmail.rawValue:
+                        loginErrorMessage = "This email address is invalid"
+                  case AuthErrorCode.missingEmail.rawValue:
+                        loginErrorMessage = "You must include an email address"
+                  case AuthErrorCode.rejectedCredential.rawValue:
+                    loginErrorMessage = "The email or password is incorrect"
+                    
                   default:
-                      print("unknown error: \(error.localizedDescription)")
+                      loginErrorMessage = "Error: \(error.localizedDescription)"
                   }
             }else{
                 print("You are connected")
@@ -307,6 +317,7 @@ class UserRepository : ObservableObject {
     
     func signOut(){
         userSession = nil
+        self.loginErrorMessage = ""
         try? Auth.auth().signOut()
     }
     

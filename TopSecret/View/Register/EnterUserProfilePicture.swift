@@ -19,8 +19,8 @@ struct EnterUserProfilePicture: View {
         ZStack{
             Color("Background")
             VStack{
-                Text("Enter a profile picture!")
                 Spacer()
+                Text("Enter a profile picture!").foregroundColor(FOREGROUNDCOLOR)
                 Button(action:{
                     isShowingPhotoPicker.toggle()
                 },label:{
@@ -44,21 +44,22 @@ struct EnterUserProfilePicture: View {
                         .frame(width: UIScreen.main.bounds.width/1.5).background(Color("AccentColor")).cornerRadius(15)
                 }).padding()
                 
+                NavigationLink(
+                    destination: CreatePassword(),
+                    isActive: $isNext,
+                    label: {
+                        EmptyView()
+                    })
+                Spacer()
             }
             
-            NavigationLink(
-                destination: CreatePassword(),
-                isActive: $isNext,
-                label: {
-                    EmptyView()
-                })
-            
-        }
+           
+        }.edgesIgnoringSafeArea(.all)
     }
 }
 
 struct EnterUserProfilePicture_Previews: PreviewProvider {
     static var previews: some View {
-        EnterUserProfilePicture()
+        EnterUserProfilePicture().colorScheme(.dark)
     }
 }

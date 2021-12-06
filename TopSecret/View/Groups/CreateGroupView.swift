@@ -25,9 +25,9 @@ struct CreateGroupView: View {
         ZStack{
         VStack{
             
-            CustomTextField(text: $groupName, placeholder: "Group Name", isSecure: false, hasSymbol: false,symbol: "phone").padding(.horizontal,20)
+            CustomTextField(text: $groupName, placeholder: "Group Name", isPassword: false, isSecure: false, hasSymbol: false,symbol: "phone").padding(.horizontal,20)
             
-            CustomTextField(text: $publicID, placeholder: "Public ID", isSecure: false, hasSymbol: false,symbol: "phone").padding(.horizontal,20)
+            CustomTextField(text: $publicID, placeholder: "Public ID", isPassword: false, isSecure: false, hasSymbol: false,symbol: "phone").padding(.horizontal,20)
             
             
             Button(action:{
@@ -60,7 +60,7 @@ struct CreateGroupView: View {
         VStack{
             Text("Join Group!")
             
-            CustomTextField(text: $joinPublicID, placeholder: "Public ID", isSecure: false, hasSymbol: false,symbol: "phone").padding(.horizontal,20)
+            CustomTextField(text: $joinPublicID, placeholder: "Public ID", isPassword: false, isSecure: false, hasSymbol: false,symbol: "phone").padding(.horizontal,20)
             
             Button(action:{
              

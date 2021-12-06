@@ -42,11 +42,12 @@ struct LoginView: View {
                     
                     VStack(spacing: 10){
                         
+                        Text(userAuthVM.loginErrorMessage).foregroundColor(.red)
                     
                         //Text Fields
                     VStack(spacing: 20){
-                    CustomTextField(text: $email, placeholder: "Email", isSecure: false, hasSymbol: true,  symbol: "envelope")
-                        CustomTextField(text: $password, placeholder: "Password", isSecure: true, hasSymbol: true, symbol: "key")
+                        CustomTextField(text: $email, placeholder: "Email", isPassword: false, isSecure: false, hasSymbol: true,  symbol: "envelope")
+                        CustomTextField(text: $password, placeholder: "Password", isPassword: true, isSecure: true, hasSymbol: true, symbol: "key")
                            
                       
                     }.padding(.horizontal)

@@ -13,6 +13,8 @@ import Combine
 
 class ChatViewModel : ObservableObject {
     @Published var userList : [User] = []
+    @Published var usersTypingList : [User] = []
+    @Published var usersIdlingList : [User] = []
     @Published var group : Group = Group()
     var colors: [String] = ["green","red","blue","orange"]
     @EnvironmentObject var userVM: UserViewModel
@@ -24,14 +26,32 @@ class ChatViewModel : ObservableObject {
         chatRepository.$userList
             .assign(to: \.userList, on: self)
             .store(in: &cancellables)
+        chatRepository.$usersTypingList
+            .assign(to: \.usersTypingList, on: self)
+            .store(in: &cancellables)
+        chatRepository.$usersIdlingList
+            .assign(to: \.usersIdlingList, on: self)
+            .store(in: &cancellables)
         chatRepository.$group
             .assign(to: \.group, on: self)
             .store(in: &cancellables)
     }
     
   
+    func getUsersIdlingList(chatID: String){
+        chatRepository.getUsersIdlingList(chatID: chatID)
+    }
+    
     func getUsers(userID: String){
         chatRepository.getUsers(userID: userID)
+    }
+    
+    func openChat(userID: String, chatID: String){
+        chatRepository.openChat(userID: userID, chatID: chatID)
+    }
+    
+    func exitChat(userID: String, chatID: String){
+        chatRepository.exitChat(userID: userID, chatID: chatID)
     }
     
     func getGroup(groupID: String){

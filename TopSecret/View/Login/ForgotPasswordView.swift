@@ -24,7 +24,7 @@ struct ForgotPasswordView: View {
                 
                 
                 
-                CustomTextField(text: $email, placeholder: "email", isSecure: false, hasSymbol: false,symbol: "none").padding(.horizontal,20)
+                CustomTextField(text: $email, placeholder: "email", isPassword: false, isSecure: false, hasSymbol: false,symbol: "none").padding(.horizontal,20)
                 
                 
                 

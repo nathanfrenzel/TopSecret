@@ -33,7 +33,7 @@ struct RegisterPhoneView: View {
                 VStack{
                     Text("Enter Phone Number").foregroundColor(Color("Foreground")).fontWeight(.bold).font(.largeTitle).padding(.bottom,10)
                     
-                    CustomTextField(text: $phoneNumber, placeholder: "Phone Number", isSecure: false, hasSymbol: true,symbol: "phone").padding(.horizontal,20)
+                    CustomTextField(text: $phoneNumber, placeholder: "Phone Number", isPassword: false, isSecure: false, hasSymbol: true,symbol: "phone").padding(.horizontal,20)
                     
                     
                     

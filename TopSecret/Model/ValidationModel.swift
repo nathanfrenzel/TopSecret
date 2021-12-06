@@ -11,12 +11,26 @@ import SwiftUI
 
 
 
-enum ValidationError {
+enum UsernameValidationError {
     case usernameTooShort
     case usernameAlreadyTaken
     case emailNotValid
     case emailAlreadyTaken
+    case valid
+ 
+}
+
+
+enum EmailValidationError {
+    case emailNotValid
+    case emailAlreadyTaken
+    case valid
+}
+
+enum PasswordValidationError{
     case passwordTooShort
     case passwordNotStrongEnough
     case valid
 }
+
+

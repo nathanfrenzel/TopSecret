@@ -32,6 +32,7 @@ struct ChatView: View {
         ZStack(alignment: .topLeading){
             Color("Background")
             Button(action:{
+                chatVM.exitChat(userID: uid, chatID: chat.id)
                 presentationMode.wrappedValue.dismiss()
             },label:{
                 Text("Back")
@@ -76,6 +77,31 @@ struct ChatView: View {
                 }
                
                 VStack{
+                    HStack{
+                        Spacer()
+                        ForEach(chatVM.usersIdlingList){ user in
+                            ChatUsersIdlingCell(userProfileURL: user.profilePicture!)
+                        }
+                    }.padding(.bottom,5)
+                    HStack{
+                        Button(action:{
+                            
+                        },label:{
+                            Text("Image")
+                        })
+                        Spacer()
+                        Button(action:{
+                            
+                        },label:{
+                            Text("Poll")
+                        })
+                        Spacer()
+                        Button(action:{
+                            
+                        },label:{
+                            Text("Countdown")
+                        })
+                    }.padding(.horizontal)
                     Divider()
                 HStack{
                    
@@ -131,8 +157,8 @@ struct ChatView: View {
             
             messageVM.readAllMessages(chatID: chat.id )
             chatVM.getGroup(groupID: chat.groupID ?? "")
-            
-         
+            chatVM.openChat(userID: uid, chatID: chat.id)
+            chatVM.getUsersIdlingList(chatID: chat.id)
             
         }.edgesIgnoringSafeArea(.all)
     }

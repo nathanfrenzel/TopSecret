@@ -10,7 +10,8 @@ import SwiftUI
 struct CustomTextField: View {
     @Binding var text: String
     var placeholder: String
-    var isSecure: Bool
+    var isPassword:Bool
+    @State var isSecure: Bool
     var hasSymbol: Bool
     var symbol: String
     var numbersOnly: Bool = false
@@ -23,12 +24,30 @@ struct CustomTextField: View {
                     Image(systemName: symbol).padding(.leading,15)
                     }
                     
-                    if isSecure {
+                    if isPassword {
                         
                         if numbersOnly {
                             SecureField(placeholder, text: $text).autocapitalization(.none).padding(.vertical).padding(.leading,15).keyboardType(.numberPad)
                         }else{
-                            SecureField(placeholder, text: $text).autocapitalization(.none).padding(.vertical).padding(.leading,15)
+                            HStack{
+                                if isSecure{
+                                    SecureField(placeholder, text: $text).autocapitalization(.none).padding(.vertical).padding(.leading,15)
+                                        Button(action:{
+                                            self.isSecure.toggle()
+                                        },label:{
+                                            Image(systemName: isSecure ? "eye" : "eye.slash")
+                                        }).padding(.trailing)
+                                }else{
+                                    TextField(placeholder, text: $text).autocapitalization(.none).padding(.vertical).padding(.leading,15)
+                                        Button(action:{
+                                            self.isSecure.toggle()
+                                        },label:{
+                                            Image(systemName: isSecure ? "eye" : "eye.slash")
+
+                                        }).padding(.trailing)
+                                }
+                            
+                            }
                         }
                         
                     }else{
@@ -36,6 +55,7 @@ struct CustomTextField: View {
                             TextField(placeholder,text: $text).autocapitalization(.none).padding(.vertical).padding(.leading,15).keyboardType(.numberPad)
                         }else{
                             TextField(placeholder,text: $text).autocapitalization(.none).padding(.vertical).padding(.leading,15)
+                             
                         }
                     }
                     

@@ -12,6 +12,7 @@ struct GroupHomeScreenView: View {
     @EnvironmentObject var userVM : UserViewModel
     @StateObject var groupVM = GroupViewModel()
     @StateObject var messageVM = MessageViewModel()
+    @StateObject var chatVM = ChatViewModel()
     
     
     var group : Group
@@ -55,7 +56,7 @@ struct GroupHomeScreenView: View {
                     NavigationLink(
                         destination: ChatView(uid: userVM.user?.id ?? "", chat: groupVM.groupChat),
                         label: {
-                            GroupChatCell(membersActive: 2,message: messageVM.readLastMessage())
+                            GroupChatCell(membersActive: chatVM.usersIdlingList.count,message: messageVM.readLastMessage())
                         })
                 }.padding(.vertical,20)
                 
@@ -68,6 +69,7 @@ struct GroupHomeScreenView: View {
         }.edgesIgnoringSafeArea(.all).navigationBarHidden(true).onAppear{
             groupVM.getChat(chatID: group.chatID ?? "")
             messageVM.readAllMessages(chatID: group.chatID ?? "")
+            chatVM.getUsersIdlingList(chatID: group.chatID!)
             
         }
     }

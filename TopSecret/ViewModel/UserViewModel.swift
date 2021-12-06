@@ -17,6 +17,7 @@ class UserViewModel : ObservableObject {
     @Published var user : User?
     @Published var userSession : FirebaseAuth.User?
     @Published var userRepository = UserRepository()
+    @Published var loginErrorMessage = ""
     @Published var email = ""
     @Published var username = ""
     @Published var fullName = ""
@@ -49,6 +50,9 @@ class UserViewModel : ObservableObject {
             .store(in: &cancellables)
         userRepository.$isConnected
             .assign(to: \.isConnected, on: self)
+            .store(in: &cancellables)
+        userRepository.$loginErrorMessage
+            .assign(to: \.loginErrorMessage, on: self)
             .store(in: &cancellables)
         listenToAll()
     }
