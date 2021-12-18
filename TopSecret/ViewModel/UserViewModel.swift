@@ -13,7 +13,7 @@ import Combine
 
 class UserViewModel : ObservableObject {
     
-    
+
     @Published var user : User?
     @Published var userSession : FirebaseAuth.User?
     @Published var userRepository = UserRepository()
@@ -54,7 +54,6 @@ class UserViewModel : ObservableObject {
         userRepository.$loginErrorMessage
             .assign(to: \.loginErrorMessage, on: self)
             .store(in: &cancellables)
-        listenToAll()
     }
     
     func fetchUserChats(){

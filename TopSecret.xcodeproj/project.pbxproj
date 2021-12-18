@@ -15,7 +15,7 @@
 		6297110526E6CB7000A90E61 /* KeyboardReadable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6297110426E6CB7000A90E61 /* KeyboardReadable.swift */; };
 		6297110E26EA99F800A90E61 /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6297110D26EA99F800A90E61 /* ChatViewModel.swift */; };
 		62CE5ADA26DEE44E00AE6ACC /* VotingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62CE5AD926DEE44E00AE6ACC /* VotingView.swift */; };
-		62CE5ADC26DEE45600AE6ACC /* EventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62CE5ADB26DEE45600AE6ACC /* EventView.swift */; };
+		62CE5ADC26DEE45600AE6ACC /* ScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62CE5ADB26DEE45600AE6ACC /* ScheduleView.swift */; };
 		62CE5ADE26DEE46000AE6ACC /* AddContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62CE5ADD26DEE46000AE6ACC /* AddContentView.swift */; };
 		62CE5AE226DEE48600AE6ACC /* HomeScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62CE5AE126DEE48600AE6ACC /* HomeScreenView.swift */; };
 		62CE5AE426DEE62300AE6ACC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 62CE5AE326DEE62300AE6ACC /* GoogleService-Info.plist */; };
@@ -52,6 +52,7 @@
 		78A61F1B26BB12BC00671021 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A61F1A26BB12BC00671021 /* CustomTextField.swift */; };
 		78A61F1E26BB19F700671021 /* RegisterEmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A61F1D26BB19F700671021 /* RegisterEmailView.swift */; };
 		78A61F2526BB1C7C00671021 /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A61F2426BB1C7C00671021 /* ForgotPasswordView.swift */; };
+		78ADC64827628105001E831B /* GroupUsersProfilePictureCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78ADC64727628104001E831B /* GroupUsersProfilePictureCell.swift */; };
 		78B2379526DD159100052E69 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B2379426DD159100052E69 /* ContentView.swift */; };
 		78B4A45A27038E82000940E8 /* MessagePopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B4A45927038E82000940E8 /* MessagePopup.swift */; };
 		78B7C77326F4D4CA001244D7 /* AddChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B7C77226F4D4CA001244D7 /* AddChatView.swift */; };
@@ -59,6 +60,7 @@
 		78B8DFED26E4626000C99DAD /* SettingsMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B8DFEC26E4626000C99DAD /* SettingsMenuView.swift */; };
 		78B8DFF326E5069500C99DAD /*  MessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B8DFF226E5069500C99DAD /*  MessageModel.swift */; };
 		78B8DFF926E551D300C99DAD /* MessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B8DFF826E551D300C99DAD /* MessageCell.swift */; };
+		78BC80E8276B6A4C00F4E6FE /* GroupSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78BC80E7276B6A4C00F4E6FE /* GroupSettingsView.swift */; };
 		78C57D5F270E14CA006875BD /* AddPollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78C57D5E270E14CA006875BD /* AddPollView.swift */; };
 		78D1A72126DE98CA0083FE2C /* RegisterPhoneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D1A72026DE98CA0083FE2C /* RegisterPhoneView.swift */; };
 		78D1A72E26DEA1590083FE2C /* CreateUsername.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D1A72D26DEA1590083FE2C /* CreateUsername.swift */; };
@@ -73,6 +75,7 @@
 		78D1A75926DEFE750083FE2C /* GroupModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D1A75826DEFE750083FE2C /* GroupModel.swift */; };
 		78D1A75D26DF16D50083FE2C /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D1A75C26DF16D50083FE2C /* ChatView.swift */; };
 		78DC8671274696CB0000BE9D /* RegisterValidationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DC8670274696CB0000BE9D /* RegisterValidationViewModel.swift */; };
+		78DEE867275FA27500C832AD /* GroupGalleryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DEE866275FA27500C832AD /* GroupGalleryView.swift */; };
 		78E6F1FB273ABD5200AFE7EB /* UserRepositiory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78E6F1FA273ABD5200AFE7EB /* UserRepositiory.swift */; };
 		78E6F1FE273ABFB200AFE7EB /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78E6F1FD273ABFB200AFE7EB /* UserViewModel.swift */; };
 		78E938D226FCB573006D630F /* GroupListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78E938D126FCB573006D630F /* GroupListCell.swift */; };
@@ -88,7 +91,7 @@
 		6297110426E6CB7000A90E61 /* KeyboardReadable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardReadable.swift; sourceTree = "<group>"; };
 		6297110D26EA99F800A90E61 /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
 		62CE5AD926DEE44E00AE6ACC /* VotingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VotingView.swift; sourceTree = "<group>"; };
-		62CE5ADB26DEE45600AE6ACC /* EventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventView.swift; sourceTree = "<group>"; };
+		62CE5ADB26DEE45600AE6ACC /* ScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleView.swift; sourceTree = "<group>"; };
 		62CE5ADD26DEE46000AE6ACC /* AddContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddContentView.swift; sourceTree = "<group>"; };
 		62CE5AE126DEE48600AE6ACC /* HomeScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenView.swift; sourceTree = "<group>"; };
 		62CE5AE326DEE62300AE6ACC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../TopSecret/TopSecret/GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -120,6 +123,7 @@
 		78A61F1A26BB12BC00671021 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		78A61F1D26BB19F700671021 /* RegisterEmailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterEmailView.swift; sourceTree = "<group>"; };
 		78A61F2426BB1C7C00671021 /* ForgotPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordView.swift; sourceTree = "<group>"; };
+		78ADC64727628104001E831B /* GroupUsersProfilePictureCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupUsersProfilePictureCell.swift; sourceTree = "<group>"; };
 		78B2379426DD159100052E69 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		78B4A45927038E82000940E8 /* MessagePopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagePopup.swift; sourceTree = "<group>"; };
 		78B7C77226F4D4CA001244D7 /* AddChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddChatView.swift; sourceTree = "<group>"; };
@@ -127,6 +131,7 @@
 		78B8DFEC26E4626000C99DAD /* SettingsMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsMenuView.swift; sourceTree = "<group>"; };
 		78B8DFF226E5069500C99DAD /*  MessageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = " MessageModel.swift"; sourceTree = "<group>"; };
 		78B8DFF826E551D300C99DAD /* MessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCell.swift; sourceTree = "<group>"; };
+		78BC80E7276B6A4C00F4E6FE /* GroupSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupSettingsView.swift; sourceTree = "<group>"; };
 		78C57D5E270E14CA006875BD /* AddPollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPollView.swift; sourceTree = "<group>"; };
 		78D1A72026DE98CA0083FE2C /* RegisterPhoneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterPhoneView.swift; sourceTree = "<group>"; };
 		78D1A72D26DEA1590083FE2C /* CreateUsername.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateUsername.swift; sourceTree = "<group>"; };
@@ -141,6 +146,7 @@
 		78D1A75826DEFE750083FE2C /* GroupModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupModel.swift; sourceTree = "<group>"; };
 		78D1A75C26DF16D50083FE2C /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
 		78DC8670274696CB0000BE9D /* RegisterValidationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterValidationViewModel.swift; sourceTree = "<group>"; };
+		78DEE866275FA27500C832AD /* GroupGalleryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupGalleryView.swift; sourceTree = "<group>"; };
 		78E6F1FA273ABD5200AFE7EB /* UserRepositiory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepositiory.swift; sourceTree = "<group>"; };
 		78E6F1FD273ABFB200AFE7EB /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
 		78E938D126FCB573006D630F /* GroupListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupListCell.swift; sourceTree = "<group>"; };
@@ -340,8 +346,8 @@
 			isa = PBXGroup;
 			children = (
 				78B2379426DD159100052E69 /* ContentView.swift */,
-				62CE5ADB26DEE45600AE6ACC /* EventView.swift */,
 				62CE5AE126DEE48600AE6ACC /* HomeScreenView.swift */,
+				78DEE869275FA6FC00C832AD /* ScheduleTab */,
 				78C57D5D270E14BB006875BD /* VotingTab */,
 				78D1A74026DEDED50083FE2C /* ChatTab */,
 				629710F826E560FA00A90E61 /* AddContent */,
@@ -372,6 +378,7 @@
 				783ADC8C274C460C00FD517D /* HomescreenGroupCell.swift */,
 				783ADC9027516AB400FD517D /* GroupChatCell.swift */,
 				785E735D275D815D00BC926F /* ChatUsersIdlingCell.swift */,
+				78ADC64727628104001E831B /* GroupUsersProfilePictureCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -382,8 +389,18 @@
 				78D1A75126DEFE370083FE2C /* CreateGroupView.swift */,
 				78E938D426FCC907006D630F /* GroupHomeScreenView.swift */,
 				783ADC932751C27B00FD517D /* GroupProfileView.swift */,
+				78DEE866275FA27500C832AD /* GroupGalleryView.swift */,
+				78BC80E7276B6A4C00F4E6FE /* GroupSettingsView.swift */,
 			);
 			path = Groups;
+			sourceTree = "<group>";
+		};
+		78DEE869275FA6FC00C832AD /* ScheduleTab */ = {
+			isa = PBXGroup;
+			children = (
+				62CE5ADB26DEE45600AE6ACC /* ScheduleView.swift */,
+			);
+			path = ScheduleTab;
 			sourceTree = "<group>";
 		};
 		78E6F1F5273AB0B500AFE7EB /* Repositories */ = {
@@ -511,17 +528,19 @@
 				78D1A73426DEC56F0083FE2C /* EnterBirthday.swift in Sources */,
 				62CE5ADA26DEE44E00AE6ACC /* VotingView.swift in Sources */,
 				787E2DA326FB9CCB00670DA4 /* ChatInfoView.swift in Sources */,
+				78BC80E8276B6A4C00F4E6FE /* GroupSettingsView.swift in Sources */,
 				7817085F270B327C00975014 /* PollViewModel.swift in Sources */,
 				788A470727551295003A6232 /* EnterUserProfilePicture.swift in Sources */,
 				78D1A75D26DF16D50083FE2C /* ChatView.swift in Sources */,
 				7839C05626E9084E000B8722 /* ChatModel.swift in Sources */,
 				78D1A75226DEFE370083FE2C /* CreateGroupView.swift in Sources */,
+				78DEE867275FA27500C832AD /* GroupGalleryView.swift in Sources */,
 				78012479273C3B8F00FB54AF /* GroupRepository.swift in Sources */,
 				78012476273C3B6900FB54AF /* ChatRepository.swift in Sources */,
 				7894BD3426EB9814008FCE55 /* TextArea.swift in Sources */,
 				78B8DFF326E5069500C99DAD /*  MessageModel.swift in Sources */,
 				783ADC8D274C460C00FD517D /* HomescreenGroupCell.swift in Sources */,
-				62CE5ADC26DEE45600AE6ACC /* EventView.swift in Sources */,
+				62CE5ADC26DEE45600AE6ACC /* ScheduleView.swift in Sources */,
 				783ADC97275425DC00FD517D /* ImagePicker.swift in Sources */,
 				7801247C273C3BAD00FB54AF /* PollRepository.swift in Sources */,
 				78D1A72126DE98CA0083FE2C /* RegisterPhoneView.swift in Sources */,
@@ -552,6 +571,7 @@
 				78E938D526FCC907006D630F /* GroupHomeScreenView.swift in Sources */,
 				78D1A73126DEC3D50083FE2C /* EnterFullName.swift in Sources */,
 				783ADC9127516AB400FD517D /* GroupChatCell.swift in Sources */,
+				78ADC64827628105001E831B /* GroupUsersProfilePictureCell.swift in Sources */,
 				78E938D226FCB573006D630F /* GroupListCell.swift in Sources */,
 				78D1A72E26DEA1590083FE2C /* CreateUsername.swift in Sources */,
 				78D1A74E26DEF0BD0083FE2C /* TabToolbarItemView.swift in Sources */,

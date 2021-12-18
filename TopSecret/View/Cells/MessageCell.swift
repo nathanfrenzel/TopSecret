@@ -11,6 +11,8 @@ import SDWebImageSwiftUI
 
 struct MessageCell: View {
     var username: String
+    var messageID: String
+    var chatID: String
     var profilePicture: String
     var timeStamp: Timestamp
     var nameColor: String
@@ -32,7 +34,14 @@ struct MessageCell: View {
                     Text("\(timeStamp.dateValue(), style: .time)")
                     Spacer()
                     Button(action:{
-                        self.showOverlay.toggle()
+                        COLLECTION_CHAT.document(chatID).collection("Messages").document(messageID).delete { (err) in
+                            if err != nil {
+                                print("ERROR DELETING MESSAGE, ERROR CODE: \(err?.localizedDescription)")
+                                return
+                            }else{
+                                print("Deleted message!")
+                            }
+                        }
                     },label:{
                         Text("---")
                     }).padding(.trailing,10)

@@ -12,51 +12,49 @@ import SDWebImageSwiftUI
 
 struct HomescreenGroupCell : View {
     
-    var groupName: String
-    var memberAmount: Int
-    var motd : String
+    @StateObject var groupVM = GroupViewModel()
+    
     var group: Group
+    @State var profilePicturesCount = 0
+    
     var body : some View {
-        ZStack{
-            VStack(alignment: .leading){
-              
-                HStack(alignment: .top){
-                   Spacer()
-                    Text(groupName)
-                        .font(.headline)
-                        .fontWeight(.bold)
-                        .foregroundColor(FOREGROUNDCOLOR)
-                        .padding(.top,4)
-                        .padding()
-                    WebImage(url: URL(string: group.groupProfileImage ?? ""))
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width:50,height:50)
-                        .clipShape(Circle())
-                        .padding()
-                    Spacer()
-                }
-                
-                HStack(alignment: .center){
-                    Text(motd)
-                        .padding(.bottom,10)
-                        .foregroundColor(BACKGROUNDCOLOR)
-                }.padding(.leading)
-                
-                HStack{
-                       
-                           
-                        Text("\(memberAmount) members")
-                            .padding(.leading,15)
-                            .padding(.bottom,10)
-                            .foregroundColor(FOREGROUNDCOLOR)
-                          
-                }
-                
-              
+        
+        VStack(alignment: .leading){
             
-            }
-        }.background(Color.purple).cornerRadius(12).shadow(color: .purple, radius: 6, x: 0.0, y: 0.0)
+            
+            
+            
+                HStack{
+                    Spacer()
+                    
+                    
+                }.padding(50).background(WebImage(url: URL(string: group.groupProfileImage ?? "")).resizable().scaledToFill())
+             
+            
+            HStack(alignment: .top){
+                
+                VStack(alignment: .leading,spacing:10){
+                    Text(group.groupName).font(.headline).bold().foregroundColor(FOREGROUNDCOLOR)
+                    
+                    HStack{
+                        Text(group.motd)
+                            .lineLimit(1)
+                    }.foregroundColor(FOREGROUNDCOLOR)
+                    
+                    HStack{
+                        Text("\(group.memberAmount) \(group.memberAmount == 1 ? "member" : "members")").foregroundColor(FOREGROUNDCOLOR)
+                      
+                        
+                    }
+                }
+                
+                Spacer(minLength: 0)
+            }.padding(10).background(Rectangle().foregroundColor(Color("Color")))
+            
+            
+        }.cornerRadius(10).onAppear{
+            groupVM.getUsersProfilePictures(groupID: group.id)
+        }.shadow(color: Color("Color"),radius: 3, x: 1, y: 1)
     }
 }
 
@@ -65,6 +63,6 @@ struct HomescreenGroupCell : View {
 
 struct HomescreenGroupCell_Previews: PreviewProvider {
     static var previews: some View {
-        HomescreenGroupCell(groupName: "Laotians", memberAmount: 24, motd: "Camilo is a furry", group: Group())
+        HomescreenGroupCell(group: Group()).colorScheme(.dark)
     }
 }

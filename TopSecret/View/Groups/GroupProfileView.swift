@@ -12,6 +12,7 @@ struct GroupProfileView: View {
     
     var group: Group
     @Environment(\.presentationMode) var dismiss
+    @State var openSettings = false
 
     
     
@@ -33,7 +34,7 @@ struct GroupProfileView: View {
                         WebImage(url: URL(string: group.groupProfileImage ?? ""))
                             .resizable()
                             .scaledToFill()
-                            .frame(width:75,height:75)
+                            .frame(width:45,height:45)
                             .clipShape(Circle())
                             .padding()
                     Text("\(group.groupName)'s Profile").fontWeight(.bold).font(.headline)
@@ -43,9 +44,12 @@ struct GroupProfileView: View {
                     
                     Button(action:{
                         //TODO
+                        openSettings.toggle()
                     },label:{
-                        Text("O")
+                        Image(systemName: "gear")
                     }).padding(.trailing)
+                    
+          
                 }.padding(.top,50).padding(.bottom,20)
                 //GALLERY
                 //POLLS
@@ -56,8 +60,19 @@ struct GroupProfileView: View {
                         Text(self.options[index]).tag(index)
                     }
                 }.pickerStyle(SegmentedPickerStyle()).padding(10)
+                if selectedIndex == 0{
+                    GroupGalleryView(group: group)
+                }else if selectedIndex == 1{
+                    Text("Hello World 1")
+                }else if selectedIndex == 2{
+                    Text("Hello World 2")
+                }else{
+                    Text("Hello World 3")
+                }
+            
                 Spacer()
             }
+            NavigationLink(destination: GroupSettingsView(), isActive: $openSettings, label:{ EmptyView()})
         }.edgesIgnoringSafeArea(.all).navigationBarHidden(true)
     }
 }

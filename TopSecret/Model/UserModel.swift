@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct User : Identifiable {
+struct User : Identifiable, Hashable{
     var id : String?
     var username: String?
     var email: String?

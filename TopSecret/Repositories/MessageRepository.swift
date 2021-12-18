@@ -26,27 +26,23 @@ class MessageRepository : ObservableObject {
                 return
             }
             
-            for doc in snapshot!.documentChanges {
                 
-                
-                // adding when data is added
-                
-                if doc.type == .added {
-                    
-                    let username = doc.document.get("username") as! String
-                    let nameColor = doc.document.get("nameColor") as! String
-                    let text = doc.document.get("text") as! String
-                    let timeStamp = doc.document.get("timeStamp") as? Timestamp ?? Timestamp()
-                    let id = doc.document.get("id") as? String ?? ""
-                    let profilePicture = doc.document.get("profilePicture") as? String ?? ""
+            self.messages = snapshot!.documents.map{ snapshot -> Message in
+                let username = snapshot.get("username") as! String
+                    let nameColor = snapshot.get("nameColor") as! String
+                    let text = snapshot.get("text") as! String
+                    let timeStamp = snapshot.get("timeStamp") as? Timestamp ?? Timestamp()
+                    let id = snapshot.get("id") as? String ?? ""
+                let profilePicture = snapshot.get("profilePicture") as? String ?? ""
                     
                     
-                    self.messages.append(Message(dictionary: ["username":username, "text":text,"timeStamp":timeStamp,"id":id, "nameColor":nameColor,"profilePicture":profilePicture]))
-                    
-                    
+                    return Message(dictionary: ["username":username, "text":text,"timeStamp":timeStamp,"id":id, "nameColor":nameColor,"profilePicture":profilePicture])
                 }
                 
-            }
+                
+            
+                
+            
             
             
         }
@@ -62,6 +58,8 @@ class MessageRepository : ObservableObject {
             
          
     }
+    
+   
     
     
 }

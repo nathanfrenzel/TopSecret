@@ -16,8 +16,10 @@ class ChatRepository : ObservableObject {
     @Published var usersTypingList : [User] = []
     @Published var usersIdlingList : [User] = []
     @Published var group : Group = Group()
-    var colors: [String] = ["green","red","blue","orange"]
+    var colors: [String] = ["green","red","blue","orange","purple","teal"]
 
+    
+    
     
     //this is for chat info tab
     func getUsers(userID: String){
@@ -45,19 +47,52 @@ class ChatRepository : ObservableObject {
                 return
             }
             let data = snapshot!.data()
-            let usersIdling = data!["usersIdlingList"] as? [User.ID] ?? []
+            let usersIdling = data?["usersIdlingList"] as? [String] ?? []
+            
             
             if ((snapshot?.didChangeValue(forKey: "usersIdlingList")) != nil){
+
                 self.usersIdlingList.removeAll()
 
                 for user in usersIdling{
+                    COLLECTION_USER.document(user).getDocument { (snapshot, err) in
+                        if err != nil {
+                            print(err!.localizedDescription)
+                            return
+                        }
+
+
+                        
+                        self.usersIdlingList.append(User(dictionary: (snapshot?.data())!))
+                        
+                    }
+                }
+                
+            }
+            
+        }
+    }
+    
+    func getUsersTypingList(chatID: String){
+        COLLECTION_CHAT.document(chatID).addSnapshotListener { (snapshot, err) in
+            if err != nil {
+                print(err!.localizedDescription)
+                return
+            }
+            let data = snapshot!.data()
+            let usersTyping = data!["usersTypingList"] as? [User.ID] ?? []
+            
+            if ((snapshot?.didChangeValue(forKey: "usersTypingList")) != nil){
+                self.usersTypingList.removeAll()
+
+                for user in usersTyping{
                     COLLECTION_USER.document(user!).getDocument { (snapshot, err) in
                         if err != nil {
                             print(err!.localizedDescription)
                             return
                         }
-                        self.usersIdlingList.append(User(dictionary: snapshot!.data()!))
                         
+                        self.usersTypingList.append(User(dictionary: snapshot!.data()!))
                     }
                 }
             }
@@ -70,6 +105,14 @@ class ChatRepository : ObservableObject {
            
         }
        
+    }
+    
+    func startTyping(userID: String, chatID: String){
+        COLLECTION_CHAT.document(chatID).updateData(["usersTypingList":FieldValue.arrayUnion([userID])])
+    }
+    
+    func stopTyping(userID: String, chatID: String){
+        COLLECTION_CHAT.document(chatID).updateData(["usersTypingList":FieldValue.arrayRemove([userID])])
     }
   
     

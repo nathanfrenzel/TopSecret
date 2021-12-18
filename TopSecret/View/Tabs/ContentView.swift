@@ -14,18 +14,18 @@ struct ContentView: View {
     @State var selectedTab = 0
     @State var storedTab = 0
     @State var selectedOption: String = "Text"
-    
+
     
     var body: some View {
+        
         //if there is a user signed in then go to the Tab View else go to the register view
         if userVM.userSession != nil {
             
-            //I put your commented-out thing at the bottom of the file
             
             NavigationView {
                 TabView(selection: $selectedTab) {
                     VotingView().onAppear { storedTab = 2
-                        userVM.listenToUserPolls()
+                        
                     }
                         .tabItem {
                             Image(systemName: "checkmark")
@@ -43,7 +43,7 @@ struct ContentView: View {
                                 .frame(width: 128, height: 128)
                         }.tag(1)
                         .onAppear { storedTab = 1
-                            userVM.listenToUserChats()
+                            
                         }
                     
                     HomeScreenView()
@@ -54,29 +54,37 @@ struct ContentView: View {
                                 .frame(width: 128, height: 128)
                         }.tag(0)
                         .onAppear { storedTab = 0
-                            userVM.listenToUserGroups()
+                            userVM.fetchUserGroups()
                         }
                     
-                    EventView()
+                    ScheduleView()
                         .tabItem {
                             Image(systemName: "text.book.closed")
                                 .scaledToFill()
                                 .foregroundColor(.gray)
                                 .frame(width: 128, height: 128)
                         }.tag(3)
-                        .onAppear{storedTab = 3}
-                    
-                    AddContentView(isPresented: $isShowingNewPostView, selectedTab: $selectedTab, storedTab: $storedTab, selectedOption: $selectedOption)
+                        .onAppear{storedTab = 3
+                            
+                        }
+                    Text("Add Content")
+//                    AddContentView(isPresented: $isShowingNewPostView, selectedTab: $selectedTab, storedTab: $storedTab, selectedOption: $selectedOption)
                         .tabItem {
                             Image(systemName: "plus")
                                 .scaledToFill()
                                 .foregroundColor(.gray)
                                 .frame(width: 128, height: 128)
                         }.tag(4)
-                        .onAppear { isShowingNewPostView = true }
+                        .onAppear { isShowingNewPostView = true
+                            
+                        }
                     
                 }
-            }
+            }.onAppear{
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    userVM.listenToAll()
+                }
+                }
             
         }else {
             LoginView()

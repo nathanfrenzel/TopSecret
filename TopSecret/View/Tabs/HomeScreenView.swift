@@ -6,13 +6,14 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct HomeScreenView: View {
     
     
     @EnvironmentObject var userVM : UserViewModel
     
-    private let gridItems = [GridItem(.flexible()), GridItem(.flexible())]
+    private let gridItems = [GridItem(.flexible())]
     @State private var options = ["Groups","Notifications"]
 
     @State var selectedIndex = 0
@@ -31,9 +32,11 @@ struct HomeScreenView: View {
                 VStack{
                 HStack(spacing: 20){
                     Button(action: { self.settingsOpen.toggle() }, label: {
-                        Image("Hamburger_icon")
+                        WebImage(url: URL(string: userVM.user?.profilePicture ?? ""))
                             .resizable()
-                            .frame(width: 32, height: 32)
+                            .scaledToFill()
+                            .frame(width:35,height:35)
+                            .clipShape(Circle())
                     }).sheet(isPresented: $settingsOpen, content: {
                         SettingsMenuView()
                     }).padding(.leading,20)
@@ -69,18 +72,18 @@ struct HomeScreenView: View {
                         }.pickerStyle(SegmentedPickerStyle()).padding()
                         //List of groups
                         ScrollView {
-                            LazyVGrid(columns: gridItems, spacing: 20) {
+                            LazyVGrid(columns: gridItems, spacing: 30) {
                                 ForEach(userVM.groups) { group in
                                     NavigationLink(
                                         destination: GroupHomeScreenView(group: group),
                                         label: {
-                                            HomescreenGroupCell(groupName: group.groupName, memberAmount: group.memberAmount, motd: "camilo is a furry", group: group)
+                                            HomescreenGroupCell(group: group)
                                         })
                                     
                                 }
                                 
-                            }.padding()
-                        }
+                            }
+                        }.padding(.horizontal)
                        
                         
                     }

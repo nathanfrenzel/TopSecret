@@ -7,14 +7,19 @@
 
 import SwiftUI
 
-struct EventView: View {
+struct ScheduleView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack{
+            Color("Background")
+            VStack{
+                Text("Event View")
+            }
+        }.edgesIgnoringSafeArea(.all)
     }
 }
 
 struct EventView_Previews: PreviewProvider {
     static var previews: some View {
-        EventView()
+        ScheduleView()
     }
 }

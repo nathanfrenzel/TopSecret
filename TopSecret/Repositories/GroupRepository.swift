@@ -16,9 +16,56 @@ class GroupRepository : ObservableObject {
     @ObservedObject var pollRepository = PollRepository()
     @ObservedObject var userRepository = UserRepository()
     @Published var groupChat : ChatModel = ChatModel()
+    @Published var usersProfilePictures : [String] = []
     @Published var groupProfileImage = ""
     
     
+    func changeMOTD(motd: String, groupID: String, userID: String){
+        COLLECTION_GROUP.document(groupID).updateData(["motd":motd])
+    }
+    
+    
+    func getUsersProfilePictures(groupID: String){
+        self.usersProfilePictures = []
+        COLLECTION_GROUP.document(groupID).getDocument { (snapshot, err) in
+            if err != nil {
+                print("ERROR")
+                return
+            }
+            let data = snapshot!.data()
+            
+            let users = data!["users"] as? [User.ID] ?? []
+            
+            for user in users{
+                COLLECTION_USER.document(user!).getDocument { (snapshot, err) in
+                    if err != nil{
+                        print("ERROR")
+                        return
+                    }
+                    self.usersProfilePictures.append(snapshot?.get("profilePicture")as! String)
+                }
+            }
+            
+        }
+    }
+    
+    
+    
+//
+//    func pickQuoteOfTheDay(chatID: String){
+//        COLLECTION_CHAT.document(chatID).collection("Messages").getDocuments { (snapshot, err) in
+//            if err != nil {
+//                print("ERROR")
+//                return
+//            }
+//            for document in snapshot!.documents{
+//                document.get("text")
+//            }
+//        }
+//    }
+    
+    
+
     
     func getChat(chatID: String){
         COLLECTION_CHAT.document(chatID).getDocument { (snapshot, err) in

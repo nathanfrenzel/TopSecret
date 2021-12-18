@@ -23,6 +23,7 @@ struct ChatView: View {
 
     var uid: String
     var chat: ChatModel
+    
    
 
     
@@ -71,7 +72,7 @@ struct ChatView: View {
                 
                 ScrollView(showsIndicators: false){
                     ForEach(messageVM.messages){ message in
-                        MessageCell(username: message.username ?? "", profilePicture: message.profilePicture ?? "", timeStamp: message.timeStamp ?? Timestamp(), nameColor: message.nameColor ?? "red", showOverlay: $showOverlay, text: message.text ?? "")
+                        MessageCell(username: message.username ?? "", messageID: message.id , chatID: chat.id, profilePicture:message.profilePicture ?? "" , timeStamp: message.timeStamp ?? Timestamp(), nameColor: message.nameColor ?? "red", showOverlay:$showOverlay, text: message.text ?? "")
                     }
                     
                 }
@@ -80,7 +81,30 @@ struct ChatView: View {
                     HStack{
                         Spacer()
                         ForEach(chatVM.usersIdlingList){ user in
-                            ChatUsersIdlingCell(userProfileURL: user.profilePicture!)
+                            let containsUser = chatVM.usersTypingList.contains { element in
+                                       if user.id == element.id {
+                                           return true
+                           
+                                       }else{
+                                           return false
+                                       }
+                                   }
+                            if containsUser{
+                                WebImage(url: URL(string: user.profilePicture ?? ""))
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width:45,height:45)
+                                    .clipShape(Circle())
+                                    .offset(y: -15)
+                                    
+                            }else{
+                                WebImage(url: URL(string: user.profilePicture ?? ""))
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width:40,height:40)
+                                    .clipShape(Circle())
+                            }
+                            
                         }
                     }.padding(.bottom,5)
                     HStack{
@@ -105,7 +129,14 @@ struct ChatView: View {
                     Divider()
                 HStack{
                    
-                    TextField("message", text: $text)
+                    TextField("message", text: $text).onChange(of: text, perform: { value in
+                        if text == ""{
+                            chatVM.stopTyping(userID: uid, chatID: chat.id)
+                        }else{
+                            chatVM.startTyping(userID: uid, chatID: chat.id)
+                        }
+                    })
+                  
                     Button(action:{
                         
                         messageVM.sendMessage(message: Message(dictionary: ["text":text,"username":userVM.user?.username ?? "","timeStamp":Date(), "nameColor":chatVM.colors[chat.users.firstIndex(of: uid) ?? 0], "id":UUID().uuidString,"profilePicture":userVM.user?.profilePicture ?? ""]), chatID: chat.id)
@@ -159,6 +190,7 @@ struct ChatView: View {
             chatVM.getGroup(groupID: chat.groupID ?? "")
             chatVM.openChat(userID: uid, chatID: chat.id)
             chatVM.getUsersIdlingList(chatID: chat.id)
+            chatVM.getUsersTypingList(chatID: chat.id)
             
         }.edgesIgnoringSafeArea(.all)
     }

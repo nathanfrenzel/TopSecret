@@ -12,7 +12,6 @@ import SwiftUI
 
 class UserRepository : ObservableObject {
     
-    
     @Published var user : User?
     @Published var loginErrorMessage = ""
     @Published var userSession : FirebaseAuth.User?
@@ -118,22 +117,27 @@ class UserRepository : ObservableObject {
                 print("No document!")
                 return
             }
-            self.groups = documents.map{ queryDocumentSnapshot -> Group in
-                let data = queryDocumentSnapshot.data()
-                let chatID = data["chatID"] as? String ?? ""
-                let groupName = data["groupName"] as? String ?? ""
-                let memberAmount = data["memberAmount"] as? Int ?? 0
-                let memberLimit = data["memberLimit"] as? Int ?? 0
-                let publicID = data["publicID"] as? String ?? ""
-                let users = data["users"] as? [User.ID] ?? []
-                let id = data["id"] as? String ?? ""
-                let groupProfileImage = data["groupProfileImage"] as? String ?? ""
-                print("Fetched Groups!")
-                
+    
+                self.groups = documents.map{ queryDocumentSnapshot -> Group in
+                    let data = queryDocumentSnapshot.data()
+                    let chatID = data["chatID"] as? String ?? ""
+                    let groupName = data["groupName"] as? String ?? ""
+                    let memberAmount = data["memberAmount"] as? Int ?? 0
+                    let memberLimit = data["memberLimit"] as? Int ?? 0
+                    let publicID = data["publicID"] as? String ?? ""
+                    let users = data["users"] as? [User.ID] ?? []
+                    let id = data["id"] as? String ?? ""
+                    let groupProfileImage = data["groupProfileImage"] as? String ?? ""
+                    let motd = data["motd"] as? String ?? "Welcome to the group!"
+                    let quoteOfTheDay = data["quoteOfTheDay"] as? String ?? ""
+                    print("Fetched Groups!")
+                    
 
-                return Group(dictionary: ["chatID":chatID,"groupName":groupName,"memberAmount":memberAmount,"memberLimit":memberLimit,"publicID":publicID,"users":users,"id":id, "groupProfileImage":groupProfileImage])
-                
-            }
+                    return Group(dictionary: ["chatID":chatID,"groupName":groupName,"memberAmount":memberAmount,"memberLimit":memberLimit,"publicID":publicID,"users":users,"id":id, "groupProfileImage":groupProfileImage,"motd":motd,"quoteOfTheDay":quoteOfTheDay])
+                    
+                }
+
+            
             
         }
     }
@@ -191,6 +195,40 @@ class UserRepository : ObservableObject {
     
     func fetchUserChats(){
         //TODO
+        COLLECTION_CHAT.whereField("users", arrayContains: user?.id ?? "").getDocuments { (snapshot, err) in
+            if err != nil {
+                print("ERROR \(err!.localizedDescription)")
+                return
+            }
+            for document in snapshot!.documents {
+                let source = document.metadata.isFromCache
+                if source{
+                    print("You are offline!")
+                }else{
+                    print("You are online!")
+                }
+            }
+            
+            guard let documents = snapshot?.documents else {
+                print("No document!")
+                return
+            }
+            
+            self.chats = documents.map{ queryDocumentSnapshot -> ChatModel in
+                let data = queryDocumentSnapshot.data()
+         
+
+                
+                
+
+                return ChatModel(dictionary: data)
+                
+            }
+            
+            print("Fetched User Chats!")
+
+            
+        }
     }
     
     func fetchUserGroups(){
@@ -224,17 +262,18 @@ class UserRepository : ObservableObject {
                 let users = data["users"] as? [User.ID] ?? []
                 let id = data["id"] as? String ?? ""
                 let groupProfileImage = data["groupProfileImage"] as? String ?? ""
+                let motd = data["motd"] as? String ?? "Welcome to the group!"
+                let quoteOfTheDay = data["quoteOfTheDay"] as? String ?? ""
 
                 
-                print("Fetched Groups!")
                 
-                print("Fetched User Groups!")
 
-                return Group(dictionary: ["chatID":chatID,"groupName":groupName,"memberAmount":memberAmount,"memberLimit":memberLimit,"publicID":publicID,"users":users,"id":id,"groupProfileImage":groupProfileImage])
+                return Group(dictionary: ["chatID":chatID,"groupName":groupName,"memberAmount":memberAmount,"memberLimit":memberLimit,"publicID":publicID,"users":users,"id":id,"groupProfileImage":groupProfileImage,"motd":motd,"quoteOfTheDay":quoteOfTheDay])
                 
             }
             
-            
+            print("Fetched User Groups!")
+
             
         }
     }

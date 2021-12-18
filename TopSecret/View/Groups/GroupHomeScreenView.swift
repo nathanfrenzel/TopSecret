@@ -12,8 +12,7 @@ struct GroupHomeScreenView: View {
     @EnvironmentObject var userVM : UserViewModel
     @StateObject var groupVM = GroupViewModel()
     @StateObject var messageVM = MessageViewModel()
-    @StateObject var chatVM = ChatViewModel()
-    
+    @State var openChat: Bool = false
     
     var group : Group
     
@@ -34,14 +33,14 @@ struct GroupHomeScreenView: View {
                     Spacer()
                     Text("\(group.groupName)")
                         .fontWeight(.bold)
-                        .font(.title)
+                        .font(.title).lineLimit(1)
                     
                     Spacer()
                     
                         NavigationLink(
                             destination: GroupProfileView(group: group),
                             label: {
-                                Text("Group Profile")
+                                Image(systemName: "person.3.fill")
                             }).padding(.trailing)
                     
                 }.padding(.top,50)
@@ -50,27 +49,30 @@ struct GroupHomeScreenView: View {
                 HStack{
                     Text("Countdown")
                     Text("4 hours until event!")
-                }.padding(.vertical,20)
+                }
                 Divider()
                 HStack{
-                    NavigationLink(
-                        destination: ChatView(uid: userVM.user?.id ?? "", chat: groupVM.groupChat),
-                        label: {
-                            GroupChatCell(membersActive: chatVM.usersIdlingList.count,message: messageVM.readLastMessage())
-                        })
-                }.padding(.vertical,20)
+                    
+                    Button(action:{
+                        openChat.toggle()
+                    },label:{
+                        GroupChatCell(message: messageVM.readLastMessage(), chat: groupVM.groupChat)
+                    })
+                   
+                
+                }
                 
                 
-                Text("Testing")
                 
                 Spacer()
                 
             }
+            NavigationLink(destination: ChatView(uid: userVM.user?.id ?? "", chat: groupVM.groupChat), isActive: $openChat, label: {
+                EmptyView()
+            })
         }.edgesIgnoringSafeArea(.all).navigationBarHidden(true).onAppear{
             groupVM.getChat(chatID: group.chatID ?? "")
             messageVM.readAllMessages(chatID: group.chatID ?? "")
-            chatVM.getUsersIdlingList(chatID: group.chatID!)
-            
         }
     }
 }

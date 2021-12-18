@@ -19,6 +19,7 @@ class GroupViewModel: ObservableObject {
     @ObservedObject var chatVM = ChatViewModel()
     @ObservedObject var groupRepository = GroupRepository()
     @Published var groupChat : ChatModel = ChatModel()
+    @Published var usersProfilePictures : [String] = []
     @Published var groupProfileImage = ""
 
     
@@ -26,14 +27,29 @@ class GroupViewModel: ObservableObject {
 
     
     init(){
+        groupRepository.$usersProfilePictures
+            .assign(to: \.usersProfilePictures, on: self)
+            .store(in: &cancellables)
         groupRepository.$groupChat
             .assign(to: \.groupChat, on: self)
             .store(in: &cancellables)
         groupRepository.$groupProfileImage
             .assign(to: \.groupProfileImage, on: self)
             .store(in: &cancellables)
+     
+        
             
     }
+    
+    func changeMOTD(motd: String, groupID: String, userID: String){
+        groupRepository.changeMOTD(motd: motd, groupID: groupID, userID: userID)
+        
+    }
+    
+    func getUsersProfilePictures(groupID: String){
+        groupRepository.getUsersProfilePictures(groupID: groupID)
+    }
+    
     func getChat(chatID: String){
         groupRepository.getChat(chatID: chatID)
     }

@@ -13,6 +13,7 @@ struct Group: Identifiable{
     
     
     var groupName: String = ""
+    var motd: String = ""
     var publicID: String?
     var id: String
     var dateCreated: Date?
@@ -22,6 +23,7 @@ struct Group: Identifiable{
     var polls : [PollModel]?
     var chatID: String?
     var groupProfileImage: String?
+    var quoteOfTheDay: String?
     
     init(dictionary: [String:Any]){
         self.id = dictionary["id"] as? String ?? " "
@@ -34,6 +36,8 @@ struct Group: Identifiable{
         self.chatID = dictionary["chatID"] as? String ?? " "
         self.polls = dictionary["polls"] as? [PollModel] ?? []
         self.groupProfileImage = dictionary["groupProfileImage"] as? String ?? " "
+        self.motd = dictionary["motd"] as? String ?? "Welcome to the group!"
+        self.quoteOfTheDay = dictionary["quoteOfTheDay"] as? String ?? ""
       
     }
     init(){

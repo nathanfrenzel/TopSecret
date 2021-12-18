@@ -16,7 +16,7 @@ class ChatViewModel : ObservableObject {
     @Published var usersTypingList : [User] = []
     @Published var usersIdlingList : [User] = []
     @Published var group : Group = Group()
-    var colors: [String] = ["green","red","blue","orange"]
+    var colors: [String] = ["green","red","blue","orange","purple","teal"]
     @EnvironmentObject var userVM: UserViewModel
     @ObservedObject var chatRepository = ChatRepository()
     
@@ -37,7 +37,18 @@ class ChatViewModel : ObservableObject {
             .store(in: &cancellables)
     }
     
+    func startTyping(userID: String, chatID: String){
+        chatRepository.startTyping(userID: userID, chatID: chatID)
+    }
   
+    func stopTyping(userID: String, chatID: String){
+        chatRepository.stopTyping(userID: userID, chatID: chatID)
+    }
+    
+    func getUsersTypingList(chatID: String){
+        chatRepository.getUsersTypingList(chatID: chatID)
+    }
+    
     func getUsersIdlingList(chatID: String){
         chatRepository.getUsersIdlingList(chatID: chatID)
     }
