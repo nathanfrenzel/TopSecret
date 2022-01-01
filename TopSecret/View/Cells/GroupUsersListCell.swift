@@ -25,9 +25,9 @@ struct GroupUsersListCell: View {
                     .padding()
                 VStack(alignment: .leading){
                     if isCurrentUser{
-                    Text("\(user.fullname ?? "") \( "(Me)")").foregroundColor(Color(nameColor))
+                    Text("\(user.nickName ?? "") \( "(Me)")").foregroundColor(Color(nameColor))
                     }else{
-                        Text("\(user.fullname ?? "") ").foregroundColor(Color(nameColor))
+                        Text("\(user.nickName ?? "") ").foregroundColor(Color(nameColor))
                     }
                     Text("@\(user.username ?? "") ").foregroundColor(.gray).opacity(0.5)
                 }

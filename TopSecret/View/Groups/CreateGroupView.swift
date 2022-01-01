@@ -23,7 +23,11 @@ struct CreateGroupView: View {
     
     var body: some View {
         ZStack{
+            Color("Background")
         VStack{
+            
+            
+            Text("Create Group!").fontWeight(.bold).font(.title)
             
             CustomTextField(text: $groupName, placeholder: "Group Name", isPassword: false, isSecure: false, hasSymbol: false,symbol: "phone").padding(.horizontal,20)
             
@@ -49,37 +53,14 @@ struct CreateGroupView: View {
             },label:{
                 Text("Create Group")
                     
-            }).background(Color.red)
-            
-          
-            
-            
-        
-        Divider()
-            
-        VStack{
-            Text("Join Group!")
-            
-            CustomTextField(text: $joinPublicID, placeholder: "Public ID", isPassword: false, isSecure: false, hasSymbol: false,symbol: "phone").padding(.horizontal,20)
-            
-            Button(action:{
-             
-                groupVM.joinGroup(publicID: joinPublicID, userID: userVM.user?.id ?? "")
-                userVM.fetchUserGroups()
-                
-            },label:{
-                Text("Join Group")
             })
             
-          
-        }
-        }
+
         
-        
-        }.onAppear{
-            self.groupVM.setupUserVM(userVM: userVM)
         }
+            
     }
+}
 }
 
 struct CreateGroupView_Previews: PreviewProvider {

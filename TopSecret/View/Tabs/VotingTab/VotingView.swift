@@ -35,7 +35,7 @@ struct VotingView: View {
                         .padding(.trailing,20).sheet(isPresented: $goToAddPoll, content: {
                             AddPollView(pollVM: pollVM).environmentObject(userVM)
                         })
-
+                        
                         
                     }.padding(.top,50)
                     
@@ -45,7 +45,7 @@ struct VotingView: View {
                     
                     ScrollView(showsIndicators: false){
                         ForEach(userVM.polls){ poll in
-                            PollCell(username: poll.creator ?? "", groupName: poll.groupName ?? "", dateCreated: poll.dateCreated ?? Timestamp(), question: poll.question ?? "")
+                            PollCell(name: poll.creator ?? "", groupName: poll.groupName ?? "", dateCreated: poll.dateCreated ?? Timestamp(), question: poll.question ?? "").padding(.bottom,15)
                             
                         }
                     }
@@ -77,10 +77,10 @@ struct VotingView: View {
                     Text("It appears there are not polls!")
                     Spacer()
                 }.padding()
-              
+                
             }
-          
-
+            
+            
         }.edgesIgnoringSafeArea(.all).navigationBarHidden(true)
     }
 }

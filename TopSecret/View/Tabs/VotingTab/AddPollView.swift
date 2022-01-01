@@ -45,6 +45,7 @@ struct AddPollView: View {
                 }
                 Button(action:{
                     pollVM.createPoll(creator: userVM.user?.username ?? "", question: question, group: selectedGroup)
+                    userVM.fetchUserPolls()
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                         presentationMode.wrappedValue.dismiss()
                     }

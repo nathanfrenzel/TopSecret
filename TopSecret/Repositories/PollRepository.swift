@@ -15,13 +15,14 @@ class PollRepository : ObservableObject {
     
     func createPoll(creator: String, question: String, group: Group){
         let id = UUID().uuidString
-        let data = ["creator":creator,"question":question,"dateCreated":Timestamp(),"id":id, "groupID":group.id, "groupName":group.groupName ] as [String : Any]
-        COLLECTION_GROUP.document(group.id).collection("Polls").document(id).setData(data) { (err) in
+        let data = ["creator":creator,"question":question,"dateCreated":Timestamp(),"id":id, "groupID":group.id, "groupName":group.groupName,"users":group.users ?? ""] as [String : Any]
+        COLLECTION_POLLS.document(id).setData(data) { (err) in
             if err != nil {
                 print("ERROR")
                 return
             }
             
+            print("Fetched User Polls")
         }
         
     }

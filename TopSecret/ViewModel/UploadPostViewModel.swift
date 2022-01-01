@@ -24,7 +24,7 @@ class UploadPostViewModel: ObservableObject {
         
         let data: [String: Any] = ["uid": user.id,
                                    "caption": caption,
-                                   "fullname": user.fullname,
+                                   "fullname": user.nickName,
                                    "timestamp": Timestamp(date: Date()),
                                    "username": user.username,
                                    "groupname": groupName,

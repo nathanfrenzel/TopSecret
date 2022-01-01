@@ -29,6 +29,10 @@ class UserRepository : ObservableObject {
         
         userSession = Auth.auth().currentUser
         fetchUser()
+        if userSession != nil{
+            self.listenToAll(uid: userSession!.uid)
+        }
+        
     }
     
     func persistImageToStorage(userID: String, image: UIImage) {
@@ -53,9 +57,10 @@ class UserRepository : ObservableObject {
       
     }
     
-    func listenToUserChats(){
+    func listenToUserChats(uid: String){
         
-        COLLECTION_CHAT.whereField("users", arrayContains: self.user?.id ?? " ").addSnapshotListener { (snapshot, err) in
+        
+        COLLECTION_CHAT.whereField("users", arrayContains: uid).addSnapshotListener { (snapshot, err) in
             
             guard let source = snapshot?.metadata.isFromCache else{
                 print("error")
@@ -96,9 +101,9 @@ class UserRepository : ObservableObject {
         
     }
     
-    func listenToUserGroups(){
+    func listenToUserGroups(uid: String){
         
-        COLLECTION_GROUP.whereField("users", arrayContains: self.user?.id ?? " ").addSnapshotListener { (snapshot, err) in
+        COLLECTION_GROUP.whereField("users", arrayContains: uid).addSnapshotListener { (snapshot, err) in
             
          
             guard let source = snapshot?.metadata.isFromCache else{
@@ -142,9 +147,9 @@ class UserRepository : ObservableObject {
         }
     }
     
-    func listenToUserPolls(){
-        for group in self.groups{
-            COLLECTION_GROUP.document(group.id).collection("Polls").order(by: "dateCreated",descending: true).addSnapshotListener { (snapshot, err) in
+    func listenToUserPolls(uid: String){
+        
+        COLLECTION_POLLS.whereField("users", arrayContains: uid).order(by: "dateCreated",descending: true).addSnapshotListener { (snapshot, err) in
                 
                 guard let source = snapshot?.metadata.isFromCache else{
                     print("error")
@@ -170,16 +175,17 @@ class UserRepository : ObservableObject {
                     let dateCreated = data["dateCreated"] as? Timestamp ?? Timestamp()
                     let groupID = data["groupID"] as? String ?? ""
                     let groupName = data["groupName"] as? String ?? ""
+                    let users = data["users"] as? [String] ?? []
                     let id = data["id"] as? String ?? ""
                     print("Fetched Polls!")
                     
-                    return PollModel(dictionary: ["question":question,"creator":creator,"dateCreated":dateCreated,"groupID":groupID,"groupName":groupName,"id":id])
+                    return PollModel(dictionary: ["question":question,"creator":creator,"dateCreated":dateCreated,"groupID":groupID,"groupName":groupName,"id":id,"users":users])
                     
                     
                 }
                 
-            }
         }
+        
         
         
         
@@ -187,10 +193,13 @@ class UserRepository : ObservableObject {
     }
     
     
-    func listenToAll(){
-        listenToUserChats()
-        listenToUserGroups()
-        listenToUserPolls()
+    func listenToAll(uid: String){
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            self.listenToUserChats(uid: uid)
+            self.listenToUserGroups(uid: uid)
+            self.listenToUserPolls(uid: uid)
+        }
+       
     }
     
     func fetchUserChats(){
@@ -279,6 +288,41 @@ class UserRepository : ObservableObject {
     }
     func fetchUserPolls(){
         //TODO
+        //TODO
+        COLLECTION_POLLS.whereField("users", arrayContains: user?.id ?? "").getDocuments { (snapshot, err) in
+            if err != nil {
+                print("ERROR \(err!.localizedDescription)")
+                return
+            }
+            for document in snapshot!.documents {
+                let source = document.metadata.isFromCache
+                if source{
+                    print("You are offline!")
+                }else{
+                    print("You are online!")
+                }
+            }
+            
+            guard let documents = snapshot?.documents else {
+                print("No document!")
+                return
+            }
+            
+            self.polls = documents.map{ queryDocumentSnapshot -> PollModel in
+                let data = queryDocumentSnapshot.data()
+         
+
+                
+                
+
+                return PollModel(dictionary: data)
+                
+            }
+            
+            print("Fetched User Chats!")
+
+            
+        }
     }
     func fetchAll(){
         fetchUserChats()
@@ -288,7 +332,7 @@ class UserRepository : ObservableObject {
     
     
     
-    func createUser(email: String, password: String, username: String, fullname: String, birthday: Date, image:UIImage){
+    func createUser(email: String, password: String, username: String, nickName: String, birthday: Date, image:UIImage){
         Auth.auth().createUser(withEmail: email, password: password) { (result, err) in
             if let err = err{
                 print("DEBUG: ERROR: \(err.localizedDescription)")
@@ -299,20 +343,25 @@ class UserRepository : ObservableObject {
             
             let data = ["email": email,
                         "username": username,
-                        "fullname": fullname,
+                        "nickName": nickName,
                         "uid": user.uid,
-                        "birthday": birthday,"profilePicture":" "
+                        "birthday": birthday,"profilePicture":""
                         
             ] as [String : Any]
             
-            COLLECTION_USER.document(user.uid).setData(data){ _ in
-                self.userSession = user
-                self.fetchUser()
-                print("DEBUG: Succesfully uploaded user data!")
-            }
+            COLLECTION_USER.document(user.uid).setData(data)
+            
+            
             self.persistImageToStorage(userID: user.uid, image: image)
+            
+            self.listenToAll(uid: user.uid)
+            print("DEBUG: Succesfully uploaded user data!")
 
             
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                self.userSession = user
+                self.fetchUser()
+            }
             Auth.auth().currentUser?.sendEmailVerification(completion: { (err) in
                 
             })
@@ -341,7 +390,7 @@ class UserRepository : ObservableObject {
                     loginErrorMessage = "The email or password is incorrect"
                     
                   default:
-                      loginErrorMessage = "Error: \(error.localizedDescription)"
+                      loginErrorMessage = "loves"
                   }
             }else{
                 print("You are connected")
@@ -349,7 +398,7 @@ class UserRepository : ObservableObject {
             
             self.userSession = result?.user
             self.fetchUser()
-            
+            self.listenToAll(uid: userSession!.uid)
         }
         
     }

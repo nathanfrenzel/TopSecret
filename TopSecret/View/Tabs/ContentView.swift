@@ -22,10 +22,10 @@ struct ContentView: View {
         if userVM.userSession != nil {
             
             
+            
             NavigationView {
                 TabView(selection: $selectedTab) {
                     VotingView().onAppear { storedTab = 2
-                        
                     }
                         .tabItem {
                             Image(systemName: "checkmark")
@@ -54,7 +54,6 @@ struct ContentView: View {
                                 .frame(width: 128, height: 128)
                         }.tag(0)
                         .onAppear { storedTab = 0
-                            userVM.fetchUserGroups()
                         }
                     
                     ScheduleView()
@@ -80,11 +79,7 @@ struct ContentView: View {
                         }
                     
                 }
-            }.onAppear{
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    userVM.listenToAll()
-                }
-                }
+            }
             
         }else {
             LoginView()

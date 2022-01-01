@@ -10,7 +10,7 @@ import Firebase
 import SDWebImageSwiftUI
 
 struct MessageCell: View {
-    var username: String
+    var name: String
     var messageID: String
     var chatID: String
     var profilePicture: String
@@ -29,7 +29,7 @@ struct MessageCell: View {
                 .padding()
             VStack(alignment: .leading){
                 HStack{
-                    Text("\(username)").foregroundColor(Color(nameColor))
+                    Text("\(name)").foregroundColor(Color(nameColor))
                     Text("*")
                     Text("\(timeStamp.dateValue(), style: .time)")
                     Spacer()

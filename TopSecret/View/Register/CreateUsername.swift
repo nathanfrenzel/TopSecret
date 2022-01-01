@@ -10,6 +10,7 @@ import SwiftUI
 struct CreateUsername: View {
     
     @State var isNext:Bool = false
+    @State var showErrorMessage:Bool = false
     @EnvironmentObject var userAuthVM: UserViewModel
     @StateObject var registerValidation = RegisterValidationViewModel()
     
@@ -27,21 +28,22 @@ struct CreateUsername: View {
                 
                 CustomTextField(text: $registerValidation.username, placeholder: "Username", isPassword: false, isSecure: false, hasSymbol: true,symbol: "person").padding(.horizontal,20)
                
-                
+                if showErrorMessage{
                 Text("\(registerValidation.usernameErrorMessage)").padding(.top,5).foregroundColor(registerValidation.usernameErrorMessage == "valid!" ? .green : .red)
-                
+                }
                 Button(action: {
-              
+                    if registerValidation.usernameErrorMessage == "valid!"{
                     self.isNext.toggle()
-                    //TODO
                     self.userAuthVM.username = registerValidation.username
-                    
+                    }else{
+                        showErrorMessage = true
+                    }
                 }, label: {
                     Text("Next")
                         .foregroundColor(Color("Foreground"))
                         .padding(.vertical)
                         .frame(width: UIScreen.main.bounds.width/1.5).background(Color("AccentColor")).cornerRadius(15)
-                }).padding().disabled(registerValidation.usernameErrorMessage != "valid!")
+                }).padding()
                 NavigationLink(
                     destination: EnterFullName(),
                     isActive: $isNext,

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct EnterFullName: View {
     
-    @State var fullName: String = ""
+    @State var nickName: String = ""
     @State var isNext: Bool = false
     @EnvironmentObject var userAuthVM: UserViewModel
     
@@ -19,14 +19,14 @@ struct EnterFullName: View {
             
             Color("Background")
             VStack{
-                Text("Enter your full name").foregroundColor(Color("Foreground")).font(.largeTitle).fontWeight(.bold).padding(.horizontal)
+                Text("Enter your nickname").foregroundColor(Color("Foreground")).font(.largeTitle).fontWeight(.bold).padding(.horizontal)
                 
                 Text("This is the name your friends will see you as").font(.headline).padding(.bottom,30)
                 
                 
                 
                 
-                CustomTextField(text: $fullName, placeholder: "Full Name", isPassword: false, isSecure: false, hasSymbol: false,symbol: "none").padding(.horizontal,20)
+                CustomTextField(text: $nickName, placeholder: "Nickname", isPassword: false, isSecure: false, hasSymbol: false,symbol: "none").padding(.horizontal,20)
                 
                 
                 
@@ -34,7 +34,7 @@ struct EnterFullName: View {
                 
                 Button(action: {
                     self.isNext.toggle()
-                    userAuthVM.fullName = fullName
+                    userAuthVM.nickName = nickName
                 }, label: {
                     Text("Next")
                         .foregroundColor(Color("Foreground"))

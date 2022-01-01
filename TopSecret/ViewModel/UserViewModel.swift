@@ -20,7 +20,7 @@ class UserViewModel : ObservableObject {
     @Published var loginErrorMessage = ""
     @Published var email = ""
     @Published var username = ""
-    @Published var fullName = ""
+    @Published var nickName = ""
     @Published var password = ""
     @Published var birthday = Date()
     @Published var userProfileImage : UIImage = UIImage()
@@ -54,6 +54,7 @@ class UserViewModel : ObservableObject {
         userRepository.$loginErrorMessage
             .assign(to: \.loginErrorMessage, on: self)
             .store(in: &cancellables)
+     
     }
     
     func fetchUserChats(){
@@ -73,21 +74,21 @@ class UserViewModel : ObservableObject {
     }
     
     func listenToUserGroups(){
-        userRepository.listenToUserGroups()
+        userRepository.listenToUserGroups(uid: userSession!.uid)
     }
     func listenToUserChats(){
-        userRepository.listenToUserChats()
+        userRepository.listenToUserChats(uid: userSession!.uid)
     }
     
     func listenToUserPolls(){
-        userRepository.listenToUserPolls()
+        userRepository.listenToUserPolls(uid: userSession!.uid)
     }
-    func listenToAll(){
-        userRepository.listenToAll()
+    func listenToAll(uid: String){
+        userRepository.listenToAll(uid: uid)
     }
     
-    func createUser(email: String, password: String, username: String, fullname: String, birthday: Date,image: UIImage){
-        userRepository.createUser(email: email, password: password, username: username, fullname: fullname, birthday: birthday, image: image)
+    func createUser(email: String, password: String, username: String, nickName: String, birthday: Date,image: UIImage){
+        userRepository.createUser(email: email, password: password, username: username, nickName: nickName, birthday: birthday, image: image)
     }
     
     func resetPassword(email: String){

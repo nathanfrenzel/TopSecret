@@ -15,14 +15,14 @@ struct Message : Identifiable{
     var nameColor: String?
     var text : String?
     var timeStamp : Timestamp?
-    var username : String?
+    var name : String?
     var profilePicture: String?
     
     
     init(dictionary: [String:Any]){
         self.text = dictionary["text"] as? String ?? " "
         self.timeStamp = dictionary["timeStamp"] as? Timestamp ?? Timestamp()
-        self.username = dictionary["username"] as? String ?? " "
+        self.name = dictionary["name"] as? String ?? " "
         self.profilePicture = dictionary["profilePicture"] as? String ?? " "
         self.id = dictionary["id"] as? String ?? " "
         self.nameColor = dictionary["nameColor"] as? String ?? " "

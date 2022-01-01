@@ -23,7 +23,7 @@ struct GroupChatCell: View {
             
             
             HStack{
-                Text("@\(message.username ?? "") : \(message.text ?? "")")
+                Text("\(message.name ?? "") : \(message.text ?? "")")
                 
             }
             HStack{

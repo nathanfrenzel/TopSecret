@@ -34,10 +34,10 @@ class GroupRepository : ObservableObject {
             }
             let data = snapshot!.data()
             
-            let users = data!["users"] as? [User.ID] ?? []
+            let users = data!["users"] as? [String] ?? []
             
             for user in users{
-                COLLECTION_USER.document(user!).getDocument { (snapshot, err) in
+                COLLECTION_USER.document(user).getDocument { (snapshot, err) in
                     if err != nil{
                         print("ERROR")
                         return

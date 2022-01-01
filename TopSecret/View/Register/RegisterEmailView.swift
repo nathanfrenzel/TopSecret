@@ -10,6 +10,7 @@ import SwiftUI
 struct RegisterEmailView: View {
     @State var isNext:Bool = false
     @State var usingEmail:Bool = true
+    @State var showErrorMessage:Bool = false
     @EnvironmentObject var userAuthVM: UserViewModel
     @StateObject var validationVM = RegisterValidationViewModel()
     
@@ -40,19 +41,24 @@ struct RegisterEmailView: View {
                         
                         CustomTextField(text: $validationVM.email, placeholder: "Email", isPassword: false, isSecure: false, hasSymbol: true,symbol: "envelope").padding(.horizontal,20)
                         
+                        if showErrorMessage{
                         Text("\(validationVM.emailErrorMessage)").padding(.top,5).foregroundColor(validationVM.emailErrorMessage == "valid!" ? .green : .red)
-                        
+                        }
                         Button(action: {
-                       
-                            self.isNext.toggle()
-                            userAuthVM.email = validationVM.email
+                            if validationVM.emailErrorMessage == "valid!"{
+                                self.isNext.toggle()
+                                userAuthVM.email = validationVM.email
+                            }else{
+                                showErrorMessage = true
+                            }
+                            
                             
                         }, label: {
                             Text("Next")
                                 .foregroundColor(Color("Foreground"))
                                 .padding(.vertical)
                                 .frame(width: UIScreen.main.bounds.width/1.5).background(Color("AccentColor")).cornerRadius(15)
-                        }).padding().disabled(validationVM.emailErrorMessage != "valid!")
+                        }).padding()
                         
                         
                         Button(action:{

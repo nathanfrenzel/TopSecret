@@ -13,7 +13,7 @@ struct User : Identifiable, Hashable{
     var username: String?
     var email: String?
     var password: String?
-    var fullname: String?
+    var nickName: String?
     var birthday: Date?
     var profilePicture: String?
     
@@ -24,7 +24,7 @@ init(dictionary: [String:Any]) {
     self.username = dictionary["username"] as? String ?? ""
     self.email = dictionary["email"] as? String ?? ""
     self.password = dictionary["password"] as? String ?? ""
-    self.fullname = dictionary["fullname"] as? String ?? ""
+    self.nickName = dictionary["nickName"] as? String ?? ""
     self.birthday = dictionary["birthday"] as? Date ?? Date()
     self.profilePicture = dictionary["profilePicture"] as? String ?? ""
 

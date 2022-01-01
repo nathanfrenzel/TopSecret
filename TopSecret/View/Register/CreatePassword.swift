@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CreatePassword: View {
     @State var password: String = ""
+    @State var showErrorMessage:Bool = false
     @EnvironmentObject var userVM : UserViewModel
     @ObservedObject var registerVM = RegisterValidationViewModel()
     
@@ -26,13 +27,16 @@ struct CreatePassword: View {
                 
                 CustomTextField(text: $registerVM.password, placeholder: "Password", isPassword: true, isSecure: true, hasSymbol: true ,symbol: "lock").padding(.horizontal,20)
                 
-                
+                if showErrorMessage{
                 Text(registerVM.passwordErrorMessage).padding(.top,5).foregroundColor(registerVM.passwordErrorMessage == "Password is valid!" ? .green : .red)
-                
+                }
                 
                 Button(action: {
-                    userVM.createUser(email: userVM.email , password: registerVM.password, username: userVM.username , fullname: userVM.fullName , birthday: userVM.birthday , image: userVM.userProfileImage)
-                    
+                    if registerVM.passwordErrorMessage == "Password is valid!"{
+                        userVM.createUser(email: userVM.email , password: registerVM.password, username: userVM.username, nickName: userVM.nickName , birthday: userVM.birthday , image: userVM.userProfileImage)
+                    }else{
+                        showErrorMessage = true
+                    }
                 }, label: {
                     Text("Create Account")
                         .foregroundColor(Color("Foreground"))

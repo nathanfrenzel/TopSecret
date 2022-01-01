@@ -28,7 +28,7 @@ class MessageRepository : ObservableObject {
             
                 
             self.messages = snapshot!.documents.map{ snapshot -> Message in
-                let username = snapshot.get("username") as! String
+                let name = snapshot.get("name") as? String ?? ""
                     let nameColor = snapshot.get("nameColor") as! String
                     let text = snapshot.get("text") as! String
                     let timeStamp = snapshot.get("timeStamp") as? Timestamp ?? Timestamp()
@@ -36,7 +36,7 @@ class MessageRepository : ObservableObject {
                 let profilePicture = snapshot.get("profilePicture") as? String ?? ""
                     
                     
-                    return Message(dictionary: ["username":username, "text":text,"timeStamp":timeStamp,"id":id, "nameColor":nameColor,"profilePicture":profilePicture])
+                    return Message(dictionary: ["name":name, "text":text,"timeStamp":timeStamp,"id":id, "nameColor":nameColor,"profilePicture":profilePicture])
                 }
                 
                 
@@ -54,7 +54,7 @@ class MessageRepository : ObservableObject {
     
     
     func sendMessage(message: Message,chatID: String){
-        COLLECTION_CHAT.document(chatID).collection("Messages").document(message.id).setData(["text":message.text!,"username":message.username!,"timeStamp":message.timeStamp!, "nameColor":message.nameColor!, "id":message.id,"profilePicture":message.profilePicture!])
+        COLLECTION_CHAT.document(chatID).collection("Messages").document(message.id).setData(["text":message.text!,"name":message.name!,"timeStamp":message.timeStamp!, "nameColor":message.nameColor!, "id":message.id,"profilePicture":message.profilePicture!])
             
          
     }

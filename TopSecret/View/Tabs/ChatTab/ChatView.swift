@@ -72,7 +72,7 @@ struct ChatView: View {
                 
                 ScrollView(showsIndicators: false){
                     ForEach(messageVM.messages){ message in
-                        MessageCell(username: message.username ?? "", messageID: message.id , chatID: chat.id, profilePicture:message.profilePicture ?? "" , timeStamp: message.timeStamp ?? Timestamp(), nameColor: message.nameColor ?? "red", showOverlay:$showOverlay, text: message.text ?? "")
+                        MessageCell(name: message.name ?? "", messageID: message.id , chatID: chat.id, profilePicture:message.profilePicture ?? "" , timeStamp: message.timeStamp ?? Timestamp(), nameColor: message.nameColor ?? "red", showOverlay:$showOverlay, text: message.text ?? "")
                     }
                     
                 }
@@ -139,7 +139,7 @@ struct ChatView: View {
                   
                     Button(action:{
                         
-                        messageVM.sendMessage(message: Message(dictionary: ["text":text,"username":userVM.user?.username ?? "","timeStamp":Date(), "nameColor":chatVM.colors[chat.users.firstIndex(of: uid) ?? 0], "id":UUID().uuidString,"profilePicture":userVM.user?.profilePicture ?? ""]), chatID: chat.id)
+                        messageVM.sendMessage(message: Message(dictionary: ["text":text,"name":userVM.user?.nickName ?? "","timeStamp":Date(), "nameColor":chatVM.colors[chat.users.firstIndex(of: uid) ?? 0], "id":UUID().uuidString,"profilePicture":userVM.user?.profilePicture ?? ""]), chatID: chat.id)
                         
                         text = ""
                         
