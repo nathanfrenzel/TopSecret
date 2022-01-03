@@ -17,6 +17,7 @@ struct ChatModel : Identifiable {
     var usersIdling : [User.ID] = []
     var dateCreated: Date?
     var messages : [Message] = [ ]
+    var pinnedMessage : String? //key value pair of messageID and pinnedByUserID
     var isPersonal: Bool
     var chatNameColors : [String]?  //Colors
     var nextColor: Int? //index for colors
@@ -38,6 +39,7 @@ struct ChatModel : Identifiable {
         self.chatNameColors = dictionary["chatNameColors"] as? [String] ?? []
         self.nextColor = dictionary["nextColor"] as? Int ?? 0
         self.pickedColors = dictionary["pickedColors"] as? [String] ?? []
+        self.pinnedMessage = dictionary["pinnedMessage"] as? String ?? ""
         self.groupID = dictionary["groupID"] as? String ?? " "
     }
     init(){

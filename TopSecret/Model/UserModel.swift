@@ -16,6 +16,7 @@ struct User : Identifiable, Hashable{
     var nickName: String?
     var birthday: Date?
     var profilePicture: String?
+    var friendsList : [String]?
     
 
 
@@ -27,6 +28,7 @@ init(dictionary: [String:Any]) {
     self.nickName = dictionary["nickName"] as? String ?? ""
     self.birthday = dictionary["birthday"] as? Date ?? Date()
     self.profilePicture = dictionary["profilePicture"] as? String ?? ""
+    self.friendsList = dictionary["friendsList"] as? [String] ?? []
 
  }
 

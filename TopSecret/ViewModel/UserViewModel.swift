@@ -27,6 +27,7 @@ class UserViewModel : ObservableObject {
     @Published var groups: [Group] = []
     @Published var chats: [ChatModel] = []
     @Published var polls: [PollModel] = []
+    @Published var events: [EventModel] = []
     @Published var isConnected : Bool = false
 
     
@@ -48,12 +49,17 @@ class UserViewModel : ObservableObject {
         userRepository.$polls
             .assign(to: \.polls, on: self)
             .store(in: &cancellables)
+        userRepository.$events
+            .assign(to: \.events, on: self)
+            .store(in: &cancellables)
         userRepository.$isConnected
             .assign(to: \.isConnected, on: self)
             .store(in: &cancellables)
         userRepository.$loginErrorMessage
             .assign(to: \.loginErrorMessage, on: self)
             .store(in: &cancellables)
+        
+        
      
     }
     
@@ -82,6 +88,9 @@ class UserViewModel : ObservableObject {
     
     func listenToUserPolls(){
         userRepository.listenToUserPolls(uid: userSession!.uid)
+    }
+    func listenToUserEvents(){
+        userRepository.listenToUserEvents(uid: userSession!.uid)
     }
     func listenToAll(uid: String){
         userRepository.listenToAll(uid: uid)

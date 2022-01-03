@@ -66,17 +66,14 @@ struct ContentView: View {
                         .onAppear{storedTab = 3
                             
                         }
-                    Text("Add Content")
-//                    AddContentView(isPresented: $isShowingNewPostView, selectedTab: $selectedTab, storedTab: $storedTab, selectedOption: $selectedOption)
+                    MapView()
                         .tabItem {
-                            Image(systemName: "plus")
+                            Image(systemName: "map")
                                 .scaledToFill()
                                 .foregroundColor(.gray)
                                 .frame(width: 128, height: 128)
                         }.tag(4)
-                        .onAppear { isShowingNewPostView = true
-                            
-                        }
+                       
                     
                 }
             }

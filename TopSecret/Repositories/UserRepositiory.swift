@@ -19,6 +19,7 @@ class UserRepository : ObservableObject {
     @Published var groups: [Group] = []
     @Published var chats: [ChatModel] = []
     @Published var polls: [PollModel] = []
+    @Published var events: [EventModel] = []
     @Published var isConnected : Bool = false
     
     private var cancellables : Set<AnyCancellable> = []
@@ -135,10 +136,11 @@ class UserRepository : ObservableObject {
                     let groupProfileImage = data["groupProfileImage"] as? String ?? ""
                     let motd = data["motd"] as? String ?? "Welcome to the group!"
                     let quoteOfTheDay = data["quoteOfTheDay"] as? String ?? ""
+                    let pinnedMessage = data["pinnedMessage"] as? String ?? ""
                     print("Fetched Groups!")
                     
 
-                    return Group(dictionary: ["chatID":chatID,"groupName":groupName,"memberAmount":memberAmount,"memberLimit":memberLimit,"publicID":publicID,"users":users,"id":id, "groupProfileImage":groupProfileImage,"motd":motd,"quoteOfTheDay":quoteOfTheDay])
+                    return Group(dictionary: ["chatID":chatID,"groupName":groupName,"memberAmount":memberAmount,"memberLimit":memberLimit,"publicID":publicID,"users":users,"id":id, "groupProfileImage":groupProfileImage,"motd":motd,"quoteOfTheDay":quoteOfTheDay,"pinnedMessage":pinnedMessage])
                     
                 }
 
@@ -192,12 +194,56 @@ class UserRepository : ObservableObject {
         
     }
     
+    func listenToUserEvents(uid: String){
+        
+        COLLECTION_EVENTS.whereField("usersVisibleTo", arrayContains: uid).addSnapshotListener { (snapshot, err) in
+                
+                guard let source = snapshot?.metadata.isFromCache else{
+                    print("error")
+                    return
+                }
+                if source {
+                    self.isConnected = false
+                    print("You are not connected, your data may not be up to date!")
+                }else{
+                    self.isConnected = true
+                    print("You are connected!")
+                }
+                
+                
+                guard let documents = snapshot?.documents else {
+                    print("No document!")
+                    return
+                }
+                self.events = documents.map{ queryDocumentSnapshot -> EventModel in
+                    let data = queryDocumentSnapshot.data()
+                    let eventName = data["eventName"] as? String ?? ""
+                    let eventLocation = data["eventLocation"] as? String ?? ""
+                    let eventTime = data["eventTime"] as? Date ?? Date()
+                    let usersVisibleTo = data["usersVisibleTo"] as? [String] ?? []
+                    let id = data["id"] as? String ?? ""
+                    print("Fetched Events!")
+                    
+                    return EventModel(dictionary: ["eventName":eventName,"eventLocation":eventLocation, "eventTime":eventTime, "usersVisibleTo":usersVisibleTo,"id":id])
+                    
+                    
+                }
+                
+        }
+        
+        
+        
+        
+        
+    }
+    
     
     func listenToAll(uid: String){
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
             self.listenToUserChats(uid: uid)
             self.listenToUserGroups(uid: uid)
             self.listenToUserPolls(uid: uid)
+            self.listenToUserEvents(uid: uid)
         }
        
     }
@@ -319,7 +365,46 @@ class UserRepository : ObservableObject {
                 
             }
             
-            print("Fetched User Chats!")
+            print("Fetched User Polls!")
+
+            
+        }
+    }
+    
+    func fetchUserEvents(){
+        //TODO
+        //TODO
+        COLLECTION_EVENTS.whereField("usersVisibleTo", arrayContains: user?.id ?? "").getDocuments { (snapshot, err) in
+            if err != nil {
+                print("ERROR \(err!.localizedDescription)")
+                return
+            }
+            for document in snapshot!.documents {
+                let source = document.metadata.isFromCache
+                if source{
+                    print("You are offline!")
+                }else{
+                    print("You are online!")
+                }
+            }
+            
+            guard let documents = snapshot?.documents else {
+                print("No document!")
+                return
+            }
+            
+            self.events = documents.map{ queryDocumentSnapshot -> EventModel in
+                let data = queryDocumentSnapshot.data()
+         
+
+                
+                
+
+                return EventModel(dictionary: data)
+                
+            }
+            
+            print("Fetched User Events!")
 
             
         }
@@ -328,6 +413,7 @@ class UserRepository : ObservableObject {
         fetchUserChats()
         fetchUserGroups()
         fetchUserPolls()
+        fetchUserEvents()
     }
     
     
@@ -345,7 +431,7 @@ class UserRepository : ObservableObject {
                         "username": username,
                         "nickName": nickName,
                         "uid": user.uid,
-                        "birthday": birthday,"profilePicture":""
+                        "birthday": birthday,"profilePicture":"", "friendsList": []
                         
             ] as [String : Any]
             

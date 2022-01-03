@@ -19,7 +19,6 @@ struct ChatView: View {
     @State var value: CGFloat = 0
     @State var text = ""
     @State var infoScreen: Bool = false
-    @State var showOverlay: Bool = false
 
     var uid: String
     var chat: ChatModel
@@ -70,9 +69,12 @@ struct ChatView: View {
                     }.padding(.top,20)
                     Divider()
                 
+                PinnedMessageCell(message: messageVM.pinnedMessage.message ?? "", name: messageVM.pinnedMessage.name ?? "", userProfilePicture: messageVM.pinnedMessage.userProfilePicture ?? "", timestamp: messageVM.pinnedMessage.timestamp ?? Timestamp(), pinnedBy: messageVM.pinnedMessage.pinnedBy ?? "", pinnedTime: "4")
+                
+                
                 ScrollView(showsIndicators: false){
                     ForEach(messageVM.messages){ message in
-                        MessageCell(name: message.name ?? "", messageID: message.id , chatID: chat.id, profilePicture:message.profilePicture ?? "" , timeStamp: message.timeStamp ?? Timestamp(), nameColor: message.nameColor ?? "red", showOverlay:$showOverlay, text: message.text ?? "")
+                        MessageCell(name: message.name ?? "", messageID: message.id , chatID: chat.id, profilePicture:message.profilePicture ?? "" , timeStamp: message.timeStamp ?? Timestamp(), nameColor: message.nameColor ?? "red", text: message.text ?? "")
                     }
                     
                 }
@@ -177,16 +179,14 @@ struct ChatView: View {
                 
             }.padding(.top,20)
             .navigationBarHidden(true)
-                if showOverlay {
-                    
-                    MessagePopup(isPresented: showOverlay)
-                }
+               
             }
             
         }
         .onAppear{
             
             messageVM.readAllMessages(chatID: chat.id )
+            messageVM.getPinnedMessage(chatID: chat.id)
             chatVM.getGroup(groupID: chat.groupID ?? "")
             chatVM.openChat(userID: uid, chatID: chat.id)
             chatVM.getUsersIdlingList(chatID: chat.id)
