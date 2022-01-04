@@ -52,6 +52,7 @@ class UserViewModel : ObservableObject {
         userRepository.$events
             .assign(to: \.events, on: self)
             .store(in: &cancellables)
+        
         userRepository.$isConnected
             .assign(to: \.isConnected, on: self)
             .store(in: &cancellables)
@@ -92,6 +93,10 @@ class UserViewModel : ObservableObject {
     func listenToUserEvents(){
         userRepository.listenToUserEvents(uid: userSession!.uid)
     }
+    
+    func listenToUserFriends(){
+        userRepository.listenToUserFriends(uid: userSession!.uid)
+    }
     func listenToAll(uid: String){
         userRepository.listenToAll(uid: uid)
     }
@@ -119,25 +124,44 @@ class UserViewModel : ObservableObject {
         userRepository.fetchUser()
     }
     
-    func getUser(userID: String, completion: @escaping (User) -> ()) -> () {
+    func fetchUserFriends(userID: String,completion: @escaping ([User]) -> ()) -> () {
         COLLECTION_USER.document(userID).getDocument { (snapshot, err) in
             if err != nil {
                 print("ERROR")
                 return
             }
             let data = snapshot!.data()
-            let birthday = data?["birthday"] as? Date ?? Date()
-            let email = data?["email"] as? String ?? ""
-            let nickName = data?["nickName"] as? String ?? ""
-            let profilePicture = data?["profilePicture"] as? String ?? ""
-            let uid = data?["uid"] as? String ?? ""
-            let username = data?["username"] as? String ?? ""
+            let friendsList = data?["friendsList"] as? [User] ?? []
+            return completion(friendsList)
+        }
+    }
+    
+    func getUsersFriend(userID: String, completion: @escaping (User) -> ()) -> () {
+        COLLECTION_USER.document(userID).getDocument { (snapshot, err) in
+            if err != nil {
+                print("ERROR")
+                return
+            }
             
-            return completion(User(dictionary: ["birthday":birthday,"email":email,"nickName":nickName,"profilePicture":profilePicture,"uid":uid,"username":username]))
+                let data = snapshot!.data()
+            return completion(User(dictionary: data!))
+            
+          
+             
+            
+           
         }
     }
     
     func persistImageToStorage(userID: String, image: UIImage){
         userRepository.persistImageToStorage(userID: userID, image: image)
+    }
+    
+    func addFriend(userID: String, friendID: String){
+        userRepository.addFriend(friendID: friendID, userID: userID)
+    }
+    
+    func removeFriend(userID: String, friendID: String){
+        userRepository.removeFriend(friendID: friendID, userID: userID)
     }
 }

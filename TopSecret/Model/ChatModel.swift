@@ -12,7 +12,7 @@ struct ChatModel : Identifiable {
     var id: String
     var name: String?
     var memberAmount: Int = 1
-    var users : [User.ID] = []
+    var users : [String] = []
     var usersTyping : [User.ID] = []
     var usersIdling : [User.ID] = []
     var dateCreated: Date?
@@ -30,7 +30,7 @@ struct ChatModel : Identifiable {
         self.id = dictionary["id"] as? String ?? " "
         self.name = dictionary["name"] as? String ?? " "
         self.memberAmount = dictionary["memberAmount"] as? Int ?? 1
-        self.users = dictionary["users"] as? [User.ID] ?? []
+        self.users = dictionary["users"] as? [String] ?? []
         self.usersTyping = dictionary["usersTyping"] as? [User.ID] ?? []
         self.usersIdling = dictionary["usersIdling"] as? [User.ID] ?? []
         self.dateCreated = dictionary["dateCreated"] as? Date ?? Date()

@@ -236,6 +236,44 @@ class UserRepository : ObservableObject {
         
     }
     
+    func listenToUserFriends(uid: String){
+        
+        COLLECTION_USER.whereField("friendsList", arrayContains: uid).addSnapshotListener { (snapshot, err) in
+                
+                guard let source = snapshot?.metadata.isFromCache else{
+                    print("error")
+                    return
+                }
+                if source {
+                    self.isConnected = false
+                    print("You are not connected, your data may not be up to date!")
+                }else{
+                    self.isConnected = true
+                    print("You are connected!")
+                }
+                
+                
+                guard let documents = snapshot?.documents else {
+                    print("No document!")
+                    return
+                }
+            self.user?.friendsList = documents.map{ queryDocumentSnapshot -> String in
+                    
+                let data = queryDocumentSnapshot.data()
+                let uid = data["uid"] as? String ?? ""
+                return uid
+                    
+                    
+                }
+                
+        }
+        
+        
+        
+        
+        
+    }
+    
     
     func listenToAll(uid: String){
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
@@ -243,6 +281,7 @@ class UserRepository : ObservableObject {
             self.listenToUserGroups(uid: uid)
             self.listenToUserPolls(uid: uid)
             self.listenToUserEvents(uid: uid)
+            self.listenToUserFriends(uid: uid)
         }
        
     }
@@ -407,6 +446,9 @@ class UserRepository : ObservableObject {
             
         }
     }
+    
+    
+    
     func fetchAll(){
         fetchUserChats()
         fetchUserGroups()
@@ -438,13 +480,13 @@ class UserRepository : ObservableObject {
             
             self.persistImageToStorage(userID: user.uid, image: image)
             
-            self.listenToAll(uid: user.uid)
             print("DEBUG: Succesfully uploaded user data!")
 
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                 self.userSession = user
                 self.fetchUser()
+                self.listenToAll(uid: user.uid)
             }
             Auth.auth().currentUser?.sendEmailVerification(completion: { (err) in
                 
@@ -512,6 +554,23 @@ class UserRepository : ObservableObject {
         Auth.auth().sendPasswordReset(withEmail: email) { (err) in
             print("You have been sent an email to reset your password!")
         }
+    }
+    
+    
+    func addFriend(friendID: String, userID: String){
+        COLLECTION_USER.document(userID).updateData(["friendsList":FieldValue.arrayUnion([friendID])])
+        COLLECTION_USER.document(friendID).updateData(["friendsList":FieldValue.arrayUnion([userID])])
+        
+        print("\(userID) has added \(friendID) as a friend!")
+
+    }
+    
+    func removeFriend(friendID: String, userID: String){
+        COLLECTION_USER.document(userID).updateData(["friendsList":FieldValue.arrayRemove([friendID])])
+        COLLECTION_USER.document(friendID).updateData(["friendsList":FieldValue.arrayRemove([userID])])
+        
+        print("\(userID) has removed \(friendID) as a friend!")
+
     }
     
 }

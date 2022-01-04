@@ -12,7 +12,10 @@ struct GroupHomeScreenView: View {
     @EnvironmentObject var userVM : UserViewModel
     @StateObject var groupVM = GroupViewModel()
     @StateObject var messageVM = MessageViewModel()
+    @StateObject var searchRepository = SearchRepository()
+    @State var _user: User = User()
     @State var openChat: Bool = false
+    @State var goToUserProfile: Bool = false
     @State var text: String = ""
     
     var group : Group
@@ -63,14 +66,37 @@ struct GroupHomeScreenView: View {
                 
                 }
                 
-                SearchBar(text: $text).padding()
+                SearchBar(text: $searchRepository.searchText).padding()
+                
+                ScrollView(){
+                    VStack(alignment: .leading){
+                        VStack(alignment: .leading){
+                            if !searchRepository.searchText.isEmpty{
+                                Text("Users").fontWeight(.bold).foregroundColor(Color("Foreground")).padding(.leading)
+                            }
+                            VStack{
+                                ForEach(searchRepository.returnedResults) { user in
+                                    NavigationLink(
+                                        destination: UserProfilePage(user: user),
+                                        label: {
+                                            UserSearchCell(user: user)
+                                        })
+                                }
+                            }.background(Color("Color")).cornerRadius(12).padding(.horizontal)
+                        }
+                        
+                        
+
+                    }
+                    
+                    
+                }
                 
                 Button(action:{
-                    groupVM.joinGroup(groupID: group.id, username: text)
+                    groupVM.joinGroup(groupID: group.id, username: searchRepository.searchText)
                 },label:{
                     Text("Add User")
                 })
-                
                 
                 Spacer()
                 
@@ -85,8 +111,8 @@ struct GroupHomeScreenView: View {
     }
 }
 
-struct GroupHomeScreenView_Previews: PreviewProvider {
-    static var previews: some View {
-        GroupHomeScreenView(group: Group())
-    }
-}
+//struct GroupHomeScreenView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        GroupHomeScreenView(group: Group())
+//    }
+//}

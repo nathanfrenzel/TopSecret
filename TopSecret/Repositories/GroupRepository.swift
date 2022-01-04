@@ -14,7 +14,7 @@ class GroupRepository : ObservableObject {
     
     @ObservedObject var chatRepository = ChatRepository()
     @ObservedObject var pollRepository = PollRepository()
-    @ObservedObject var userRepository = UserRepository()
+    @EnvironmentObject var userVM : UserViewModel
     @Published var groupChat : ChatModel = ChatModel()
     @Published var usersProfilePictures : [String] = []
     @Published var groupProfileImage = ""
@@ -42,7 +42,7 @@ class GroupRepository : ObservableObject {
                         print("ERROR")
                         return
                     }
-                    self.usersProfilePictures.append(snapshot?.get("profilePicture")as! String)
+                    self.usersProfilePictures.append(snapshot?.get("profilePicture")as? String ?? "")
                 }
             }
             
@@ -184,8 +184,8 @@ class GroupRepository : ObservableObject {
             }
             self.persistImageToStorage(groupID: id,image: image)
         }
-        userRepository.fetchUserChats()
         chatRepository.createGroupChat(name: groupName, userID: userID, groupID: id)
+
         
     }
     func persistImageToStorage(groupID: String, image: UIImage) {

@@ -30,92 +30,50 @@ struct ChatInfoView: View {
                         Text("\(chat.name!)")
                         
                     }.padding(.top,40)
-                    VStack{
-                        ZStack{
-                            RoundedRectangle(cornerRadius: 20).foregroundColor(Color("Color"))
-                            VStack{
-                                Text("\(chat.memberAmount) members")
-                            ScrollView(showsIndicators: false){
-                                ForEach(chatVM.userList, id: \.id){ user in
-                                    Button(action:{
-                                        _user = user
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                                            self.goToUserProfilePage.toggle()
-                                        }
-                                        
-                                    },label:{
-                                        GroupUsersListCell(user: user, isCurrentUser: user.id == userVM.user?.id, nameColor: chatVM.colors[chat.users.firstIndex(of: user.id) ?? 0])
-                                    }).fullScreenCover(isPresented: $goToUserProfilePage, content: {
-                                        UserProfilePage(user: _user)
-                                    })
-                                }
+                    
+                    
+                    ScrollView(){
+                        VStack(alignment: .leading){
+                            VStack(alignment: .leading){
+                                    Text("Users").fontWeight(.bold).foregroundColor(Color("Foreground")).padding(.leading,25)
+                                        .padding(.bottom,2)
+                                
+                                VStack{
+                                    ForEach(chatVM.userList, id: \.id){ user in
+                                        Button(action:{
+                                            _user = user
+                                           
+                                                self.goToUserProfilePage.toggle()
+                                            
+                                            
+                                        },label:{
+                                            GroupUsersListCell(user: user, isCurrentUser: user.id == userVM.user?.id, nameColor: chatVM.colors[chat.users.firstIndex(of: user.id ?? "") ?? 0])
+                                        }).fullScreenCover(isPresented: $goToUserProfilePage, content: {
+                                            UserProfilePage(user: user)
+                                        })
+                                    }
+                                    
+                                }.background(Color("Color")).cornerRadius(12).padding(.horizontal)
                             }
-                            }.padding()
-                        }.padding(.horizontal,20)
-                    }
-                    VStack{
-                        ZStack{
-                            RoundedRectangle(cornerRadius: 20).foregroundColor(Color("Color"))
-                            VStack{
-                                Text("Pinned Messages")
-                            ScrollView(showsIndicators: false){
-                               Text("Messages")
-                            }
-                            }.padding()
-                        }.padding(.horizontal,20)
-                    }
-                    VStack{
-                        ZStack{
-                            RoundedRectangle(cornerRadius: 20).foregroundColor(Color("Color"))
-                            VStack{
-                                Text("Notifications").padding(.top,5).font(.title)
-                                Spacer()
-                                HStack{
-                                    Text("Messages")
-                                    Spacer()
-                                    Toggle(isOn: $messageNotificationsOn, label: {
-                                        EmptyView()
-                                    })
-                                }
-                                Divider()
-                                HStack{
-                                    Text("Pinned Messages")
-                                    Spacer()
-                                    Toggle(isOn: $pinnedMessageNotifactionsOn, label: {
-                                        EmptyView()
-                                    })
-                                }
-                                Spacer()
-                            }.padding(.horizontal,20)
-                        }.padding(.horizontal,20)
-                    }
-                    HStack{
-                        Button(action:{
-                            chatVM.leaveChat(chatID: chat.id, userID: userVM.user?.id ?? " ")
-                          
-                            presentationMode.wrappedValue.dismiss()
-                        },label:{
-                            Text("Leave Chat").foregroundColor(Color(.red))
-                                .padding(.vertical)
-                                .frame(width: UIScreen.main.bounds.width/3).background(Color("Color")).cornerRadius(15)
-                        })
-                        Button(action:{
                             
-                        },label:{
-                            Text("Leave Group").foregroundColor(Color(.red))
-                                .padding(.vertical)
-                                .frame(width: UIScreen.main.bounds.width/3).background(Color("Color")).cornerRadius(15)
-                        })
-                    }.padding()
+                            
+
+                        }
+                        
+                        
+                    }
+                    
+                    
+                   
+                   
+                    
                     
                 }.padding()
             
           
             
         }.edgesIgnoringSafeArea(.all)        .onAppear{
-            for user in chat.users{
-                self.chatVM.getUsers(userID: user ?? " ")
-            }
+            self.chatVM.getUsers(usersID: chat.users)
         }
         
     }

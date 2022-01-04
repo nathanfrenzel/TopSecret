@@ -18,9 +18,7 @@ struct HomeScreenView: View {
     
     @State var selectedIndex = 0
     
-    @State var showUserProfilePage: Bool = false
     @State var showCreateGroupView : Bool = false
-    @State var searchOpen: Bool = false
     @State var settingsOpen : Bool = false
     
     var body: some View {
@@ -34,15 +32,16 @@ struct HomeScreenView: View {
                     HStack(spacing: 20){
                         
                         HStack{
-                            Button(action: { self.showUserProfilePage.toggle() }, label: {
-                                WebImage(url: URL(string: userVM.user?.profilePicture ?? ""))
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width:40,height:40)
-                                    .clipShape(Circle())
-                            }).fullScreenCover(isPresented: $showUserProfilePage, content: {
-                                UserProfilePage(user: userVM.user ?? User())
-                            })
+                             NavigationLink(
+                                destination: UserProfilePage(user: userVM.user ?? User()),
+                                label: {
+                                    WebImage(url: URL(string: userVM.user?.profilePicture ?? ""))
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width:40,height:40)
+                                        .clipShape(Circle())
+                                })
+                           
                             
                             Button(action:{
                                 //TODO
@@ -78,22 +77,24 @@ struct HomeScreenView: View {
                             
                           
                             
-                            Button(action: {
-                                searchOpen.toggle()
-                            }, label: {
-                                ZStack{
-                                    Circle().foregroundColor(Color("Color")).frame(width: 40, height: 40)
-                                    Image(systemName: "magnifyingglass")
-                                        .resizable()
-                                        .frame(width: 16, height: 16).foregroundColor(Color("Foreground"))
-                                    
-                                }
+                           
+                               
+                                
+                                NavigationLink(
+                                    destination: SearchView(),
+                                    label: {
+                                        ZStack{
+                                            Circle().foregroundColor(Color("Color")).frame(width: 40, height: 40)
+                                            Image(systemName: "magnifyingglass")
+                                                .resizable()
+                                                .frame(width: 16, height: 16).foregroundColor(Color("Foreground"))
+                                            
+                                        }
+                                    })
                                 
                                 
                                 
-                            })            .sheet(isPresented: $searchOpen, content: {
-                                SearchView()
-                            })
+                                 
                             
                             Button(action: {
                                 showCreateGroupView.toggle()

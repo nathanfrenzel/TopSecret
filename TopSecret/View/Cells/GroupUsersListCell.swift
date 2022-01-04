@@ -14,34 +14,29 @@ struct GroupUsersListCell: View {
     var isCurrentUser : Bool
     var nameColor : String
     var body: some View {
-        ZStack{
-            VStack{
-            HStack{
-                WebImage(url: URL(string: user.profilePicture ?? " "))
+        VStack(alignment: .leading){
+            HStack(alignment: .center){
+                WebImage(url: URL(string: user.profilePicture ?? ""))
                     .resizable()
                     .scaledToFill()
-                    .frame(width:30,height:30)
+                    .frame(width:48,height:48)
                     .clipShape(Circle())
-                    .padding()
-                VStack(alignment: .leading){
-                    if isCurrentUser{
-                    Text("\(user.nickName ?? "") \( "(Me)")").foregroundColor(Color(nameColor))
-                    }else{
-                        Text("\(user.nickName ?? "") ").foregroundColor(Color(nameColor))
-                    }
-                    Text("@\(user.username ?? "") ").foregroundColor(.gray).opacity(0.5)
-                }
-           
-                Spacer()
-                Button(action:{
                     
-                },label:{
-                    Text(">")
-                }).padding(.trailing,30)
-            }
+                
+                VStack(alignment: .leading){
+                    
+                  
+                        Text("\(user.nickName ?? "") \(isCurrentUser ? "(Me)" : "")").foregroundColor(Color(nameColor))
+                    
+                    
+
+                    Text("\(user.username ?? "")").font(.subheadline).foregroundColor(.gray)
+                }
+                Spacer()
+            }.padding([.leading,.vertical])
             Divider()
-            }
         }
+    .edgesIgnoringSafeArea(.all)
     }
 }
 

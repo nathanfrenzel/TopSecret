@@ -18,6 +18,7 @@ struct User : Identifiable, Hashable{
     var bio: String?
     var profilePicture: String?
     var friendsList : [String]?
+    var blockedAccounts : [String]?
     
 
 
@@ -31,6 +32,7 @@ init(dictionary: [String:Any]) {
     self.profilePicture = dictionary["profilePicture"] as? String ?? ""
     self.bio = dictionary["bio"] as? String ?? "This is my bio"
     self.friendsList = dictionary["friendsList"] as? [String] ?? []
+    self.blockedAccounts = dictionary["blockedAccounts"] as? [String] ?? []
 
  }
 

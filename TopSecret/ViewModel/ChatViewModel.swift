@@ -53,8 +53,8 @@ class ChatViewModel : ObservableObject {
         chatRepository.getUsersIdlingList(chatID: chatID)
     }
     
-    func getUsers(userID: String){
-        chatRepository.getUsers(userID: userID)
+    func getUsers(usersID: [String]){
+        chatRepository.getUsers(usersID: usersID)
     }
     
     func openChat(userID: String, chatID: String){

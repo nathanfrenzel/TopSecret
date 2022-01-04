@@ -22,16 +22,23 @@ class ChatRepository : ObservableObject {
     
     
     //this is for chat info tab
-    func getUsers(userID: String){
+    func getUsers(usersID: [String]){
         
-        COLLECTION_USER.document(userID).getDocument { (snap, err) in
-                if err != nil{
-                    print("Error")
-                    return
-                }
-            let data = snap!.data()
-            self.userList.append(User(dictionary: data!))
+        COLLECTION_USER.whereField("uid", in: usersID).getDocuments { (snapshot, err) in
+            if err != nil {
+                print("ERROR")
+                return
             }
+            guard let documents = snapshot?.documents else {
+                print("No document!")
+                return
+            }
+            
+            self.userList = documents.map({ (queryDocumentSnapshot) -> User in
+                let data = queryDocumentSnapshot.data()
+                return User(dictionary: data)
+            })
+        }
         
     }
     
