@@ -13,6 +13,7 @@ struct GroupHomeScreenView: View {
     @StateObject var groupVM = GroupViewModel()
     @StateObject var messageVM = MessageViewModel()
     @State var openChat: Bool = false
+    @State var text: String = ""
     
     var group : Group
     
@@ -62,6 +63,13 @@ struct GroupHomeScreenView: View {
                 
                 }
                 
+                SearchBar(text: $text).padding()
+                
+                Button(action:{
+                    groupVM.joinGroup(groupID: group.id, username: text)
+                },label:{
+                    Text("Add User")
+                })
                 
                 
                 Spacer()

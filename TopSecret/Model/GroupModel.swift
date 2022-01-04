@@ -14,7 +14,6 @@ struct Group: Identifiable{
     
     var groupName: String = ""
     var motd: String = ""
-    var publicID: String?
     var id: String
     var dateCreated: Date?
     var memberAmount: Int = 0
@@ -28,7 +27,6 @@ struct Group: Identifiable{
     init(dictionary: [String:Any]){
         self.id = dictionary["id"] as? String ?? " "
         self.groupName = dictionary["groupName"] as? String ?? ""
-        self.publicID = dictionary["publicID"] as? String ?? ""
         self.dateCreated = dictionary["dateCreated"] as? Date ?? Date()
         self.memberAmount = dictionary["memberAmount"] as? Int ?? 0
         self.memberLimit = dictionary["memberLimit"] as? Int ?? 0

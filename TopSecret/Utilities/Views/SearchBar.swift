@@ -13,10 +13,20 @@ struct SearchBar: View {
     
     var body: some View {
         HStack(spacing: 15){
+            
             Image(systemName: "magnifyingglass").font(.system(size: 23, weight: .bold))
                 .foregroundColor(.gray)
             
-            TextField("Search", text: $text)
+            TextField("Search", text: $text).autocapitalization(.none)
+            
+            Spacer()
+            
+            Button(action:{
+                self.text = ""
+            },label:{
+                Image(systemName: "xmark.circle")
+            })
+            
         }.padding(.vertical,10).padding(.horizontal).background(Color("Color")).cornerRadius(16).padding(.horizontal)
         
     }

@@ -78,6 +78,7 @@
 		78C74D0227826E9B0009E08C /* EventListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78C74D0127826E9B0009E08C /* EventListCell.swift */; };
 		78C74D05278286720009E08C /* PinnedMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78C74D04278286720009E08C /* PinnedMessageCell.swift */; };
 		78C74D08278288980009E08C /* PinnedMessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78C74D07278288980009E08C /* PinnedMessageModel.swift */; };
+		78C74D0B278375EE0009E08C /* UserProfilePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78C74D0A278375EE0009E08C /* UserProfilePage.swift */; };
 		78D1A72126DE98CA0083FE2C /* RegisterPhoneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D1A72026DE98CA0083FE2C /* RegisterPhoneView.swift */; };
 		78D1A72E26DEA1590083FE2C /* CreateUsername.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D1A72D26DEA1590083FE2C /* CreateUsername.swift */; };
 		78D1A73126DEC3D50083FE2C /* EnterNickName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D1A73026DEC3D50083FE2C /* EnterNickName.swift */; };
@@ -97,6 +98,8 @@
 		78E938D226FCB573006D630F /* GroupListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78E938D126FCB573006D630F /* GroupListCell.swift */; };
 		78E938D526FCC907006D630F /* GroupHomeScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78E938D426FCC907006D630F /* GroupHomeScreenView.swift */; };
 		78E938D826FE3722006D630F /* GroupUsersListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78E938D726FE3722006D630F /* GroupUsersListCell.swift */; };
+		78F13C762783CFFD00EB2346 /* SearchRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F13C752783CFFD00EB2346 /* SearchRepository.swift */; };
+		78F13C792783DE3900EB2346 /* UserSearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F13C782783DE3900EB2346 /* UserSearchCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -165,6 +168,7 @@
 		78C74D0127826E9B0009E08C /* EventListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventListCell.swift; sourceTree = "<group>"; };
 		78C74D04278286720009E08C /* PinnedMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinnedMessageCell.swift; sourceTree = "<group>"; };
 		78C74D07278288980009E08C /* PinnedMessageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinnedMessageModel.swift; sourceTree = "<group>"; };
+		78C74D0A278375EE0009E08C /* UserProfilePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfilePage.swift; sourceTree = "<group>"; };
 		78D1A72026DE98CA0083FE2C /* RegisterPhoneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterPhoneView.swift; sourceTree = "<group>"; };
 		78D1A72D26DEA1590083FE2C /* CreateUsername.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateUsername.swift; sourceTree = "<group>"; };
 		78D1A73026DEC3D50083FE2C /* EnterNickName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterNickName.swift; sourceTree = "<group>"; };
@@ -184,6 +188,8 @@
 		78E938D126FCB573006D630F /* GroupListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupListCell.swift; sourceTree = "<group>"; };
 		78E938D426FCC907006D630F /* GroupHomeScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupHomeScreenView.swift; sourceTree = "<group>"; };
 		78E938D726FE3722006D630F /* GroupUsersListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupUsersListCell.swift; sourceTree = "<group>"; };
+		78F13C752783CFFD00EB2346 /* SearchRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchRepository.swift; sourceTree = "<group>"; };
+		78F13C782783DE3900EB2346 /* UserSearchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSearchCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -305,6 +311,7 @@
 				78D1A73F26DEDD7E0083FE2C /* Tabs */,
 				78D1A72326DE99040083FE2C /* Register */,
 				7887ADEE26267F5C00D9FC21 /* Login */,
+				78C74D0A278375EE0009E08C /* UserProfilePage.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -441,6 +448,7 @@
 				78ADC64727628104001E831B /* GroupUsersProfilePictureCell.swift */,
 				78C74D0127826E9B0009E08C /* EventListCell.swift */,
 				78C74D04278286720009E08C /* PinnedMessageCell.swift */,
+				78F13C782783DE3900EB2346 /* UserSearchCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -475,6 +483,7 @@
 				7801247B273C3BAD00FB54AF /* PollRepository.swift */,
 				7801247E273C3EBE00FB54AF /* MessageRepository.swift */,
 				78C74CEB27824E8D0009E08C /* EventRepository.swift */,
+				78F13C752783CFFD00EB2346 /* SearchRepository.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -589,8 +598,10 @@
 				7801247F273C3EBE00FB54AF /* MessageRepository.swift in Sources */,
 				78A61F1B26BB12BC00671021 /* CustomTextField.swift in Sources */,
 				78C74CE027821A690009E08C /* CreateEventView.swift in Sources */,
+				78F13C792783DE3900EB2346 /* UserSearchCell.swift in Sources */,
 				78C74CEC27824E8D0009E08C /* EventRepository.swift in Sources */,
 				78D1A74226DEDF320083FE2C /* MessageListView.swift in Sources */,
+				78F13C762783CFFD00EB2346 /* SearchRepository.swift in Sources */,
 				78C74CFF278266430009E08C /* PlaceListView.swift in Sources */,
 				78D1A73426DEC56F0083FE2C /* EnterBirthday.swift in Sources */,
 				62CE5ADA26DEE44E00AE6ACC /* VotingView.swift in Sources */,
@@ -630,6 +641,7 @@
 				78A61F0D26B9B79800671021 /* LoginView.swift in Sources */,
 				629710FA26E563E400A90E61 /* FullScreenPostView.swift in Sources */,
 				629710FC26E5662E00A90E61 /* PostViewFilterOptions.swift in Sources */,
+				78C74D0B278375EE0009E08C /* UserProfilePage.swift in Sources */,
 				78B7C77326F4D4CA001244D7 /* AddChatView.swift in Sources */,
 				78E6F1FB273ABD5200AFE7EB /* UserRepositiory.swift in Sources */,
 				789FC2F82618B9FC0021616B /* UserModel.swift in Sources */,

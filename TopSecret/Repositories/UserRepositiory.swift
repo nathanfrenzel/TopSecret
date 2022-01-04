@@ -130,7 +130,6 @@ class UserRepository : ObservableObject {
                     let groupName = data["groupName"] as? String ?? ""
                     let memberAmount = data["memberAmount"] as? Int ?? 0
                     let memberLimit = data["memberLimit"] as? Int ?? 0
-                    let publicID = data["publicID"] as? String ?? ""
                     let users = data["users"] as? [User.ID] ?? []
                     let id = data["id"] as? String ?? ""
                     let groupProfileImage = data["groupProfileImage"] as? String ?? ""
@@ -140,7 +139,7 @@ class UserRepository : ObservableObject {
                     print("Fetched Groups!")
                     
 
-                    return Group(dictionary: ["chatID":chatID,"groupName":groupName,"memberAmount":memberAmount,"memberLimit":memberLimit,"publicID":publicID,"users":users,"id":id, "groupProfileImage":groupProfileImage,"motd":motd,"quoteOfTheDay":quoteOfTheDay,"pinnedMessage":pinnedMessage])
+                    return Group(dictionary: ["chatID":chatID,"groupName":groupName,"memberAmount":memberAmount,"memberLimit":memberLimit,"users":users,"id":id, "groupProfileImage":groupProfileImage,"motd":motd,"quoteOfTheDay":quoteOfTheDay,"pinnedMessage":pinnedMessage])
                     
                 }
 
@@ -313,7 +312,6 @@ class UserRepository : ObservableObject {
                 let groupName = data["groupName"] as? String ?? ""
                 let memberAmount = data["memberAmount"] as? Int ?? 0
                 let memberLimit = data["memberLimit"] as? Int ?? 0
-                let publicID = data["publicID"] as? String ?? ""
                 let users = data["users"] as? [User.ID] ?? []
                 let id = data["id"] as? String ?? ""
                 let groupProfileImage = data["groupProfileImage"] as? String ?? ""
@@ -323,7 +321,7 @@ class UserRepository : ObservableObject {
                 
                 
 
-                return Group(dictionary: ["chatID":chatID,"groupName":groupName,"memberAmount":memberAmount,"memberLimit":memberLimit,"publicID":publicID,"users":users,"id":id,"groupProfileImage":groupProfileImage,"motd":motd,"quoteOfTheDay":quoteOfTheDay])
+                return Group(dictionary: ["chatID":chatID,"groupName":groupName,"memberAmount":memberAmount,"memberLimit":memberLimit,"users":users,"id":id,"groupProfileImage":groupProfileImage,"motd":motd,"quoteOfTheDay":quoteOfTheDay])
                 
             }
             
@@ -431,7 +429,7 @@ class UserRepository : ObservableObject {
                         "username": username,
                         "nickName": nickName,
                         "uid": user.uid,
-                        "birthday": birthday,"profilePicture":"", "friendsList": []
+                        "birthday": birthday,"profilePicture":"", "friendsList": [], "bio":""
                         
             ] as [String : Any]
             
@@ -476,7 +474,7 @@ class UserRepository : ObservableObject {
                     loginErrorMessage = "The email or password is incorrect"
                     
                   default:
-                      loginErrorMessage = "loves"
+                      loginErrorMessage = "fuck"
                   }
             }else{
                 print("You are connected")
@@ -484,7 +482,9 @@ class UserRepository : ObservableObject {
             
             self.userSession = result?.user
             self.fetchUser()
-            self.listenToAll(uid: userSession!.uid)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1 ) {
+                self.listenToAll(uid: userSession?.uid ?? "")
+            }
         }
         
     }
@@ -504,6 +504,9 @@ class UserRepository : ObservableObject {
             self.user = user
         }
     }
+    
+    
+   
     
     func resetPassword(email: String){
         Auth.auth().sendPasswordReset(withEmail: email) { (err) in

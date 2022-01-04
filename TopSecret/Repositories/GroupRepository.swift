@@ -34,7 +34,7 @@ class GroupRepository : ObservableObject {
             }
             let data = snapshot!.data()
             
-            let users = data!["users"] as? [String] ?? []
+            let users = data?["users"] as? [String] ?? []
             
             for user in users{
                 COLLECTION_USER.document(user).getDocument { (snapshot, err) in
@@ -78,41 +78,49 @@ class GroupRepository : ObservableObject {
         }
     }
     
-    func joinGroup(publicID: String, userID: String){
+    func inviteToGroup(userID: String, groupID: String){
+        
+    }
+    
+    func joinGroup(groupID: String, username: String){
         
         
-        //this finds the group in group list and adds user to its user list
-        
-        let groupQuery = COLLECTION_GROUP.whereField("publicID", isEqualTo: publicID)
+        let userQuery = COLLECTION_USER.whereField("username", isEqualTo: username)
+          
+        userQuery.getDocuments { (snapshot, err) in
+            if err != nil {
+                print("ERROR")
+                return
+            }
+            
+            if snapshot!.documents.isEmpty {
+                print("There are no usernames with this text!")
+            }else{
+                for document in snapshot!.documents{
+                    print("Username: \(document.get("username") as? String ?? "")")
+                }
+            }
+            
+            for document in snapshot!.documents{
+                let data = document.data()
+                let id = data["uid"] as? String ?? ""
+                COLLECTION_GROUP.document(groupID).updateData(["users":FieldValue.arrayUnion([id])])
+                COLLECTION_GROUP.document(groupID).updateData(["memberAmount":FieldValue.increment(Int64(1))])
+                
+                
+                COLLECTION_GROUP.document(groupID).getDocument { (snapshot, err) in
+                    
+                    let data = snapshot!.data()
+                    let chatID = data?["chatID"] as? String ?? ""
+                    
+                    self.chatRepository.joinChat(chatID: chatID, userID: id)
 
-        groupQuery.getDocuments { [self]  (querySnapshot, err) in
-            if let err = err {
-                print("DEBUG: \(err.localizedDescription)")
-                return
+                }
             }
-            if querySnapshot!.documents.count == 0 {
-                print("unable to find group with code: \(publicID)")
-                return
-            }
-            
-            for document in querySnapshot!.documents{
-                
-                let group = Group(dictionary: document.data())
-                
-                //updates the list of users
-                document.reference.updateData(["users":FieldValue.arrayUnion([userID])])
-                document.reference.updateData(["memberAmount": FieldValue.increment(Int64(1))])
-                
-                print("sucesfully added user to group")
-                chatRepository.joinChat(chatID: group.chatID ?? " ", userID: userID)
-                
-                
-            }
-            
-            
-            
         }
-        
+            
+       
+
        
     }
     
@@ -156,7 +164,7 @@ class GroupRepository : ObservableObject {
 
     }
     
-    func createGroup(groupName: String, memberLimit: Int, dateCreated: Date, publicID: String, userID: String, image: UIImage){
+    func createGroup(groupName: String, memberLimit: Int, dateCreated: Date,userID: String, image: UIImage){
         
         
         let id = UUID().uuidString
@@ -165,7 +173,6 @@ class GroupRepository : ObservableObject {
 
         let data = ["groupName" : groupName,
                     "memberLimit" : memberLimit,
-                    "publicID" : publicID,
                     "users" : [userID] ,
                     "memberAmount": 1, "id":id, "chatID": " ", "dateCreated":Timestamp(), "groupProfileImage": " "
         ] as [String:Any]

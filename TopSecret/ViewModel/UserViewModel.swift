@@ -119,6 +119,24 @@ class UserViewModel : ObservableObject {
         userRepository.fetchUser()
     }
     
+    func getUser(userID: String, completion: @escaping (User) -> ()) -> () {
+        COLLECTION_USER.document(userID).getDocument { (snapshot, err) in
+            if err != nil {
+                print("ERROR")
+                return
+            }
+            let data = snapshot!.data()
+            let birthday = data?["birthday"] as? Date ?? Date()
+            let email = data?["email"] as? String ?? ""
+            let nickName = data?["nickName"] as? String ?? ""
+            let profilePicture = data?["profilePicture"] as? String ?? ""
+            let uid = data?["uid"] as? String ?? ""
+            let username = data?["username"] as? String ?? ""
+            
+            return completion(User(dictionary: ["birthday":birthday,"email":email,"nickName":nickName,"profilePicture":profilePicture,"uid":uid,"username":username]))
+        }
+    }
+    
     func persistImageToStorage(userID: String, image: UIImage){
         userRepository.persistImageToStorage(userID: userID, image: image)
     }

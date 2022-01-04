@@ -14,8 +14,6 @@ struct CreateGroupView: View {
     @StateObject var groupVM = GroupViewModel()
     @State var groupName: String = ""
     @State var memberLimit: Int = 0
-    @State var publicID : String = ""
-    @State var joinPublicID : String = ""
     @State var isShowingPhotoPicker:Bool = false
     @State var avatarImage = UIImage(named: "Icon")!
 
@@ -31,8 +29,7 @@ struct CreateGroupView: View {
             
             CustomTextField(text: $groupName, placeholder: "Group Name", isPassword: false, isSecure: false, hasSymbol: false,symbol: "phone").padding(.horizontal,20)
             
-            CustomTextField(text: $publicID, placeholder: "Public ID", isPassword: false, isSecure: false, hasSymbol: false,symbol: "phone").padding(.horizontal,20)
-            
+       
             
             Button(action:{
                 isShowingPhotoPicker.toggle()
@@ -48,7 +45,7 @@ struct CreateGroupView: View {
             })
             
             Button(action:{
-                groupVM.createGroup(groupName: groupName, memberLimit: memberLimit, dateCreated: Date(), publicID: publicID, userID: userVM.user?.id ?? "",image: avatarImage)
+                groupVM.createGroup(groupName: groupName, memberLimit: memberLimit, dateCreated: Date(), userID: userVM.user?.id ?? "",image: avatarImage)
                 presentationMode.wrappedValue.dismiss()
             },label:{
                 Text("Create Group")

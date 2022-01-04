@@ -14,6 +14,7 @@ struct CreateEventView: View {
     @State var eventTime : Date = Date()
     @State var usersVisibleTo : [String] = []
     @StateObject var eventVM = EventViewModel()
+    @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var userVM : UserViewModel
     var body: some View {
         ZStack{
@@ -39,6 +40,7 @@ struct CreateEventView: View {
                 
                 Button(action:{
                     eventVM.createEvent(eventName: eventName, eventLocation: eventLocation, eventTime: eventTime, usersVisibleTo: usersVisibleTo, userID: userVM.user?.id ?? "")
+                    presentationMode.wrappedValue.dismiss()
                 },label:{
                     Text("Create Event")
                 })

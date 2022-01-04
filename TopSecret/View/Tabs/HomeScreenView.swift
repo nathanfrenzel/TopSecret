@@ -18,7 +18,7 @@ struct HomeScreenView: View {
     
     @State var selectedIndex = 0
     
-    
+    @State var showUserProfilePage: Bool = false
     @State var showCreateGroupView : Bool = false
     @State var searchOpen: Bool = false
     @State var settingsOpen : Bool = false
@@ -34,14 +34,14 @@ struct HomeScreenView: View {
                     HStack(spacing: 20){
                         
                         HStack{
-                            Button(action: { self.settingsOpen.toggle() }, label: {
+                            Button(action: { self.showUserProfilePage.toggle() }, label: {
                                 WebImage(url: URL(string: userVM.user?.profilePicture ?? ""))
                                     .resizable()
                                     .scaledToFill()
                                     .frame(width:40,height:40)
                                     .clipShape(Circle())
-                            }).sheet(isPresented: $settingsOpen, content: {
-                                SettingsMenuView()
+                            }).fullScreenCover(isPresented: $showUserProfilePage, content: {
+                                UserProfilePage(user: userVM.user ?? User())
                             })
                             
                             Button(action:{

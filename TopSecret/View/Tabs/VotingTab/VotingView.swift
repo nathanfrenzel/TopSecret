@@ -45,7 +45,7 @@ struct VotingView: View {
                     
                     ScrollView(showsIndicators: false){
                         ForEach(userVM.polls){ poll in
-                            PollCell(name: poll.creator ?? "", groupName: poll.groupName ?? "", dateCreated: poll.dateCreated ?? Timestamp(), question: poll.question ?? "").padding(.bottom,15)
+                            PollCell(name: poll.creator ?? "", groupName: poll.groupName ?? "", dateCreated: poll.dateCreated ?? Timestamp(), question: poll.question ?? "" ).padding(.bottom,15)
                             
                         }
                     }

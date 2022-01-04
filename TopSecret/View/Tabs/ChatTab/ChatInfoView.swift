@@ -9,11 +9,13 @@ import SwiftUI
 
 struct ChatInfoView: View {
     var chat: ChatModel
+    @State var _user : User = User()
     @StateObject var chatVM = ChatViewModel()
     @StateObject var groupVM = GroupViewModel()
     @Environment(\.presentationMode) var presentationMode
     @State var messageNotificationsOn: Bool = false
     @State var pinnedMessageNotifactionsOn: Bool = false
+    @State var goToUserProfilePage : Bool = false
     @EnvironmentObject var userVM : UserViewModel
     
     var body: some View {
@@ -30,12 +32,22 @@ struct ChatInfoView: View {
                     }.padding(.top,40)
                     VStack{
                         ZStack{
-                            RoundedRectangle(cornerRadius: 20).foregroundColor(Color("LightBackground"))
+                            RoundedRectangle(cornerRadius: 20).foregroundColor(Color("Color"))
                             VStack{
                                 Text("\(chat.memberAmount) members")
                             ScrollView(showsIndicators: false){
                                 ForEach(chatVM.userList, id: \.id){ user in
-                                    GroupUsersListCell(user: user, isCurrentUser: user.id == userVM.user?.id, nameColor: chatVM.colors[chat.users.firstIndex(of: user.id) ?? 0])
+                                    Button(action:{
+                                        _user = user
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                            self.goToUserProfilePage.toggle()
+                                        }
+                                        
+                                    },label:{
+                                        GroupUsersListCell(user: user, isCurrentUser: user.id == userVM.user?.id, nameColor: chatVM.colors[chat.users.firstIndex(of: user.id) ?? 0])
+                                    }).fullScreenCover(isPresented: $goToUserProfilePage, content: {
+                                        UserProfilePage(user: _user)
+                                    })
                                 }
                             }
                             }.padding()
@@ -43,7 +55,7 @@ struct ChatInfoView: View {
                     }
                     VStack{
                         ZStack{
-                            RoundedRectangle(cornerRadius: 20).foregroundColor(Color("LightBackground"))
+                            RoundedRectangle(cornerRadius: 20).foregroundColor(Color("Color"))
                             VStack{
                                 Text("Pinned Messages")
                             ScrollView(showsIndicators: false){
@@ -54,7 +66,7 @@ struct ChatInfoView: View {
                     }
                     VStack{
                         ZStack{
-                            RoundedRectangle(cornerRadius: 20).foregroundColor(Color("LightBackground"))
+                            RoundedRectangle(cornerRadius: 20).foregroundColor(Color("Color"))
                             VStack{
                                 Text("Notifications").padding(.top,5).font(.title)
                                 Spacer()
@@ -85,17 +97,20 @@ struct ChatInfoView: View {
                         },label:{
                             Text("Leave Chat").foregroundColor(Color(.red))
                                 .padding(.vertical)
-                                .frame(width: UIScreen.main.bounds.width/3).background(Color("LightBackground")).cornerRadius(15)
+                                .frame(width: UIScreen.main.bounds.width/3).background(Color("Color")).cornerRadius(15)
                         })
                         Button(action:{
                             
                         },label:{
                             Text("Leave Group").foregroundColor(Color(.red))
                                 .padding(.vertical)
-                                .frame(width: UIScreen.main.bounds.width/3).background(Color("LightBackground")).cornerRadius(15)
+                                .frame(width: UIScreen.main.bounds.width/3).background(Color("Color")).cornerRadius(15)
                         })
                     }.padding()
+                    
                 }.padding()
+            
+          
             
         }.edgesIgnoringSafeArea(.all)        .onAppear{
             for user in chat.users{

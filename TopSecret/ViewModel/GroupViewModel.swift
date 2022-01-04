@@ -59,9 +59,9 @@ class GroupViewModel: ObservableObject {
     }
     
     
-    func joinGroup(publicID: String, userID: String){
+    func joinGroup(groupID: String, username: String){
         
-        groupRepository.joinGroup(publicID: publicID, userID: userID)
+        groupRepository.joinGroup(groupID: groupID, username: username)
         
         
     }
@@ -76,9 +76,9 @@ class GroupViewModel: ObservableObject {
     
     
     
-    func createGroup(groupName: String, memberLimit: Int, dateCreated: Date, publicID: String, userID: String, image: UIImage){
+    func createGroup(groupName: String, memberLimit: Int, dateCreated: Date,userID: String, image: UIImage){
         
-        groupRepository.createGroup(groupName: groupName, memberLimit: memberLimit, dateCreated: dateCreated, publicID: publicID, userID: userID, image: image)
+        groupRepository.createGroup(groupName: groupName, memberLimit: memberLimit, dateCreated: dateCreated, userID: userID, image: image)
         
     }
     
