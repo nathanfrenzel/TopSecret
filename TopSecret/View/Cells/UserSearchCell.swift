@@ -13,22 +13,23 @@ struct UserSearchCell: View {
     var body: some View {
      
             VStack(alignment: .leading){
-                HStack{
+                HStack(alignment: .center){
                     WebImage(url: URL(string: user.profilePicture ?? ""))
                         .resizable()
                         .scaledToFill()
-                        .frame(width:60,height:60)
+                        .frame(width:48,height:48)
                         .clipShape(Circle())
-                        .padding(.top,10)
+                        
                     
                     VStack(alignment: .leading){
                         
                         Text("\(user.nickName ?? "")").foregroundColor(Color("Foreground"))
                         
-                        Text("@\(user.username ?? "")").font(.caption).foregroundColor(.gray)
+
+                        Text("\(user.username ?? "")").font(.subheadline).foregroundColor(.gray)
                     }
                     Spacer()
-                }.padding(.leading)
+                }.padding([.leading,.vertical])
                 Divider()
             }
         .edgesIgnoringSafeArea(.all)

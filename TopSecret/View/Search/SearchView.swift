@@ -40,9 +40,8 @@ struct SearchView: View {
                                 ForEach(searchRepository.returnedResults) { user in
                                     Button(action:{
                                         _user = user
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                                             self.goToUserProfile.toggle()
-                                        }
+                                        
                                     },label:{
                                         UserSearchCell(user: user)
                                     }).fullScreenCover(isPresented: $goToUserProfile, content: {

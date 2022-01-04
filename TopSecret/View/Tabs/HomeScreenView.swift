@@ -53,7 +53,7 @@ struct HomeScreenView: View {
                                     
                                     Image(systemName: "gear")
                                         .resizable()
-                                        .frame(width: 24, height: 24)
+                                        .frame(width: 24, height: 24).foregroundColor(Color("Foreground"))
                                     
                                     
                                 }
@@ -85,7 +85,7 @@ struct HomeScreenView: View {
                                     Circle().foregroundColor(Color("Color")).frame(width: 40, height: 40)
                                     Image(systemName: "magnifyingglass")
                                         .resizable()
-                                        .frame(width: 16, height: 16)
+                                        .frame(width: 16, height: 16).foregroundColor(Color("Foreground"))
                                     
                                 }
                                 
@@ -102,7 +102,7 @@ struct HomeScreenView: View {
                                     Circle().foregroundColor(Color("Color")).frame(width: 40, height: 40)
                                     Image(systemName: "person.3.fill")
                                         .resizable()
-                                        .frame(width: 24, height: 16)
+                                        .frame(width: 24, height: 16).foregroundColor(Color("Foreground"))
                                     
                                 }
                                 
