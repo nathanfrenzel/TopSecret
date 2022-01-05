@@ -6,31 +6,63 @@
 //
 
 import SwiftUI
+import Firebase
+import SDWebImageSwiftUI
 
 struct MessageCell: View {
-    var username: String
-    var timeStamp: Date
+    @StateObject var messageVM = MessageViewModel()
+    @EnvironmentObject var userVM: UserViewModel
+    var name: String
+    var messageID: String
+    var chatID: String
+    var profilePicture: String
+    var timeStamp: Timestamp
+    var nameColor: String
     var text: String
     
     var body: some View {
         HStack{
-            Circle()
-                .frame(width:50,height:50).foregroundColor(Color("AccentColor"))
+            WebImage(url: URL(string: profilePicture))
+                .resizable()
+                .scaledToFill()
+                .frame(width:50,height:50)
+                .clipShape(Circle())
+                .padding()
             VStack(alignment: .leading){
                 HStack{
-                    Text("\(username)")
+                    Text("\(name)").foregroundColor(Color(nameColor))
                     Text("*")
-                    Text("\(timeStamp, style: .time)")
+                    Text("\(timeStamp.dateValue(), style: .time)")
                     Spacer()
-                    Button(action:{
+                    Menu(content:{
+                        Button(action:{
+                            messageVM.deleteMessage(chatID: chatID, messageID: messageID)
+                        },label:{
+                            Text("Delete")
+                        })
                         
+                        Button(action:{
+                            
+                        },label:{
+                            Text("Edit")
+                        })
+                        
+                        Button(action:{
+                            messageVM.pinMessage(chatID: chatID, messageID: messageID, userID: userVM.user?.id ?? "")
+                        },label:{
+                            Text("Pin")
+                        })
                     },label:{
                         Text("---")
                     }).padding(.trailing,10)
+                  
                 }
                 Text("\(text)")
             }
+           
         }
+        
+        
     }
 }
 

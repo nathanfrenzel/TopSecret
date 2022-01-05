@@ -6,16 +6,19 @@
 //
 
 import Foundation
+import SwiftUI
 
-struct User : Identifiable {
+struct User : Identifiable, Hashable{
     var id : String?
     var username: String?
     var email: String?
     var password: String?
-    var fullname: String?
-    var groups: [Group] = []
-    var chats: [ChatModel] = []
+    var nickName: String?
     var birthday: Date?
+    var bio: String?
+    var profilePicture: String?
+    var friendsList : [String]?
+    var blockedAccounts : [String]?
     
 
 
@@ -24,10 +27,13 @@ init(dictionary: [String:Any]) {
     self.username = dictionary["username"] as? String ?? ""
     self.email = dictionary["email"] as? String ?? ""
     self.password = dictionary["password"] as? String ?? ""
-    self.fullname = dictionary["fullname"] as? String ?? ""
+    self.nickName = dictionary["nickName"] as? String ?? ""
     self.birthday = dictionary["birthday"] as? Date ?? Date()
-    self.groups = dictionary["groups"] as? [Group] ?? []
-    self.chats = dictionary["chats"] as? [ChatModel] ?? []
+    self.profilePicture = dictionary["profilePicture"] as? String ?? ""
+    self.bio = dictionary["bio"] as? String ?? "This is my bio"
+    self.friendsList = dictionary["friendsList"] as? [String] ?? []
+    self.blockedAccounts = dictionary["blockedAccounts"] as? [String] ?? []
+
  }
 
     init(){

@@ -13,13 +13,12 @@ struct TopSecretApp: App {
     
     init(){
         FirebaseApp.configure()
+        
     }
-    
-    
     var body: some Scene {
         WindowGroup {
-            ContentView().environmentObject(UserAuthViewModel())
-
+            ContentView().environmentObject(UserViewModel())
+            
         }
     }
 }

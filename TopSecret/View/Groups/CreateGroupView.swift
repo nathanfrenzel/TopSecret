@@ -9,65 +9,59 @@ import SwiftUI
 
 struct CreateGroupView: View {
     
-    @EnvironmentObject var userVM : UserAuthViewModel
-    @ObservedObject var groupVM = GroupViewModel()
+    @EnvironmentObject var userVM : UserViewModel
+    @Environment(\.presentationMode) var presentationMode
+    @StateObject var groupVM = GroupViewModel()
     @State var groupName: String = ""
     @State var memberLimit: Int = 0
-    @State var publicID : String = ""
-    @State var joinPublicID : String = ""
+    @State var isShowingPhotoPicker:Bool = false
+    @State var avatarImage = UIImage(named: "Icon")!
 
     @Binding var goBack: Bool
     
     var body: some View {
+        ZStack{
+            Color("Background")
         VStack{
             
-            CustomTextField(text: $groupName, placeholder: "Group Name", isSecure: false, hasSymbol: false,symbol: "phone").padding(.horizontal,20)
             
-            CustomTextField(text: $publicID, placeholder: "Public ID", isSecure: false, hasSymbol: false,symbol: "phone").padding(.horizontal,20)
+            Text("Create Group!").fontWeight(.bold).font(.title)
             
+            CustomTextField(text: $groupName, placeholder: "Group Name", isPassword: false, isSecure: false, hasSymbol: false,symbol: "phone").padding(.horizontal,20)
             
+       
             
             Button(action:{
-                groupVM.createGroup(groupName: groupName, memberLimit: memberLimit, dateCreated: Date(), publicID: publicID)
-                userVM.fetchUser()
-                
+                isShowingPhotoPicker.toggle()
+            },label:{
+                Image(uiImage: avatarImage)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width:45,height:45)
+                    .clipShape(Circle())
+                    .padding()
+            }).fullScreenCover(isPresented: $isShowingPhotoPicker, content: {
+                ImagePicker(avatarImage: $avatarImage)
+            })
+            
+            Button(action:{
+                groupVM.createGroup(groupName: groupName, memberLimit: memberLimit, dateCreated: Date(), userID: userVM.user?.id ?? "",image: avatarImage)
+                presentationMode.wrappedValue.dismiss()
             },label:{
                 Text("Create Group")
+                    
             })
             
-            Button(action:{
-                self.goBack.toggle()
-            },label:{
-                Text("Back")
-            })
+
+        
         }
-        Divider()
             
-        VStack{
-            Text("Join Group!")
-            
-            CustomTextField(text: $joinPublicID, placeholder: "Public ID", isSecure: false, hasSymbol: false,symbol: "phone").padding(.horizontal,20)
-            
-            Button(action:{
-             
-                groupVM.joinGroup(publicID: joinPublicID)
-                userVM.fetchUser()
-                
-            },label:{
-                Text("Join Group")
-            })
-            
-          
-            
-        }
-        .onAppear{
-            self.groupVM.setupUserVM(userVM)
-        }
     }
 }
+}
 
-//struct CreateGroupView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        CreateGroupView()
-//    }
-//}
+struct CreateGroupView_Previews: PreviewProvider {
+    static var previews: some View {
+        CreateGroupView(goBack: .constant(false))
+    }
+}

@@ -11,7 +11,7 @@ struct RegisterPhoneView: View {
     @State var phoneNumber: String = " "
     @State var isNext:Bool = false
     @Binding var usingEmail: Bool
-    @EnvironmentObject var vm: UserAuthViewModel
+    @EnvironmentObject var vm: UserViewModel
 
     
     var body: some View {
@@ -33,7 +33,7 @@ struct RegisterPhoneView: View {
                 VStack{
                     Text("Enter Phone Number").foregroundColor(Color("Foreground")).fontWeight(.bold).font(.largeTitle).padding(.bottom,10)
                     
-                    CustomTextField(text: $phoneNumber, placeholder: "Phone Number", isSecure: false, hasSymbol: true,symbol: "phone").padding(.horizontal,20)
+                    CustomTextField(text: $phoneNumber, placeholder: "Phone Number", isPassword: false, isSecure: false, hasSymbol: true,symbol: "phone").padding(.horizontal,20)
                     
                     
                     
@@ -51,14 +51,7 @@ struct RegisterPhoneView: View {
                         usingEmail.toggle()
                     },label:{Text("I want to use my email").font(.body)})
                     
-                    Button(action: {
-                        self.isNext.toggle()
-                    }, label: {
-                        Text("Skip (FOR TESTING)")
-                            .foregroundColor(Color("Foreground"))
-                            .padding(.vertical)
-                            .frame(width: UIScreen.main.bounds.width/1.5).background(Color.green).cornerRadius(15)
-                    }).padding()
+                 
                     
                     Spacer()
                 }
@@ -70,6 +63,6 @@ struct RegisterPhoneView: View {
 
 struct RegisterPhoneView_Previews: PreviewProvider {
     static var previews: some View {
-        RegisterPhoneView(usingEmail: .constant(false)).preferredColorScheme(.dark).environmentObject(UserAuthViewModel())
+        RegisterPhoneView(usingEmail: .constant(false)).preferredColorScheme(.dark).environmentObject(UserViewModel())
     }
 }

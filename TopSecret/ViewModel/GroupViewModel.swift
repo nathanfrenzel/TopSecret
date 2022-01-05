@@ -8,160 +8,125 @@
 import SwiftUI
 
 import Firebase
+import Combine
+
 
 
 class GroupViewModel: ObservableObject {
     
-    @Published var group : Group?
-    @Published var groupChat : ChatModel?
     
-    var userVM: UserAuthViewModel?
+    var userVM: UserViewModel?
+    @ObservedObject var chatVM = ChatViewModel()
+    @ObservedObject var groupRepository = GroupRepository()
+    @Published var groupChat : ChatModel = ChatModel()
+    @Published var usersProfilePictures : [String] = []
+    @Published var groupProfileImage = ""
+
     
-    
+    private var cancellables : Set<AnyCancellable> = []
+
     
     init(){
-        userVM?.fetchGroups()
-    }
-    
-    func setupUserVM(_ userVM: UserAuthViewModel){
-        self.userVM = userVM
-        
-    }
-    
-    func createChat(group: Group){
-        
-        
-        
-        let data = ["name": group.groupName ?? " ",
-                    "memberAmount":group.memberAmount,
-                    "dateCreated":Date(),
-                    "users":[userVM?.user?.id], "id":UUID().uuidString] as [String : Any]
-        
-        let chat = ChatModel(dictionary: data)
-        
-        COLLECTION_CHAT.document(chat.id).setData(data) { (err) in
-            if let err = err{
-                print("Error")
-                return
-            }
-        }
-       
-        COLLECTION_CHAT.document(chat.id).updateData(["id":chat.id])
-        COLLECTION_GROUP.document(group.id).updateData(["chatID":chat.id])
-
+        groupRepository.$usersProfilePictures
+            .assign(to: \.usersProfilePictures, on: self)
+            .store(in: &cancellables)
+        groupRepository.$groupChat
+            .assign(to: \.groupChat, on: self)
+            .store(in: &cancellables)
+        groupRepository.$groupProfileImage
+            .assign(to: \.groupProfileImage, on: self)
+            .store(in: &cancellables)
      
         
+            
     }
-    func joinChat(chatID: String){
-      
-        COLLECTION_CHAT.document(chatID).updateData(["users":FieldValue.arrayUnion([userVM?.user?.id ?? ""])])
+    
+    func changeMOTD(motd: String, groupID: String, userID: String){
+        groupRepository.changeMOTD(motd: motd, groupID: groupID, userID: userID)
+        
+    }
+    
+    func getUsersProfilePictures(groupID: String){
+        groupRepository.getUsersProfilePictures(groupID: groupID)
+    }
+    
+    func getChat(chatID: String){
+        groupRepository.getChat(chatID: chatID)
+    }
+    
+    func setupUserVM(userVM: UserViewModel){
+        self.userVM = userVM
+    }
+    
+    
+    func joinGroup(groupID: String, username: String){
+        
+        groupRepository.joinGroup(groupID: groupID, username: username)
+        
         
     }
     
     
-    func joinGroup(publicID: String){
+    func leaveGroup(groupID: String, userID: String){
+        
+        groupRepository.leaveGroup(groupID: groupID, userID: userID)
         
         
-        //this finds the group in group list and adds user to its user list
+    }
+    
+    
+    
+    func createGroup(groupName: String, memberLimit: Int, dateCreated: Date,userID: String, image: UIImage){
         
-        let groupQuery = COLLECTION_GROUP.whereField("publicID", isEqualTo: publicID)
+        groupRepository.createGroup(groupName: groupName, memberLimit: memberLimit, dateCreated: dateCreated, userID: userID, image: image)
+        
+    }
+    
+  
+    
+//    func listen(){
+//        COLLECTION_GROUP.whereField("users", arrayContains: userVM.user?.id ?? " ").addSnapshotListener { (snapshot, err) in
+//            if err != nil{
+//                print("Error")
+//                return
+//            }
+//            for doc in snapshot!.documentChanges{
+//                if doc.type == .removed{
+//                    self.userVM.user?.groups = []
+//                    self.userVM.fetchUserGroups()
+//
+//                    print("New Group!")
+//                }
+//                if doc.type == .modified{
+//                    self.userVM.user?.groups = []
+//
+//                    COLLECTION_GROUP.whereField("users", arrayContains: self.userVM.user?.id ?? " ").getDocuments { [self] (snapshot, err) in
+//                        if err != nil {
+//                            print("Error")
+//                            return
+//                        }
+//                        guard let documents = snapshot?.documents else{
+//                            print("No documents")
+//                            return
+//                        }
+//
+//                        for document in documents{
+//                            let data = document.data()
+//                            userVM.user?.groups.append(Group(dictionary: data))
+//                        }
+//
+//                    }
+//
+//                    print("Group Gone!")
+//                }
+//
+//            }
+//        }
+//    }
+    
+    
+  
 
-        groupQuery.getDocuments { [self]  (querySnapshot, err) in
-            if let err = err {
-                print("DEBUG: \(err.localizedDescription)")
-                return
-            }
-            if querySnapshot!.documents.count == 0 {
-                print("unable to find group with code: \(publicID)")
-                return
-            }
-            
-            for document in querySnapshot!.documents{
-                
-                let group = Group(dictionary: document.data())
-                
-                //updates the list of users
-                document.reference.updateData(["users":FieldValue.arrayUnion([userVM?.user?.id ?? " "])])
-                document.reference.updateData(["memberAmount": group.memberAmount+1])
-                
-                print("sucesfully added user to group")
-                joinChat(chatID: group.chatID ?? " ")
-                
-                
-            }
-            
-            
-            
-        }
-        
-       
-    }
-    
-    func leaveGroup(){
-        let groupQuery = COLLECTION_GROUP.whereField("users", arrayContains: userVM?.user?.id ?? "")
-        
-        groupQuery.getDocuments { [self]  (querySnapshot, err) in
-            if let err = err {
-                print("DEBUG: \(err.localizedDescription)")
-                return
-            }
-            
-            for document in querySnapshot!.documents{
-                
-                let group = Group(dictionary: document.data())
-                
-                
-                //updates the list of users
-                document.reference.updateData(["users":FieldValue.arrayRemove([userVM?.user?.id ?? " "])])
-                document.reference.updateData(["memberAmount": group.memberAmount-1])
-                
-                print("sucesfully removed user from group")
-                
-                
-            }
-        }
-        
-        
-        
-        
-    }
-    
-    
-    func createGroup(groupName: String, memberLimit: Int, dateCreated: Date, publicID: String){
-        
-        
-        
-        
-        let data = ["groupName" : groupName,
-                    "memberLimit" : memberLimit,
-                    "publicID" : publicID,
-                    "users" : [userVM?.user?.id] ,
-                    "memberAmount": group?.memberAmount ?? 0, "id":UUID().uuidString, "chatID": " "
-        ] as [String:Any]
-        
-        let group = Group(dictionary: data)
-        
-        
-        //adds group to db
-        COLLECTION_GROUP.document(group.id).setData(data)
-        COLLECTION_GROUP.document(group.id).updateData(["id":group.id])
-        createChat(group: group)
-
-        
-        //adds user to group
-        joinGroup(publicID: group.publicID ?? " ")
-        
-        
-        
-        
-        
-    }
-    
-    
-    
-    
-    
-    
     
 }
 

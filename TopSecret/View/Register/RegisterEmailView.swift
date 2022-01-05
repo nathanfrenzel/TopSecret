@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct RegisterEmailView: View {
-    @State var email = ""
     @State var isNext:Bool = false
     @State var usingEmail:Bool = true
-    @EnvironmentObject var vm: UserAuthViewModel
-
+    @State var showErrorMessage:Bool = false
+    @EnvironmentObject var userAuthVM: UserViewModel
+    @StateObject var validationVM = RegisterValidationViewModel()
     
     
     
@@ -39,13 +39,20 @@ struct RegisterEmailView: View {
                     VStack{
                         Text("Enter Email").foregroundColor(Color("Foreground")).fontWeight(.bold).font(.largeTitle).padding(.bottom,10)
                         
-                        CustomTextField(text: $email, placeholder: "Email", isSecure: false, hasSymbol: true,symbol: "envelope").padding(.horizontal,20)
+                        CustomTextField(text: $validationVM.email, placeholder: "Email", isPassword: false, isSecure: false, hasSymbol: true,symbol: "envelope").padding(.horizontal,20)
                         
-                        
-                        
+                        if showErrorMessage{
+                        Text("\(validationVM.emailErrorMessage)").padding(.top,5).foregroundColor(validationVM.emailErrorMessage == "valid!" ? .green : .red)
+                        }
                         Button(action: {
-                            self.isNext.toggle()
-                            vm.email = email
+                            if validationVM.emailErrorMessage == "valid!"{
+                                self.isNext.toggle()
+                                userAuthVM.email = validationVM.email
+                            }else{
+                                showErrorMessage = true
+                            }
+                            
+                            
                         }, label: {
                             Text("Next")
                                 .foregroundColor(Color("Foreground"))
@@ -59,17 +66,7 @@ struct RegisterEmailView: View {
                         },label:{Text("I want to use my phone number").font(.body)})
                         
                         
-                        //FOR TESTING
-                        
-                        Button(action: {
-                            self.isNext.toggle()
-                            vm.email = email
-                        }, label: {
-                            Text("Skip (FOR TESTING)")
-                                .foregroundColor(Color("Foreground"))
-                                .padding(.vertical)
-                                .frame(width: UIScreen.main.bounds.width/1.5).background(Color.green).cornerRadius(15)
-                        }).padding()
+                    
                     }
                     
                     Spacer()
@@ -86,7 +83,7 @@ struct RegisterEmailView: View {
     struct RegisterEmailView_Previews: PreviewProvider {
         static var previews: some View {
             
-            RegisterEmailView().preferredColorScheme(.dark).environmentObject(UserAuthViewModel())
+            RegisterEmailView().preferredColorScheme(.dark).environmentObject(UserViewModel())
             
         }
     }
