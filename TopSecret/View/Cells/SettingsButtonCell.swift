@@ -20,7 +20,7 @@ struct SettingsButtonCell: View {
                 Text(text).foregroundColor(FOREGROUNDCOLOR)
                     .padding(.leading)
                 Spacer()
-                Text(">").foregroundColor(.gray).font(.headline).padding(.trailing)
+                
             }
         })
             if includeDivider {

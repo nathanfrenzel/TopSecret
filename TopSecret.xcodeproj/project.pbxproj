@@ -103,6 +103,7 @@
 		78F13C7E2784D27C00EB2346 /* SettingsButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F13C7D2784D27C00EB2346 /* SettingsButtonCell.swift */; };
 		78F13C822784E2D100EB2346 /* UserFriendsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F13C812784E2D100EB2346 /* UserFriendsListView.swift */; };
 		78F13C862784ECFA00EB2346 /* UserInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F13C852784ECFA00EB2346 /* UserInfoView.swift */; };
+		78F13C8927853EA900EB2346 /* UserEditProfilePageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F13C8827853EA900EB2346 /* UserEditProfilePageView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -196,6 +197,7 @@
 		78F13C7D2784D27C00EB2346 /* SettingsButtonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsButtonCell.swift; sourceTree = "<group>"; };
 		78F13C812784E2D100EB2346 /* UserFriendsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFriendsListView.swift; sourceTree = "<group>"; };
 		78F13C852784ECFA00EB2346 /* UserInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoView.swift; sourceTree = "<group>"; };
+		78F13C8827853EA900EB2346 /* UserEditProfilePageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserEditProfilePageView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -501,6 +503,7 @@
 				78C74D0A278375EE0009E08C /* UserProfilePage.swift */,
 				78F13C812784E2D100EB2346 /* UserFriendsListView.swift */,
 				78F13C852784ECFA00EB2346 /* UserInfoView.swift */,
+				78F13C8827853EA900EB2346 /* UserEditProfilePageView.swift */,
 			);
 			path = User;
 			sourceTree = "<group>";
@@ -655,6 +658,7 @@
 				78D1A75926DEFE750083FE2C /* GroupModel.swift in Sources */,
 				78DC8671274696CB0000BE9D /* RegisterValidationViewModel.swift in Sources */,
 				78C74CF927825F840009E08C /* LocationManager.swift in Sources */,
+				78F13C8927853EA900EB2346 /* UserEditProfilePageView.swift in Sources */,
 				78E938D826FE3722006D630F /* GroupUsersListCell.swift in Sources */,
 				78A61F0D26B9B79800671021 /* LoginView.swift in Sources */,
 				629710FA26E563E400A90E61 /* FullScreenPostView.swift in Sources */,

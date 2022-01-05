@@ -32,14 +32,14 @@ struct PinnedMessageCell: View{
                     
                     VStack(alignment: .leading){
                         HStack{
-                            Text("\(name )")
+                            Text("\(name)")
                          
                         }
-                        Text("\(message )")
+                        Text("\(message)")
                     }
                     Spacer()
                 }.padding(.leading)
-            }.frame(maxWidth: .infinity).border(Color.red)
+            }.frame(maxWidth: .infinity)
         
     }
 }

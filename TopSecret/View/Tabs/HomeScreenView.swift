@@ -43,22 +43,7 @@ struct HomeScreenView: View {
                                 })
                            
                             
-                            Button(action:{
-                                //TODO
-                                self.settingsOpen.toggle()
-                            },label:{
-                                ZStack{
-                                    Circle().foregroundColor(Color("Color")).frame(width: 40, height: 40)
-                                    
-                                    Image(systemName: "gear")
-                                        .resizable()
-                                        .frame(width: 24, height: 24).foregroundColor(Color("Foreground"))
-                                    
-                                    
-                                }
-                            }).sheet(isPresented: $settingsOpen, content: {
-                                SettingsMenuView()
-                            })
+                            
                             
                             
                         }.padding(.leading,20)
@@ -147,12 +132,14 @@ struct HomeScreenView: View {
                                     Text("You are not in any groups!")
                                 }
                             }.padding(.horizontal)
+                            Spacer()
                         }else{
                             ScrollView{
                                 Text("Notifications")
                             }
                             
                         }
+                        
                         
                     }
                 }

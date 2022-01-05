@@ -53,6 +53,7 @@ class UserRepository : ObservableObject {
                 print("Successfully stored image in database")
                 let imageURL = url?.absoluteString ?? ""
                 COLLECTION_USER.document(userID).updateData(["profilePicture":imageURL])
+                self.fetchUser()
             }
         }
       
@@ -448,6 +449,9 @@ class UserRepository : ObservableObject {
     }
     
     
+   
+    
+    
     
     func fetchAll(){
         fetchUserChats()
@@ -482,10 +486,10 @@ class UserRepository : ObservableObject {
             
             print("DEBUG: Succesfully uploaded user data!")
 
-            self.userSession = user
-            self.fetchUser()
+            
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                
+                self.userSession = user
+                self.fetchUser()
                 self.listenToAll(uid: user.uid)
             }
             Auth.auth().currentUser?.sendEmailVerification(completion: { (err) in
@@ -571,6 +575,11 @@ class UserRepository : ObservableObject {
         
         print("\(userID) has removed \(friendID) as a friend!")
 
+    }
+    
+    func changeBio(userID: String, bio: String){
+        COLLECTION_USER.document(userID).updateData(["bio":bio])
+        fetchUser()
     }
     
 }

@@ -17,18 +17,22 @@ struct SettingsMenuView: View {
             VStack(alignment: .leading){
                 
                 HStack(alignment: .center){
+                 
+                    Spacer()
+                    
+                    
+                    Text("Settings").fontWeight(.bold).font(.title).padding(.leading,60)
+                    
+                    Spacer()
+                    
                     Button(action:{
                         dismiss.wrappedValue.dismiss()
                     },label:{
-                        Text("Back").foregroundColor(FOREGROUNDCOLOR).font(.headline)
-                    }).padding()
-                    
-                    Spacer()
+                        Text("Back").foregroundColor(FOREGROUNDCOLOR).padding(.vertical,10).padding(.horizontal).background(Capsule().foregroundColor(Color("Color"))).padding(.trailing)
+                    })
                     
                     
-                    Text("Settings").fontWeight(.bold).font(.title).padding(.trailing,30)
                     
-                    Spacer()
                     
                 }.padding(.top,30)
                 

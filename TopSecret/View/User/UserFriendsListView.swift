@@ -8,14 +8,16 @@
 import SwiftUI
 
 struct UserFriendsListView: View {
-    @State var friendsList: [User] = []
+    @State var friendsIDList: [String] = []
+    @State var user: User
+    @State var friendsList : [User] = []
     @EnvironmentObject var userVM: UserViewModel
     var body: some View {
         ScrollView(){
             VStack(alignment: .leading){
                    
                     VStack{
-                        if self.friendsList.isEmpty{
+                        if self.friendsIDList.isEmpty{
                             Text("0 friends :(")
                         }else{
                             ForEach(friendsList, id: \.self) { user in
@@ -36,6 +38,19 @@ struct UserFriendsListView: View {
             }
             
             
+        }.onAppear{
+            userVM.getFriendsListString(userID: user.id ?? "") { list in
+                self.friendsIDList = list
+            }
+            
+            self.friendsList.removeAll()
+            
+            for user in friendsIDList {
+                userVM.getUsersFriend(userID: user) { friend in
+                    self.friendsList.append(friend)
+                }
+                
+            }
         }
     }
 }

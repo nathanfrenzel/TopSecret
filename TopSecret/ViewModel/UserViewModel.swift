@@ -52,7 +52,6 @@ class UserViewModel : ObservableObject {
         userRepository.$events
             .assign(to: \.events, on: self)
             .store(in: &cancellables)
-        
         userRepository.$isConnected
             .assign(to: \.isConnected, on: self)
             .store(in: &cancellables)
@@ -137,7 +136,7 @@ class UserViewModel : ObservableObject {
     }
     
     func getUsersFriend(userID: String, completion: @escaping (User) -> ()) -> () {
-        COLLECTION_USER.document(userID).getDocument { (snapshot, err) in
+        COLLECTION_USER.document(userID).addSnapshotListener { (snapshot, err) in
             if err != nil {
                 print("ERROR")
                 return
@@ -153,6 +152,16 @@ class UserViewModel : ObservableObject {
         }
     }
     
+    func getFriendsListString(userID: String, completion: @escaping ([String]) -> ()) -> (){
+        COLLECTION_USER.document(userID).getDocument { (snapshot, err) in
+            if err != nil {
+                print("ERROR")
+                return
+            }
+            return completion(snapshot?.get("friendsList") as? [String] ?? [])
+        }
+    }
+    
     func persistImageToStorage(userID: String, image: UIImage){
         userRepository.persistImageToStorage(userID: userID, image: image)
     }
@@ -163,5 +172,9 @@ class UserViewModel : ObservableObject {
     
     func removeFriend(userID: String, friendID: String){
         userRepository.removeFriend(friendID: friendID, userID: userID)
+    }
+    
+    func changeBio(userID: String, bio: String){
+        userRepository.changeBio(userID: userID, bio: bio)
     }
 }
