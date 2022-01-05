@@ -62,12 +62,19 @@ struct UserProfilePage: View {
                     
                     
                     
-                    HStack(alignment: .center){
                         Text("@\(user.username ?? "")").foregroundColor(.gray).font(.caption)
                             
                     
+                    
+                    
+                    HStack(alignment: .center){
                         
-                        if userVM.user?.id != user.id ?? "" {
+                        Text("\(user.nickName ?? "")").fontWeight(.bold)
+
+                        
+                        var friendsList = userVM.user?.friendsList ?? []
+                        
+                        if userVM.user?.id != user.id ?? "" && !friendsList.contains(user.id ?? ""){
                             Button(action:{
                                 //TODO
                                 userVM.addFriend(userID: userVM.user?.id ?? "", friendID: user.id ?? "")
@@ -75,10 +82,10 @@ struct UserProfilePage: View {
                             },label:{
                                 Text("Add Friend?")
                             })
+                        }else if friendsList.contains(user.id ?? ""){
+                            Text("Friends").foregroundColor(.gray).font(.caption)
                         }
                     }
-                    
-                    Text("\(user.nickName ?? "")").fontWeight(.bold)
                    
                         
                     
@@ -112,7 +119,7 @@ struct UserProfilePage: View {
                         //Friends
                         VStack{
                             
-                            UserFriendsListView(friendsIDList: user.friendsList ?? [])
+                            UserFriendsListView(friendsList: self.friendsList)
                             
                            
                         }
@@ -121,7 +128,15 @@ struct UserProfilePage: View {
                 }
                 Spacer()
             }
-        }.edgesIgnoringSafeArea(.all).navigationBarHidden(true)
+        }.edgesIgnoringSafeArea(.all).navigationBarHidden(true).onAppear{
+            self.friendsList.removeAll()
+            for user in user.friendsList ?? [] {
+                userVM.getUsersFriend(userID: user) { friend in
+                    self.friendsList.append(friend)
+                }
+
+            }
+        }
             
         
     }

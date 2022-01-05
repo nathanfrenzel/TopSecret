@@ -14,20 +14,22 @@ struct SettingsMenuView: View {
     var body: some View {
         ZStack{
             Color("Background")
-            VStack{
+            VStack(alignment: .leading){
                 
                 HStack(alignment: .center){
                     Button(action:{
                         dismiss.wrappedValue.dismiss()
                     },label:{
-                        Text("<").foregroundColor(FOREGROUNDCOLOR).font(.headline)
-                    }).padding(.leading)
+                        Text("Back").foregroundColor(FOREGROUNDCOLOR).font(.headline)
+                    }).padding()
                     
                     Spacer()
                     
-                    Text("Settings").fontWeight(.bold).font(.title)
+                    
+                    Text("Settings").fontWeight(.bold).font(.title).padding(.trailing,30)
                     
                     Spacer()
+                    
                 }.padding(.top,30)
                 
                 ScrollView(){
@@ -40,7 +42,7 @@ struct SettingsMenuView: View {
                             VStack(alignment: .leading, spacing: 15){
                                 SettingsButtonCell(text: "Blocked Accounts", includeDivider: true,  action:{
                                     //TODO
-                                }).padding(.top,10)
+                                }).padding(.top,15)
                                 SettingsButtonCell(text: "Color Preferences", includeDivider: true,  action:{
                                     //TODO
                                 })
