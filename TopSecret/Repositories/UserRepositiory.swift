@@ -482,10 +482,10 @@ class UserRepository : ObservableObject {
             
             print("DEBUG: Succesfully uploaded user data!")
 
-            
+            self.userSession = user
+            self.fetchUser()
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                self.userSession = user
-                self.fetchUser()
+                
                 self.listenToAll(uid: user.uid)
             }
             Auth.auth().currentUser?.sendEmailVerification(completion: { (err) in
