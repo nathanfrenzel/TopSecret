@@ -14,7 +14,7 @@ struct ImageSendView: View {
     var imageURL: UIImage
     var chatID: String
     
-    @StateObject var messageVM = MessageViewModel()
+    var messageVM : MessageViewModel
     
     @Environment(\.presentationMode) var presentationMode
 
@@ -24,10 +24,12 @@ struct ImageSendView: View {
             Color("Background")
             VStack{
                 
-                Image(uiImage: imageURL).resizable().scaledToFit().frame(width:100, height: 100)
+                Image(uiImage: imageURL).resizable().scaledToFit()
                 
                 Button(action:{
                     messageVM.sendImageMessage(name: message.name!, timeStamp: message.timeStamp!, nameColor: message.nameColor!, messageID: message.id, profilePicture: message.profilePicture!, messageType: message.messageType!, chatID: chatID, imageURL: imageURL)
+                    
+                    presentationMode.wrappedValue.dismiss()
                 },label:{
                     Text("Send")
                 })
