@@ -53,7 +53,7 @@ class SearchRepository : ObservableObject {
 
     
     private func getUsers(){
-        COLLECTION_USER.addSnapshotListener { (snapshot, err) in
+        COLLECTION_USER.getDocuments { (snapshot, err) in
             if err != nil {
                 print("ERROR")
                 return

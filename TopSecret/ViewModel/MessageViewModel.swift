@@ -13,7 +13,7 @@ import SwiftUI
 class MessageViewModel : ObservableObject {
     @Published var messages : [Message] = []
     @Published var pinnedMessage : PinnedMessageModel = PinnedMessageModel()
-
+    @Published var scrollToBottom : Int = 0
     
     
     @Published var messageRepository = MessageRepository()
@@ -26,6 +26,9 @@ class MessageViewModel : ObservableObject {
         messageRepository.$pinnedMessage
             .assign(to: \.pinnedMessage, on: self)
             .store(in: &cancellables)
+        messageRepository.$scrollToBottom
+            .assign(to: \.scrollToBottom, on: self)
+            .store(in: &cancellables)
         
     }
     
@@ -37,9 +40,17 @@ class MessageViewModel : ObservableObject {
         messageRepository.readAllMessages(chatID: chatID)
     }
     
-    func sendMessage(message: Message, chatID: String){
-        messageRepository.sendMessage(message: message, chatID: chatID)
+    func sendTextMessage(text: String, name: String, timeStamp: Timestamp, nameColor: String, messageID: String, profilePicture: String, messageType: String, chatID: String){
+        
+        messageRepository.sendTextMessage(text: text, name: name, timeStamp: timeStamp, nameColor: nameColor, messageID: messageID, profilePicture: profilePicture, messageType: messageType, chatID: chatID)
     }
+    
+    func sendImageMessage(name: String, timeStamp: Timestamp, nameColor: String, messageID: String, profilePicture: String, messageType: String, chatID: String, imageURL: UIImage){
+        
+        messageRepository.sendImageMessage(name: name, timeStamp: timeStamp, nameColor: nameColor, messageID: messageID, profilePicture: profilePicture, messageType: messageType, chatID: chatID, imageURL: imageURL)
+    }
+    
+    
     
     func deleteMessage(chatID: String, messageID: String){
         messageRepository.deleteMessage(chatID: chatID, messageID: messageID)
@@ -51,6 +62,10 @@ class MessageViewModel : ObservableObject {
     
     func pinMessage(chatID: String, messageID: String, userID: String){
         messageRepository.pinMessage(chatID: chatID, messageID: messageID, userID: userID)
+    }
+    
+    func persistImageToStorage(image: UIImage, chatID: String, messageID: String){
+        messageRepository.persistImageToStorage(image: image, chatID: chatID, messageID: messageID)
     }
     
     

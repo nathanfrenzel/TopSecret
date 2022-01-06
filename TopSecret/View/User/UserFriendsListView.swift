@@ -15,26 +15,26 @@ struct UserFriendsListView: View {
     var body: some View {
         ScrollView(){
             VStack(alignment: .leading){
-                   
+                if self.friendsIDList.isEmpty{
+                    Text("0 friends :(").foregroundColor(FOREGROUNDCOLOR)
+                }
+                else{
                     VStack{
-                        if self.friendsIDList.isEmpty{
-                            Text("0 friends :(")
-                        }else{
-                            ForEach(friendsList, id: \.self) { user in
-                                NavigationLink(
-                                    destination: UserProfilePage(user: user),
-                                    label: {
-                                        UserSearchCell(user: user)
-                                    })
-                               
-                            }
+                        ForEach(friendsList, id: \.self) { user in
+                            NavigationLink(
+                                destination: UserProfilePage(user: user),
+                                label: {
+                                    UserSearchCell(user: user)
+                                })
+                            
                         }
-                       
                     }.background(Color("Color")).cornerRadius(12).padding(.horizontal)
+                    
+                }
                 
                 
                 
-
+                
             }
             
             

@@ -21,7 +21,8 @@ class UserRepository : ObservableObject {
     @Published var polls: [PollModel] = []
     @Published var events: [EventModel] = []
     @Published var isConnected : Bool = false
-    
+    @Published var firestoreListener : [ListenerRegistration] = []
+
     private var cancellables : Set<AnyCancellable> = []
     let store = Firestore.firestore()
     let path = "Users"
@@ -62,7 +63,7 @@ class UserRepository : ObservableObject {
     func listenToUserChats(uid: String){
         
         
-        COLLECTION_CHAT.whereField("users", arrayContains: uid).addSnapshotListener { (snapshot, err) in
+        let listener = COLLECTION_CHAT.whereField("users", arrayContains: uid).addSnapshotListener { (snapshot, err) in
             
             guard let source = snapshot?.metadata.isFromCache else{
                 print("error")
@@ -101,11 +102,12 @@ class UserRepository : ObservableObject {
             
         }
         
+        firestoreListener.append(listener)
     }
     
     func listenToUserGroups(uid: String){
         
-        COLLECTION_GROUP.whereField("users", arrayContains: uid).addSnapshotListener { (snapshot, err) in
+       let listener = COLLECTION_GROUP.whereField("users", arrayContains: uid).addSnapshotListener { (snapshot, err) in
             
          
             guard let source = snapshot?.metadata.isFromCache else{
@@ -147,11 +149,13 @@ class UserRepository : ObservableObject {
             
             
         }
+        firestoreListener.append(listener)
+
     }
     
     func listenToUserPolls(uid: String){
         
-        COLLECTION_POLLS.whereField("users", arrayContains: uid).order(by: "dateCreated",descending: true).addSnapshotListener { (snapshot, err) in
+        let listener = COLLECTION_POLLS.whereField("users", arrayContains: uid).order(by: "dateCreated",descending: true).addSnapshotListener { (snapshot, err) in
                 
                 guard let source = snapshot?.metadata.isFromCache else{
                     print("error")
@@ -189,14 +193,15 @@ class UserRepository : ObservableObject {
         }
         
         
-        
+        firestoreListener.append(listener)
+
         
         
     }
     
     func listenToUserEvents(uid: String){
         
-        COLLECTION_EVENTS.whereField("usersVisibleTo", arrayContains: uid).addSnapshotListener { (snapshot, err) in
+        let listener = COLLECTION_EVENTS.whereField("usersVisibleTo", arrayContains: uid).addSnapshotListener { (snapshot, err) in
                 
                 guard let source = snapshot?.metadata.isFromCache else{
                     print("error")
@@ -232,14 +237,16 @@ class UserRepository : ObservableObject {
         }
         
         
-        
+        firestoreListener.append(listener)
+
         
         
     }
     
     func listenToUserFriends(uid: String){
         
-        COLLECTION_USER.whereField("friendsList", arrayContains: uid).addSnapshotListener { (snapshot, err) in
+        
+ let listener = COLLECTION_USER.whereField("friendsList", arrayContains: uid).addSnapshotListener { (snapshot, err) in
                 
                 guard let source = snapshot?.metadata.isFromCache else{
                     print("error")
@@ -270,7 +277,8 @@ class UserRepository : ObservableObject {
         }
         
         
-        
+        firestoreListener.append(listener)
+
         
         
     }
@@ -536,6 +544,12 @@ class UserRepository : ObservableObject {
     }
     
     func signOut(){
+        
+        for listener in firestoreListener  {
+            listener.remove()
+            print("Removed listener!")
+        }
+        
         userSession = nil
         self.loginErrorMessage = ""
         try? Auth.auth().signOut()

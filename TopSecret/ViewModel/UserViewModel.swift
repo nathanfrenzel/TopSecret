@@ -29,6 +29,7 @@ class UserViewModel : ObservableObject {
     @Published var polls: [PollModel] = []
     @Published var events: [EventModel] = []
     @Published var isConnected : Bool = false
+    @Published var firestoreListener : [ListenerRegistration] = []
 
     
     private var cancellables : Set<AnyCancellable> = []
@@ -57,6 +58,9 @@ class UserViewModel : ObservableObject {
             .store(in: &cancellables)
         userRepository.$loginErrorMessage
             .assign(to: \.loginErrorMessage, on: self)
+            .store(in: &cancellables)
+        userRepository.$firestoreListener
+            .assign(to: \.firestoreListener, on: self)
             .store(in: &cancellables)
         
         

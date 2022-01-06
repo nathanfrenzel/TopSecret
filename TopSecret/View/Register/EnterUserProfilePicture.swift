@@ -31,7 +31,7 @@ struct EnterUserProfilePicture: View {
                         .clipShape(Circle())
                         .padding()
                 }).fullScreenCover(isPresented: $isShowingPhotoPicker, content: {
-                    ImagePicker(avatarImage: $avatarImage)
+                    ImagePicker(avatarImage: $avatarImage, allowsEditing: true)
                 })
                 
         Button(action: {

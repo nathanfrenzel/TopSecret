@@ -17,6 +17,11 @@ struct Message : Identifiable{
     var timeStamp : Timestamp?
     var name : String?
     var profilePicture: String?
+    var imageURL : String?
+    var messageType: String?
+    
+    
+  
     
     
     init(dictionary: [String:Any]){
@@ -26,6 +31,8 @@ struct Message : Identifiable{
         self.profilePicture = dictionary["profilePicture"] as? String ?? " "
         self.id = dictionary["id"] as? String ?? " "
         self.nameColor = dictionary["nameColor"] as? String ?? " "
+        self.imageURL = dictionary["imageURL"] as? String ?? " "
+        self.messageType = dictionary["messageType"] as? String ?? ""
     }
     init(){
         self.id = UUID().uuidString

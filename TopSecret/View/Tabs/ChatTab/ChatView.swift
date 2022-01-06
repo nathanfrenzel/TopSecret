@@ -19,132 +19,106 @@ struct ChatView: View {
     @State var value: CGFloat = 0
     @State var text = ""
     @State var infoScreen: Bool = false
-
+    @State var isShowingPhotoPicker:Bool = false
+    @State var showImageSendView : Bool = false
+    @State var avatarImage = UIImage(named: "Icon")!
+    
+    
     var uid: String
     var chat: ChatModel
     
-   
-
+    
+    
     
     var body: some View {
         
         
         ZStack(alignment: .topLeading){
             Color("Background")
-            Button(action:{
-                chatVM.exitChat(userID: uid, chatID: chat.id)
-                presentationMode.wrappedValue.dismiss()
-            },label:{
-                Text("Back")
-            }).padding().padding(.top,30)
+            
             
             ZStack{
-            VStack{
                 
-                  
-                    HStack{
-                       Spacer()
-                       
-                        VStack{
-                            WebImage(url: URL(string: chatVM.group.groupProfileImage ?? ""))
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width:75,height:75)
-                                .clipShape(Circle())
-                                .padding()
-                            Text("\(chat.name ?? "")")
-                            Text("\(chat.memberAmount) members").foregroundColor(.gray).opacity(0.5)
-                        }.padding(.leading,10)
-
-                          Spacer()
-                        
-                         Button(action:{
-                             infoScreen.toggle()
-                         },label:{
-                             Text("Info")
-                         }).fullScreenCover(isPresented: $infoScreen, content: {
-                            ChatInfoView(chat: chat, chatVM: chatVM, groupVM: groupVM)
-                         }).padding(.trailing,20).padding(.top,20)
-                        
-                    }.padding(.top,20)
-                    Divider()
-                
-                PinnedMessageCell(message: messageVM.pinnedMessage.message ?? "", name: messageVM.pinnedMessage.name ?? "", userProfilePicture: messageVM.pinnedMessage.userProfilePicture ?? "", timestamp: messageVM.pinnedMessage.timestamp ?? Timestamp(), pinnedBy: messageVM.pinnedMessage.pinnedBy ?? "", pinnedTime: "4")
-                
-                
-                ScrollView(showsIndicators: false){
-                    ForEach(messageVM.messages){ message in
-                        MessageCell(name: message.name ?? "", messageID: message.id , chatID: chat.id, profilePicture:message.profilePicture ?? "" , timeStamp: message.timeStamp ?? Timestamp(), nameColor: message.nameColor ?? "red", text: message.text ?? "")
-                    }
-                    
-                }
-               
                 VStack{
-                    HStack{
-                        Spacer()
-                        ForEach(chatVM.usersIdlingList){ user in
-                            let containsUser = chatVM.usersTypingList.contains { element in
-                                       if user.id == element.id {
-                                           return true
-                           
-                                       }else{
-                                           return false
-                                       }
-                                   }
-                            if containsUser{
-                                WebImage(url: URL(string: user.profilePicture ?? ""))
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width:45,height:45)
-                                    .clipShape(Circle())
-                                    .offset(y: -15)
+                    
+                    ScrollView(showsIndicators: false){
+                        ScrollViewReader{ scrollViewProxy in
+                            
+                            VStack{
+                                ForEach(messageVM.messages){ message in
+                                    MessageCell(message: message, chatID: chat.id)
+                                }
+                                
+                                HStack{Spacer()}.id("Empty")
+                                
+                            }.onReceive(messageVM.$scrollToBottom, perform: { _ in
+                                withAnimation(.easeOut(duration: 0.5)) {
+                                    scrollViewProxy.scrollTo("Empty", anchor: .bottom)
+                                }
+                            })
+                            
+                        }
+                        
+                        
+                    }.padding(.top,50)
+                    
+                    VStack{
+                        
+                        Divider()
+                        HStack{
+                            
+                            Button(action:{
+                                self.isShowingPhotoPicker.toggle()
+                            },label:{
+                                ZStack{
+                                    Circle().frame(width: 40, height: 40).foregroundColor(Color("Color"))
+                                    Image(systemName: "photo.on.rectangle")
+                                }
+                            }).fullScreenCover(isPresented: $isShowingPhotoPicker, onDismiss: {
+                                self.showImageSendView.toggle()
+                            }, content: {
+                                ImagePicker(avatarImage: $avatarImage, allowsEditing: false)
+                                
+                            })
+                            
+                            
+                            TextField("message", text: $text).onChange(of: text, perform: { value in
+                                if text == ""{
+                                    chatVM.stopTyping(userID: uid, chatID: chat.id)
+                                }else{
+                                    chatVM.startTyping(userID: uid, chatID: chat.id)
+                                }
+                            }).padding(.vertical,10).padding(.leading,5).background(Color("Color")).cornerRadius(12).sheet(isPresented: $showImageSendView, content: {
+                                ImageSendView(message: Message(dictionary: ["id":UUID().uuidString,"nameColor":chatVM.colors[chat.users.firstIndex(of: uid) ?? 0],"timeStamp":Timestamp(),"name":userVM.user?.nickName ?? "","profilePicture":userVM.user?.profilePicture ?? "","imageURL":"","messageType":"image"]), imageURL: avatarImage, chatID: chat.id)
+                            })
+                            
+                            Button(action:{
+                                
+                                messageVM.sendTextMessage(text: text, name: userVM.user?.nickName ?? "", timeStamp: Timestamp(), nameColor: chatVM.colors[chat.users.firstIndex(of: uid) ?? 0], messageID: UUID().uuidString, profilePicture: userVM.user?.profilePicture ?? "", messageType: "text", chatID: chat.id)
+                                
+                                
+                                
+                                text = ""
+                                
+                                NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { (noti) in
+                                    let value = noti.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! CGRect
+                                    let height = value.height
+                                    self.value = height
+                                }
+                                
+                                NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { (noti) in
                                     
-                            }else{
-                                WebImage(url: URL(string: user.profilePicture ?? ""))
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width:40,height:40)
-                                    .clipShape(Circle())
-                            }
-                            
-                        }
-                    }.padding(.bottom,5)
-                    HStack{
-                        Button(action:{
-                            
-                        },label:{
-                            Text("Image")
-                        })
-                        Spacer()
-                        Button(action:{
-                            
-                        },label:{
-                            Text("Poll")
-                        })
-                        Spacer()
-                        Button(action:{
-                            
-                        },label:{
-                            Text("Countdown")
-                        })
-                    }.padding(.horizontal)
-                    Divider()
-                HStack{
-                   
-                    TextField("message", text: $text).onChange(of: text, perform: { value in
-                        if text == ""{
-                            chatVM.stopTyping(userID: uid, chatID: chat.id)
-                        }else{
-                            chatVM.startTyping(userID: uid, chatID: chat.id)
-                        }
-                    })
-                  
-                    Button(action:{
+                                    self.value = 0
+                                }
+                                
+                            },label:{
+                                Text("Send")
+                            }).disabled(text == "")
+                        }.padding()
                         
-                        messageVM.sendMessage(message: Message(dictionary: ["text":text,"name":userVM.user?.nickName ?? "","timeStamp":Date(), "nameColor":chatVM.colors[chat.users.firstIndex(of: uid) ?? 0], "id":UUID().uuidString,"profilePicture":userVM.user?.profilePicture ?? ""]), chatID: chat.id)
-                        
-                        text = ""
-                        
+                    }.padding(.bottom,10).background(Color("Background")).offset(y: -self.value)
+                    .animation(.spring())
+                    .onAppear{
                         NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { (noti) in
                             let value = noti.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! CGRect
                             let height = value.height
@@ -152,37 +126,40 @@ struct ChatView: View {
                         }
                         
                         NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { (noti) in
-                       
+                            
                             self.value = 0
                         }
-                  
-                    },label:{
-                        Text("Send")
-                    }).disabled(text == "")
-                }.padding()}.padding(.bottom,10).background(Color("Background"))
-                .offset(y: -self.value)
-                .animation(.spring())
-                .onAppear{
-                    NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { (noti) in
-                        let value = noti.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! CGRect
-                        let height = value.height
-                        self.value = height
                     }
                     
-                    NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { (noti) in
-                   
-                        self.value = 0
-                    }
                 }
                 
-                   
                 
             }.padding(.top,20)
             .navigationBarHidden(true)
-               
-            }
+            
+            VStack{
+                HStack{
+                    
+                    Spacer()
+                    
+                    Button(action:{
+                        chatVM.exitChat(userID: uid, chatID: chat.id)
+                        presentationMode.wrappedValue.dismiss()
+                    },label:{
+                        Text("Back")
+                    })
+                    
+                    Text("Top Bar")
+                    
+                    Spacer()
+                }.padding(.top,30)
+                
+                Divider()
+            }.background(Color("Background")).padding(.bottom,50)
+            
             
         }
+        .edgesIgnoringSafeArea(.all)
         .onAppear{
             
             messageVM.readAllMessages(chatID: chat.id )
@@ -192,12 +169,14 @@ struct ChatView: View {
             chatVM.getUsersIdlingList(chatID: chat.id)
             chatVM.getUsersTypingList(chatID: chat.id)
             
-        }.edgesIgnoringSafeArea(.all)
+        }
     }
 }
 
-//struct ChatView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ChatView(chat: ChatModel())
-//    }
-//}
+
+
+struct ChatView_Previews: PreviewProvider {
+    static var previews: some View {
+        ChatView(uid: "", chat: ChatModel())
+    }
+}
