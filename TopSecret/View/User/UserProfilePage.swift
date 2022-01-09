@@ -10,10 +10,13 @@ import SDWebImageSwiftUI
 
 struct UserProfilePage: View {
     @State var user: User
-    @State var friendsList : [User] = []
     @State var goToUserInfoPage : Bool = false
     @State var settingsOpen: Bool = false
     @State var showEditProfile: Bool = false
+    @State var goToPersonalChat: Bool = false
+    @State var personalChat: ChatModel = ChatModel()
+    
+    @StateObject var chatVM = ChatViewModel()
     @EnvironmentObject var userVM: UserViewModel
     @Environment(\.presentationMode) var presentationMode
     
@@ -71,6 +74,19 @@ struct UserProfilePage: View {
                         }else{
                             Button(action:{
                                 
+                                
+                                chatVM.createPersonalChat(user1: userVM.user?.id ?? "", user2: user.id ?? "") { personalChat in
+                                    self.personalChat = personalChat
+                                    self.goToPersonalChat.toggle()
+                                }
+                                
+
+                                
+
+                                
+                                
+                                
+                                
                             },label:{
                                 ZStack{
                                     Circle().foregroundColor(Color("Color")).frame(width: 32, height: 32)
@@ -78,7 +94,10 @@ struct UserProfilePage: View {
                                     
                                     Image(systemName: "bubble.left").resizable().frame(width: 16, height: 16).foregroundColor(Color("Foreground"))
                                 }
+
                             })
+                            
+                         
                         }
                         
                        
@@ -147,13 +166,7 @@ struct UserProfilePage: View {
                                 Button(action:{
                                     //TODO
                                     userVM.addFriend(userID: userVM.user?.id ?? "", friendID: user.id ?? "")
-                                    self.friendsList.removeAll()
-                                    for user in user.friendsList ?? [] {
-                                        userVM.getUsersFriend(userID: user) { friend in
-                                            self.friendsList.append(friend)
-                                        }
-                                        
-                                    }
+                                   
                                 },label:{
                                     Text("Add Friend?").font(.caption2)
                                 })
@@ -199,15 +212,23 @@ struct UserProfilePage: View {
                         //Friends
                         VStack{
                             
-                            UserFriendsListView(friendsIDList: user.friendsList ?? [], user: user)
+                            UserFriendsListView(user: user)
                             
                             
                         }
                         
                     }
+                        
+                    
                 }
                 Spacer()
             }
+                NavigationLink(
+                    destination: PersonalChatView(goBack: $goToPersonalChat, chat: self.personalChat, user2: user),
+                    isActive: $goToPersonalChat,
+                    label: {
+                        EmptyView()
+                    })
         }
         }.edgesIgnoringSafeArea(.all).navigationBarHidden(true)
         
@@ -218,6 +239,6 @@ struct UserProfilePage: View {
 
 struct UserProfilePage_Previews: PreviewProvider {
     static var previews: some View {
-        UserProfilePage(user: User(dictionary: ["username":"bj_lao","nickName":"camilo","bio":"16","profilePicture":"https://firebasestorage.googleapis.com/v0/b/top-secret-dcb43.appspot.com/o/userProfileImages%2FdEUxJX1gXZcYViXUyLJTr0wf5RM2?alt=media&token=68acfeed-0dfb-496e-9929-82bdf70b1e80"])).environmentObject(UserViewModel()).colorScheme(.dark)
+        UserProfilePage(user: User(dictionary: ["username":"bj_lao","nickName":"camilo","bio":"16","profilePicture":"https://firebasestorage.googleapis.com/v0/b/top-secret-dcb43.appspot.com/o/userProfileImages%2FdEUxJX1gXZcYViXUyLJTr0wf5RM2?alt=media&token=68acfeed-0dfb-496e-9929-82bdf70b1e80"]), personalChat: ChatModel()).environmentObject(UserViewModel()).colorScheme(.dark)
     }
 }

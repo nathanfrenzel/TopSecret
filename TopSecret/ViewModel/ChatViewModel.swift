@@ -16,6 +16,7 @@ class ChatViewModel : ObservableObject {
     @Published var usersTypingList : [User] = []
     @Published var usersIdlingList : [User] = []
     @Published var group : Group = Group()
+
     var colors: [String] = ["green","red","blue","orange","purple","teal"]
     @EnvironmentObject var userVM: UserViewModel
     @ObservedObject var chatRepository = ChatRepository()
@@ -37,12 +38,12 @@ class ChatViewModel : ObservableObject {
             .store(in: &cancellables)
     }
     
-    func startTyping(userID: String, chatID: String){
-        chatRepository.startTyping(userID: userID, chatID: chatID)
+    func startTyping(userID: String, chatID: String, chatType: String){
+        chatRepository.startTyping(userID: userID, chatID: chatID, chatType: chatType)
     }
   
-    func stopTyping(userID: String, chatID: String){
-        chatRepository.stopTyping(userID: userID, chatID: chatID)
+    func stopTyping(userID: String, chatID: String, chatType: String){
+        chatRepository.stopTyping(userID: userID, chatID: chatID, chatType: chatType)
     }
     
     func getUsersTypingList(chatID: String){
@@ -57,12 +58,12 @@ class ChatViewModel : ObservableObject {
         chatRepository.getUsers(usersID: usersID)
     }
     
-    func openChat(userID: String, chatID: String){
-        chatRepository.openChat(userID: userID, chatID: chatID)
+    func openChat(userID: String, chatID: String, chatType: String){
+        chatRepository.openChat(userID: userID, chatID: chatID, chatType: chatType)
     }
     
-    func exitChat(userID: String, chatID: String){
-        chatRepository.exitChat(userID: userID, chatID: chatID)
+    func exitChat(userID: String, chatID: String, chatType: String){
+        chatRepository.exitChat(userID: userID, chatID: chatID, chatType: chatType)
     }
     
     func getGroup(groupID: String){
@@ -77,6 +78,90 @@ class ChatViewModel : ObservableObject {
         chatRepository.createGroupChat(name: name, userID: userID, groupID: groupID)
     }
     
+    
+    func createPersonalChat(user1: String, user2: String, completion: @escaping (ChatModel) -> ()) -> (){
+        //check if user1 and then user2 order exists
+        COLLECTION_PERSONAL_CHAT.whereField("users", isEqualTo: [user1,user2]).getDocuments { (snapshot, err) in
+            if err != nil {
+                print("ERROR")
+                return
+            }
+            
+            let way1IsEmpty = snapshot!.isEmpty
+            
+            //check if user2 and then user1 order exists
+            COLLECTION_PERSONAL_CHAT.whereField("users", isEqualTo: [user2,user1]).getDocuments { (snapshot2, err) in
+                if err != nil {
+                    print("ERROR")
+                    return
+                }
+                let way2IsEmpty = snapshot2!.isEmpty
+                
+                if !way1IsEmpty{
+                    //hasChat
+                    print("Users already have a personal chat!")
+                    for document in snapshot!.documents {
+                        let data = document.data()
+                        return completion(ChatModel(dictionary: data))
+                    }
+                }else if !way2IsEmpty{
+                    //hasChat
+                    print("Users already have a personal chat!")
+                    for document in snapshot2!.documents {
+                        let data = document.data()
+                        return completion(ChatModel(dictionary: data))
+                    }
+                }else if way1IsEmpty && way2IsEmpty{
+                    
+                    //does not have chat
+                    print("Users do not have a personal chat!")
+                    let id = UUID().uuidString
+                    
+                    let data = ["users":[user1, user2],"id":id,"chatType":"personal"] as [String : Any]
+                    
+                    let chat = ChatModel(dictionary: data)
+                    
+                  
+                    COLLECTION_PERSONAL_CHAT.document(id).setData(data){ err in
+                        if err != nil {
+                            print("ERROR")
+                            return
+                            
+                        }
+                    }
+                    
+                    return completion(chat)
+                }
+            }
+            
+        }
+        
+    }
+    
+    
+    
+//    func getPersonalChat(user1: String, user2: String, completion: @escaping (ChatModel) -> ()) -> (){
+//        
+//        COLLECTION_PERSONAL_CHAT.whereField("users", arrayContainsAny: [user2,user1]).getDocuments { (snapshot, err) in
+//            if err != nil {
+//                print("ERROR")
+//                return
+//            }
+//            
+//            guard let documents = snapshot?.documents else {
+//                print("No document!")
+//                return
+//            }
+//            
+//            for document in documents {
+//                let data = document.data()
+//                let chat = ChatModel(dictionary: data)
+//                return completion(chat)
+//            }
+//            
+//        }
+//    }
+    
     func pickColor(chatID: String, picker: Int){
         chatRepository.pickColor(chatID: chatID, picker: picker)
     }
@@ -85,65 +170,6 @@ class ChatViewModel : ObservableObject {
         chatRepository.leaveChat(chatID: chatID, userID: userID)
     }
     
-//    func listen(){
-//        COLLECTION_CHAT.whereField("users", arrayContains: userVM.user?.id ?? " ").addSnapshotListener { (snapshot, err) in
-//            if err != nil{
-//                print("Error")
-//                return
-//            }
-//            for doc in snapshot!.documentChanges{
-//                if doc.type == .removed{
-//                    COLLECTION_CHAT.whereField("users", arrayContains: self.userVM.user?.id ?? " ").getDocuments { (snapshot, err) in
-//                        guard let documents = snapshot?.documents else{
-//                            print("No documents")
-//                            return
-//                        }
-//
-//                        self.userVM.user?.chats = documents.map{ (queryDocumentSnapshot) -> ChatModel in
-//                            let data = queryDocumentSnapshot.data()
-//
-//
-//                            let chat = ChatModel(dictionary: data)
-//
-//
-//
-//
-//
-//                            return chat
-//
-//                        }
-//
-//                    }
-//
-//                    print("New Chat!")
-//                }
-//                if doc.type == .modified{
-//                    self.userVM.user?.chats = []
-//
-//                    COLLECTION_CHAT.whereField("users", arrayContains: self.userVM.user?.id ?? " ").getDocuments { [self] (snapshot, err) in
-//                            if err != nil {
-//                                print("Error")
-//                                return
-//                            }
-//                            guard let documents = snapshot?.documents else{
-//                                print("No documents")
-//                                return
-//                            }
-//
-//                            for document in documents{
-//                                let data = document.data()
-//                                userVM.user?.chats.append(ChatModel(dictionary: data))
-//                            }
-//
-//                        }
-//
-//                    print("Chat Gone!")
-//                }
-//
-//            }
-//        }
-//    }
-//
     
     
 }

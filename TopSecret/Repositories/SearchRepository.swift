@@ -53,7 +53,7 @@ class SearchRepository : ObservableObject {
 
     
     private func getUsers(){
-        COLLECTION_USER.getDocuments { (snapshot, err) in
+        COLLECTION_USER.getDocuments{ (snapshot, err) in
             if err != nil {
                 print("ERROR")
                 return
@@ -63,6 +63,8 @@ class SearchRepository : ObservableObject {
                 print("No document!")
                 return
             }
+            
+            
             
             self.results = documents.map({ (queryDocumentSnapshot) -> User in
                 let data = queryDocumentSnapshot.data()

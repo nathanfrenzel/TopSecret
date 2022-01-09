@@ -25,7 +25,8 @@ class UserViewModel : ObservableObject {
     @Published var birthday = Date()
     @Published var userProfileImage : UIImage = UIImage()
     @Published var groups: [Group] = []
-    @Published var chats: [ChatModel] = []
+    @Published var groupChats: [ChatModel] = []
+    @Published var personalChats: [ChatModel] = []
     @Published var polls: [PollModel] = []
     @Published var events: [EventModel] = []
     @Published var isConnected : Bool = false
@@ -44,8 +45,8 @@ class UserViewModel : ObservableObject {
         userRepository.$groups
             .assign(to: \.groups, on: self)
             .store(in: &cancellables)
-        userRepository.$chats
-            .assign(to: \.chats, on: self)
+        userRepository.$groupChats
+            .assign(to: \.groupChats, on: self)
             .store(in: &cancellables)
         userRepository.$polls
             .assign(to: \.polls, on: self)
@@ -61,6 +62,9 @@ class UserViewModel : ObservableObject {
             .store(in: &cancellables)
         userRepository.$firestoreListener
             .assign(to: \.firestoreListener, on: self)
+            .store(in: &cancellables)
+        userRepository.$personalChats
+            .assign(to: \.personalChats, on: self)
             .store(in: &cancellables)
         
         
@@ -127,44 +131,57 @@ class UserViewModel : ObservableObject {
         userRepository.fetchUser()
     }
     
-    func fetchUserFriends(userID: String,completion: @escaping ([User]) -> ()) -> () {
+    func fetchUser(userID: String, completion: @escaping (User) -> ()) -> (){
         COLLECTION_USER.document(userID).getDocument { (snapshot, err) in
             if err != nil {
                 print("ERROR")
                 return
             }
             let data = snapshot!.data()
-            let friendsList = data?["friendsList"] as? [User] ?? []
-            return completion(friendsList)
+            
+            return completion(User(dictionary: data!))
         }
     }
     
-    func getUsersFriend(userID: String, completion: @escaping (User) -> ()) -> () {
-        COLLECTION_USER.document(userID).addSnapshotListener { (snapshot, err) in
-            if err != nil {
-                print("ERROR")
-                return
-            }
-            
-                let data = snapshot!.data()
-            return completion(User(dictionary: data!))
+  
+    
+    func getUserFriendsList(user: User, completion: @escaping ([User]) -> () ) -> (){
+        if !user.friendsList!.isEmpty{
+           COLLECTION_USER.whereField("uid", in: user.friendsList ?? []).addSnapshotListener{ (snapshot, err) in
+                if err != nil {
+                    print("ERROR")
+                    return
+                }
+                guard let documents = snapshot?.documents else {
+                    print("No documents!")
+                    return
+                    
+                }
             
           
-             
+                return completion(documents.map { (queryDocumentSnapshot) -> User in
+                    let data = queryDocumentSnapshot.data()
+                    return User(dictionary: data)
+                })
+                
+                
+                
+            }
             
-           
+       
+
+
+        }else{
+            print("User has no friends!")
         }
+     
+        
     }
     
-    func getFriendsListString(userID: String, completion: @escaping ([String]) -> ()) -> (){
-        COLLECTION_USER.document(userID).getDocument { (snapshot, err) in
-            if err != nil {
-                print("ERROR")
-                return
-            }
-            return completion(snapshot?.get("friendsList") as? [String] ?? [])
-        }
-    }
+   
+   
+    
+  
     
     func persistImageToStorage(userID: String, image: UIImage){
         userRepository.persistImageToStorage(userID: userID, image: image)

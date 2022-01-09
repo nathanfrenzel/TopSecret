@@ -36,13 +36,17 @@ class MessageViewModel : ObservableObject {
         return messageRepository.readLastMessage()
     }
     
-    func readAllMessages(chatID: String){
-        messageRepository.readAllMessages(chatID: chatID)
+    func readAllMessages(chatID: String, userID: String, chatType: String){
+        messageRepository.readAllMessages(chatID: chatID, chatType: chatType, userID: userID)
     }
     
-    func sendTextMessage(text: String, name: String, timeStamp: Timestamp, nameColor: String, messageID: String, profilePicture: String, messageType: String, chatID: String){
+    func sendGroupChatTextMessage(text: String, user: User, timeStamp: Timestamp, nameColor: String, messageID: String, messageType: String, chat: ChatModel, chatType: String){
         
-        messageRepository.sendTextMessage(text: text, name: name, timeStamp: timeStamp, nameColor: nameColor, messageID: messageID, profilePicture: profilePicture, messageType: messageType, chatID: chatID)
+        messageRepository.sendGroupChatTextMessage(text: text, user: user, timeStamp: timeStamp, nameColor: nameColor, messageID: messageID, messageType: messageType, chat: chat, chatType: chatType)
+    }
+    
+    func sendPersonalChatTextMessage(text: String, user: User, timeStamp: Timestamp, nameColor: String, messageID: String, messageType: String, chat: ChatModel, chatType: String){
+        messageRepository.sendPersonalTextMessage(text: text, user: user, timeStamp: timeStamp, nameColor: nameColor, messageID: messageID, messageType: messageType, chat: chat, chatType: chatType)
     }
     
     func sendImageMessage(name: String, timeStamp: Timestamp, nameColor: String, messageID: String, profilePicture: String, messageType: String, chatID: String, imageURL: UIImage){
@@ -50,10 +54,15 @@ class MessageViewModel : ObservableObject {
         messageRepository.sendImageMessage(name: name, timeStamp: timeStamp, nameColor: nameColor, messageID: messageID, profilePicture: profilePicture, messageType: messageType, chatID: chatID, imageURL: imageURL)
     }
     
+    func sendDeleteMessage(name: String, timeStamp: Timestamp, nameColor: String, messageID: String, messageType: String, chatID: String){
+        messageRepository.sendDeletedMessage(name: name, timeStamp: timeStamp, nameColor: nameColor, messageID: messageID, messageType: messageType, chatID: chatID)
+        
+    }
     
     
-    func deleteMessage(chatID: String, messageID: String){
-        messageRepository.deleteMessage(chatID: chatID, messageID: messageID)
+    
+    func deleteMessage(chatID: String, message: Message){
+        messageRepository.deleteMessage(chatID: chatID, message: message)
     }
     
     func getPinnedMessage(chatID: String){

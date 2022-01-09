@@ -59,7 +59,7 @@ struct MessageListView: View {
             VStack{
                 
             
-            if userVM.chats.count != 0{
+            if userVM.groupChats.count != 0{
                 VStack{
                     Picker("Options",selection: $selectedIndex){
                         ForEach(0..<options.count){ index in
@@ -69,8 +69,7 @@ struct MessageListView: View {
                     Spacer()
                     ScrollView(showsIndicators: false){
                         if selectedIndex == 0{
-                            ForEach(userVM.chats, id: \.id){ chat in
-                                if !chat.isPersonal{
+                            ForEach(userVM.groupChats, id: \.id){ chat in
                                     NavigationLink(
                                         destination: ChatView(uid: userVM.user?.id ?? " ", chat: chat),
                                         label: {
@@ -78,12 +77,11 @@ struct MessageListView: View {
                                         })
                                     
                                     Divider()
-                                }
+                                
                             }
                             
                         }else{
-                            ForEach(userVM.chats, id: \.id){ chat in
-                                if chat.isPersonal{
+                            ForEach(userVM.personalChats, id: \.id){ chat in
                                     NavigationLink(
                                         destination: ChatView(uid: userVM.user?.id ?? " ",chat: chat),
                                         label: {
@@ -91,7 +89,7 @@ struct MessageListView: View {
                                         })
                                     
                                     Divider()
-                                }
+                                
                             }
                         }
                         

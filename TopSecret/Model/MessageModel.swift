@@ -21,6 +21,12 @@ struct Message : Identifiable{
     var messageType: String?
     
     
+    enum MessageType {
+        case text
+        case image
+        case deletedMessage
+        case savedMessage
+    }
   
     
     
@@ -34,6 +40,8 @@ struct Message : Identifiable{
         self.imageURL = dictionary["imageURL"] as? String ?? " "
         self.messageType = dictionary["messageType"] as? String ?? ""
     }
+    
+    
     init(){
         self.id = UUID().uuidString
     }

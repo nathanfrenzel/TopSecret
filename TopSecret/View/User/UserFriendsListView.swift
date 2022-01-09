@@ -8,14 +8,13 @@
 import SwiftUI
 
 struct UserFriendsListView: View {
-    @State var friendsIDList: [String] = []
-    @State var user: User
-    @State var friendsList : [User] = []
+    @State var user: User 
+    @State var friendsList: [User] = []
     @EnvironmentObject var userVM: UserViewModel
     var body: some View {
         ScrollView(){
             VStack(alignment: .leading){
-                if self.friendsIDList.isEmpty{
+                if friendsList.isEmpty{
                     Text("0 friends :(").foregroundColor(FOREGROUNDCOLOR)
                 }
                 else{
@@ -39,18 +38,21 @@ struct UserFriendsListView: View {
             
             
         }.onAppear{
-            userVM.getFriendsListString(userID: user.id ?? "") { list in
-                self.friendsIDList = list
-            }
-            
-            self.friendsList.removeAll()
-            
-            for user in friendsIDList {
-                userVM.getUsersFriend(userID: user) { friend in
-                    self.friendsList.append(friend)
-                }
+            userVM.fetchUser(userID: user.id ?? "", completion: { user in
+                self.user = user
+            })
+            print("User Fetched!")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 
+                userVM.getUserFriendsList(user: user, completion: { list in
+                    friendsList = list
+                })
+                print("Friends list appeared!")
+                for friend in user.friendsList! {
+                    print(friend)
+                }
             }
+            
         }
     }
 }

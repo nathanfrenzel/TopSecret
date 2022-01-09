@@ -14,57 +14,121 @@ struct MessageCell: View {
     @EnvironmentObject var userVM: UserViewModel
     var message: Message
     var chatID: String
-
+    
     var body: some View {
-        HStack{
-            WebImage(url: URL(string: message.profilePicture ?? ""))
-                .resizable()
-                .scaledToFill()
-                .frame(width:50,height:50)
-                .clipShape(Circle())
-                .padding()
-            VStack(alignment: .leading){
-                HStack{
-                    Text("\(message.name ?? "")").foregroundColor(Color(message.nameColor ?? ""))
-                    Text("*")
-                    Text("\(message.timeStamp?.dateValue() ?? Date(), style: .time)")
-                    Spacer()
-                    Menu(content:{
-                        Button(action:{
-                            messageVM.deleteMessage(chatID: chatID, messageID: message.id)
-                        },label:{
-                            Text("Delete")
-                        })
-                        
-                        Button(action:{
+        
+           if message.messageType == "text" {
+        
+            HStack{
+                WebImage(url: URL(string: message.profilePicture ?? ""))
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width:50,height:50)
+                    .clipShape(Circle())
+                    .padding()
+                VStack(alignment: .leading){
+                    HStack{
+                        Text("\(message.name ?? "")").foregroundColor(Color(message.nameColor ?? ""))
+                        Text("*")
+                        Text("\(message.timeStamp?.dateValue() ?? Date(), style: .time)")
+                        Spacer()
+                        Menu(content:{
+                            Button(action:{
+                                messageVM.deleteMessage(chatID: chatID, message: message)
+                            },label:{
+                                Text("Delete")
+                            })
                             
+                            Button(action:{
+                                
+                            },label:{
+                                Text("Edit")
+                            })
+                            
+                            Button(action:{
+                                messageVM.pinMessage(chatID: chatID, messageID: message.id, userID: userVM.user?.id ?? "")
+                            },label:{
+                                Text("Pin")
+                            })
                         },label:{
-                            Text("Edit")
-                        })
+                            Text("---")
+                        }).padding(.trailing,10)
                         
-                        Button(action:{
-                            messageVM.pinMessage(chatID: chatID, messageID: message.id, userID: userVM.user?.id ?? "")
-                        },label:{
-                            Text("Pin")
-                        })
-                    },label:{
-                        Text("---")
-                    }).padding(.trailing,10)
-                  
+                    }
+                    
+                    Text("\(message.text ?? "")")
+                    
+                    
                 }
-                if message.messageType == "image"{
+                
+            }
+           }
+           else if message.messageType == "image"{
+            HStack{
+                WebImage(url: URL(string: message.profilePicture ?? ""))
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width:50,height:50)
+                    .clipShape(Circle())
+                    .padding()
+                VStack(alignment: .leading){
+                    HStack{
+                        Text("\(message.name ?? "")").foregroundColor(Color(message.nameColor ?? ""))
+                        Text("*")
+                        Text("\(message.timeStamp?.dateValue() ?? Date(), style: .time)")
+                        Spacer()
+                        Menu(content:{
+                            Button(action:{
+                                messageVM.deleteMessage(chatID: chatID, message: message)
+                            },label:{
+                                Text("Delete")
+                            })
+                            
+                            Button(action:{
+                                
+                            },label:{
+                                Text("Edit")
+                            })
+                            
+                            Button(action:{
+                                messageVM.pinMessage(chatID: chatID, messageID: message.id, userID: userVM.user?.id ?? "")
+                            },label:{
+                                Text("Pin")
+                            })
+                        },label:{
+                            Text("---")
+                        }).padding(.trailing,10)
+                        
+                    }
+                    
                     WebImage(url: URL(string: message.imageURL ?? ""))
                         .resizable().scaledToFit().frame(width:100, height: 100)
-                }else if message.messageType == "text"{
-                    Text("\(message.text ?? "")")
+                    
+                    
                 }
-               
+                
             }
-           
+            
+           }else if message.messageType == "deletedMessage"{
+            HStack(spacing: 5){
+                Text("\(message.name ?? "")").foregroundColor(Color(message.nameColor ?? ""))
+                Text("deleted a chat!").foregroundColor(.gray)
+            }
+           }
+            
+      
+        
+        
+        
+        
+        
+        
         }
         
         
-    }
+        
+        
+    
 }
 
 //struct MessageCell_Previews: PreviewProvider {

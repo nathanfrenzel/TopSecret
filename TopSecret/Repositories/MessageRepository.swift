@@ -17,9 +17,9 @@ class MessageRepository : ObservableObject {
     @Published var pinnedMessage : PinnedMessageModel = PinnedMessageModel()
     @Published var scrollToBottom = 0 //used for scrolling based on published changes
     
-    func readAllMessages(chatID: String){
+    func readAllMessages(chatID: String, chatType: String, userID: String){
         
-        COLLECTION_CHAT.document(chatID).collection("Messages").order(by: "timeStamp",descending: false).addSnapshotListener { (snapshot, err) in
+        if chatType == "groupChat"{ COLLECTION_CHAT.document(chatID).collection("Messages").order(by: "timeStamp",descending: false).addSnapshotListener { (snapshot, err) in
             
             if err != nil {
                 print(err!.localizedDescription)
@@ -41,6 +41,31 @@ class MessageRepository : ObservableObject {
                 }
 
         }
+        }
+        else if chatType == "personal"{
+            COLLECTION_PERSONAL_CHAT.document(chatID).collection("Messages").order(by: "timeStamp",descending: false).addSnapshotListener { (snapshot, err) in
+                
+                if err != nil {
+                    print(err!.localizedDescription)
+                    return
+                }
+
+                self.messages = snapshot!.documents.map{ snapshot -> Message in
+                        let name = snapshot.get("name") as? String ?? ""
+                        let nameColor = snapshot.get("nameColor") as! String
+                        let text = snapshot.get("text") as? String ?? ""
+                        let timeStamp = snapshot.get("timeStamp") as? Timestamp ?? Timestamp()
+                        let id = snapshot.get("id") as? String ?? ""
+                        let profilePicture = snapshot.get("profilePicture") as? String ?? ""
+                        let imageURL = snapshot.get("imageURL") as? String ?? ""
+                        let messageType = snapshot.get("messageType") as? String ?? ""
+                        
+                        
+                    return Message(dictionary: ["name":name, "text":text,"timeStamp":timeStamp,"id":id, "nameColor":nameColor,"profilePicture":profilePicture,"imageURL":imageURL,"messageType":messageType])
+                    }
+
+            }
+        }
     }
     
     func getPinnedMessage(chatID: String){
@@ -52,7 +77,7 @@ class MessageRepository : ObservableObject {
             
             let pinnedMessage = snapshot?.get("pinnedMessage")
             
-            COLLECTION_CHAT.document(chatID).collection("Messages").whereField("id", isEqualTo: pinnedMessage).getDocuments { (querySnapshot, err) in
+            COLLECTION_CHAT.document(chatID).collection("Messages").whereField("id", isEqualTo: pinnedMessage as Any).getDocuments { (querySnapshot, err) in
                 if err != nil {
                     print(err!.localizedDescription)
                     return
@@ -83,11 +108,26 @@ class MessageRepository : ObservableObject {
     }
     
     
-    func sendTextMessage(text: String, name: String, timeStamp: Timestamp, nameColor: String, messageID: String, profilePicture: String, messageType: String,chatID: String){
-        COLLECTION_CHAT.document(chatID).collection("Messages").document(messageID).setData(["text":text,"name":name,"timeStamp":timeStamp, "nameColor":nameColor, "id":messageID,"profilePicture":profilePicture,"messageType":messageType])
-        self.scrollToBottom += 1
+    func sendGroupChatTextMessage(text: String, user: User, timeStamp: Timestamp, nameColor: String, messageID: String,messageType: String, chat: ChatModel, chatType: String){
+            COLLECTION_CHAT.document(chat.id).collection("Messages").document(messageID).setData(["text":text,"name":user.nickName ?? "","timeStamp":timeStamp, "nameColor":nameColor, "id":messageID,"profilePicture":user.profilePicture ?? "","messageType":messageType])
+        
+            
+           
          
     }
+    
+    func sendPersonalTextMessage(text: String, user: User, timeStamp: Timestamp, nameColor: String, messageID: String, messageType: String, chat: ChatModel, chatType: String){
+        
+        //user 1
+        COLLECTION_PERSONAL_CHAT.document(chat.id).collection("Messages").document(messageID).setData(["text":text,"name":user.nickName ?? "","timeStamp":timeStamp, "nameColor":nameColor, "id":messageID,"profilePicture":user.profilePicture ?? "","messageType":messageType])
+        
+   
+    
+ 
+    self.scrollToBottom += 1
+    }
+    
+    
     
     func sendImageMessage(name: String, timeStamp: Timestamp, nameColor: String, messageID: String, profilePicture: String, messageType: String,chatID: String, imageURL: UIImage){
         COLLECTION_CHAT.document(chatID).collection("Messages").document(messageID).setData(["name":name,"timeStamp":timeStamp, "nameColor":nameColor, "id":messageID,"profilePicture":profilePicture,"messageType":messageType,"imageURL":""])
@@ -96,20 +136,32 @@ class MessageRepository : ObservableObject {
          
     }
     
+    func sendDeletedMessage(name: String, timeStamp: Timestamp, nameColor:String, messageID: String, messageType: String, chatID: String){
+        COLLECTION_CHAT.document(chatID).collection("Messages").document(messageID).setData(
+            //this is the message
+            ["name":name,"timeStamp":timeStamp,"nameColor":nameColor,"id":messageID,"messageType":messageType]
+        )
+        
+        self.scrollToBottom += 1
+    }
     
     
     
     
     
-    func deleteMessage(chatID: String, messageID: String){
-        COLLECTION_CHAT.document(chatID).collection("Messages").document(messageID).delete { (err) in
+    
+    func deleteMessage(chatID: String, message: Message){
+        COLLECTION_CHAT.document(chatID).collection("Messages").document(message.id).delete { (err) in
             if err != nil {
-                print("ERROR DELETING MESSAGE, ERROR CODE: \(err?.localizedDescription)")
+                print("ERROR DELETING MESSAGE, ERROR CODE: \(String(describing: err?.localizedDescription))")
                 return
-            }else{
-                print("Deleted message!")
             }
+            
+            self.sendDeletedMessage(name: message.name ?? "", timeStamp: message.timeStamp ?? Timestamp(), nameColor: message.nameColor ?? "", messageID: message.id, messageType: "deletedMessage", chatID: chatID)
+            
         }
+        
+        
     }
     
     func persistImageToStorage(image: UIImage, chatID: String, messageID: String) {

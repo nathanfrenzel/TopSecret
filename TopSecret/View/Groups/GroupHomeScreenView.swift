@@ -106,7 +106,7 @@ struct GroupHomeScreenView: View {
             })
         }.edgesIgnoringSafeArea(.all).navigationBarHidden(true).onAppear{
             groupVM.getChat(chatID: group.chatID ?? "")
-            messageVM.readAllMessages(chatID: group.chatID ?? "")
+            messageVM.readAllMessages(chatID: group.chatID ?? "", userID: userVM.user?.id ?? "", chatType: "groupChat")
         }
     }
 }

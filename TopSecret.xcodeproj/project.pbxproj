@@ -106,6 +106,7 @@
 		78F13C8927853EA900EB2346 /* UserEditProfilePageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F13C8827853EA900EB2346 /* UserEditProfilePageView.swift */; };
 		78F13C8D27861C7600EB2346 /* ImageMessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F13C8C27861C7600EB2346 /* ImageMessageModel.swift */; };
 		78F13C922786805B00EB2346 /* ImageSendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F13C912786805B00EB2346 /* ImageSendView.swift */; };
+		78F13C982788C96F00EB2346 /* PersonalChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F13C972788C96F00EB2346 /* PersonalChatView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -202,6 +203,7 @@
 		78F13C8827853EA900EB2346 /* UserEditProfilePageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserEditProfilePageView.swift; sourceTree = "<group>"; };
 		78F13C8C27861C7600EB2346 /* ImageMessageModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImageMessageModel.swift; path = TopSecret/Model/ImageMessageModel.swift; sourceTree = SOURCE_ROOT; };
 		78F13C912786805B00EB2346 /* ImageSendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSendView.swift; sourceTree = "<group>"; };
+		78F13C972788C96F00EB2346 /* PersonalChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalChatView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -324,6 +326,7 @@
 				78D1A73F26DEDD7E0083FE2C /* Tabs */,
 				78D1A72326DE99040083FE2C /* Register */,
 				7887ADEE26267F5C00D9FC21 /* Login */,
+				78F13C972788C96F00EB2346 /* PersonalChatView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -424,9 +427,9 @@
 		78D1A73F26DEDD7E0083FE2C /* Tabs */ = {
 			isa = PBXGroup;
 			children = (
-				78C74CF127825C080009E08C /* MapTab */,
 				78B2379426DD159100052E69 /* ContentView.swift */,
-				62CE5AE126DEE48600AE6ACC /* HomeScreenView.swift */,
+				78F13C952788081000EB2346 /* HomescreenTab */,
+				78C74CF127825C080009E08C /* MapTab */,
 				78DEE869275FA6FC00C832AD /* ScheduleTab */,
 				78C57D5D270E14BB006875BD /* VotingTab */,
 				78D1A74026DEDED50083FE2C /* ChatTab */,
@@ -512,6 +515,14 @@
 				78F13C8827853EA900EB2346 /* UserEditProfilePageView.swift */,
 			);
 			path = User;
+			sourceTree = "<group>";
+		};
+		78F13C952788081000EB2346 /* HomescreenTab */ = {
+			isa = PBXGroup;
+			children = (
+				62CE5AE126DEE48600AE6ACC /* HomeScreenView.swift */,
+			);
+			path = HomescreenTab;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -638,6 +649,7 @@
 				78D1A75D26DF16D50083FE2C /* ChatView.swift in Sources */,
 				7839C05626E9084E000B8722 /* ChatModel.swift in Sources */,
 				78D1A75226DEFE370083FE2C /* CreateGroupView.swift in Sources */,
+				78F13C982788C96F00EB2346 /* PersonalChatView.swift in Sources */,
 				78DEE867275FA27500C832AD /* GroupGalleryView.swift in Sources */,
 				78012479273C3B8F00FB54AF /* GroupRepository.swift in Sources */,
 				78012476273C3B6900FB54AF /* ChatRepository.swift in Sources */,

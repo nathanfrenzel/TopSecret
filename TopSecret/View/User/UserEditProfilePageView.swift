@@ -25,7 +25,6 @@ struct UserEditProfilePageView: View {
                 
                 Button(action:{
                     userVM.changeBio(userID: userVM.user?.id ?? "", bio: bio)
-                    userVM.fetchUser()
                     dismiss.wrappedValue.dismiss()
                     
                 },label:{

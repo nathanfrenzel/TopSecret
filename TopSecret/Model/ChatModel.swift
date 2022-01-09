@@ -13,16 +13,16 @@ struct ChatModel : Identifiable {
     var name: String?
     var memberAmount: Int = 1
     var users : [String] = []
-    var usersTyping : [User.ID] = []
-    var usersIdling : [User.ID] = []
+    var usersTyping : [String] = []
+    var usersIdling : [String] = []
     var dateCreated: Date?
     var messages : [Message] = [ ]
     var pinnedMessage : String? //key value pair of messageID and pinnedByUserID
-    var isPersonal: Bool
     var chatNameColors : [String]?  //Colors
     var nextColor: Int? //index for colors
     var pickedColors: [String]? //Picked chat name colors
     var groupID : String?
+    var chatType : String?
     
     
     
@@ -31,20 +31,19 @@ struct ChatModel : Identifiable {
         self.name = dictionary["name"] as? String ?? " "
         self.memberAmount = dictionary["memberAmount"] as? Int ?? 1
         self.users = dictionary["users"] as? [String] ?? []
-        self.usersTyping = dictionary["usersTyping"] as? [User.ID] ?? []
-        self.usersIdling = dictionary["usersIdling"] as? [User.ID] ?? []
+        self.usersTyping = dictionary["usersTyping"] as? [String] ?? []
+        self.usersIdling = dictionary["usersIdling"] as? [String] ?? []
         self.dateCreated = dictionary["dateCreated"] as? Date ?? Date()
         self.messages = dictionary["messages"] as? [Message] ?? [ ]
-        self.isPersonal = dictionary["isPersonal"] as? Bool ?? false
         self.chatNameColors = dictionary["chatNameColors"] as? [String] ?? []
         self.nextColor = dictionary["nextColor"] as? Int ?? 0
         self.pickedColors = dictionary["pickedColors"] as? [String] ?? []
         self.pinnedMessage = dictionary["pinnedMessage"] as? String ?? ""
         self.groupID = dictionary["groupID"] as? String ?? " "
+        self.chatType = dictionary["chatType"] as? String ?? ""
     }
     init(){
         self.id = UUID().uuidString
-        self.isPersonal = false
     }
    
    

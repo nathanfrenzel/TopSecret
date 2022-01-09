@@ -49,7 +49,7 @@ struct ChatView: View {
                                     MessageCell(message: message, chatID: chat.id)
                                 }
                                 
-                                HStack{Spacer()}.id("Empty")
+                                HStack{Spacer()}.padding(0).id("Empty")
                                 
                             }.onReceive(messageVM.$scrollToBottom, perform: { _ in
                                 withAnimation(.easeOut(duration: 0.5)) {
@@ -84,9 +84,9 @@ struct ChatView: View {
                             
                             TextField("message", text: $text).onChange(of: text, perform: { value in
                                 if text == ""{
-                                    chatVM.stopTyping(userID: uid, chatID: chat.id)
+                                    chatVM.stopTyping(userID: uid, chatID: chat.id, chatType: "groupChat")
                                 }else{
-                                    chatVM.startTyping(userID: uid, chatID: chat.id)
+                                    chatVM.startTyping(userID: uid, chatID: chat.id, chatType: "groupChat")
                                 }
                             }).padding(.vertical,10).padding(.leading,5).background(Color("Color")).cornerRadius(12).sheet(isPresented: $showImageSendView, content: {
                                 ImageSendView(message: Message(dictionary: ["id":UUID().uuidString,"nameColor":chatVM.colors[chat.users.firstIndex(of: uid) ?? 0],"timeStamp":Timestamp(),"name":userVM.user?.nickName ?? "","profilePicture":userVM.user?.profilePicture ?? "","imageURL":"","messageType":"image"]), imageURL: avatarImage, chatID: chat.id, messageVM: messageVM)
@@ -94,7 +94,7 @@ struct ChatView: View {
                             
                             Button(action:{
                                 
-                                messageVM.sendTextMessage(text: text, name: userVM.user?.nickName ?? "", timeStamp: Timestamp(), nameColor: chatVM.colors[chat.users.firstIndex(of: uid) ?? 0], messageID: UUID().uuidString, profilePicture: userVM.user?.profilePicture ?? "", messageType: "text", chatID: chat.id)
+                                messageVM.sendGroupChatTextMessage(text: text, user: userVM.user ?? User(), timeStamp: Timestamp(), nameColor: chatVM.colors[chat.users.firstIndex(of: uid) ?? 0], messageID: UUID().uuidString, messageType: "text", chat: chat, chatType: "groupChat")
                                 
                                 
                                 
@@ -140,16 +140,17 @@ struct ChatView: View {
             VStack{
                 HStack{
                     
-                    Spacer()
                     
                     Button(action:{
-                        chatVM.exitChat(userID: uid, chatID: chat.id)
+                        chatVM.exitChat(userID: uid, chatID: chat.id, chatType: "groupChat")
                         presentationMode.wrappedValue.dismiss()
                     },label:{
                         Text("Back")
-                    })
+                    }).padding(.leading)
                     
-                    Text("Top Bar")
+                    Spacer()
+                    
+                    Text("\(chat.name ?? "")").fontWeight(.bold).font(.title)
                     
                     Spacer()
                 }.padding(.top,30)
@@ -162,10 +163,10 @@ struct ChatView: View {
         .edgesIgnoringSafeArea(.all)
         .onAppear{
             
-            messageVM.readAllMessages(chatID: chat.id )
+            messageVM.readAllMessages(chatID: chat.id, userID: userVM.user?.id ?? "", chatType: "groupChat")
             messageVM.getPinnedMessage(chatID: chat.id)
             chatVM.getGroup(groupID: chat.groupID ?? "")
-            chatVM.openChat(userID: uid, chatID: chat.id)
+            chatVM.openChat(userID: uid, chatID: chat.id, chatType: "groupChat")
             chatVM.getUsersIdlingList(chatID: chat.id)
             chatVM.getUsersTypingList(chatID: chat.id)
             

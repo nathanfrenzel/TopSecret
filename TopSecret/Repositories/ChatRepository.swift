@@ -16,6 +16,7 @@ class ChatRepository : ObservableObject {
     @Published var usersTypingList : [User] = []
     @Published var usersIdlingList : [User] = []
     @Published var group : Group = Group()
+    
     var colors: [String] = ["green","red","blue","orange","purple","teal"]
 
     
@@ -42,9 +43,7 @@ class ChatRepository : ObservableObject {
         
     }
     
-    func getUser(userID: String){
-        
-    }
+    
     
     //this is for fetching idle users from database
     func getUsersIdlingList(chatID: String){
@@ -87,13 +86,13 @@ class ChatRepository : ObservableObject {
                 return
             }
             let data = snapshot!.data()
-            let usersTyping = data!["usersTypingList"] as? [User.ID] ?? []
+            let usersTyping = data?["usersTypingList"] as? [String] ?? []
             
             if ((snapshot?.didChangeValue(forKey: "usersTypingList")) != nil){
                 self.usersTypingList.removeAll()
 
                 for user in usersTyping{
-                    COLLECTION_USER.document(user!).getDocument { (snapshot, err) in
+                    COLLECTION_USER.document(user).getDocument { (snapshot, err) in
                         if err != nil {
                             print(err!.localizedDescription)
                             return
@@ -114,23 +113,39 @@ class ChatRepository : ObservableObject {
        
     }
     
-    func startTyping(userID: String, chatID: String){
-        COLLECTION_CHAT.document(chatID).updateData(["usersTypingList":FieldValue.arrayUnion([userID])])
+    func startTyping(userID: String, chatID: String, chatType: String){
+        if chatType == "groupChat" {
+            COLLECTION_CHAT.document(chatID).updateData(["usersTypingList":FieldValue.arrayUnion([userID])])
+        }else if chatType == "personal"{
+            COLLECTION_USER.document(userID).collection("Personal Chats").document(chatID).updateData(["usersTypingList":FieldValue.arrayUnion([userID])])
+        }
     }
     
-    func stopTyping(userID: String, chatID: String){
-        COLLECTION_CHAT.document(chatID).updateData(["usersTypingList":FieldValue.arrayRemove([userID])])
+    func stopTyping(userID: String, chatID: String, chatType: String){
+        if chatType == "groupChat" {
+            COLLECTION_CHAT.document(chatID).updateData(["usersTypingList":FieldValue.arrayRemove([userID])])
+        }else if chatType == "personal"{
+            COLLECTION_USER.document(userID).collection("Personal Chats").document(chatID).updateData(["usersTypingList":FieldValue.arrayRemove([userID])])
+        }
     }
   
     
-    func openChat(userID: String, chatID: String){
-        COLLECTION_CHAT.document(chatID).updateData(["usersIdlingList":FieldValue.arrayUnion([userID])])
+    func openChat(userID: String, chatID: String, chatType: String){
+        if chatType == "groupChat"{
+            COLLECTION_CHAT.document(chatID).updateData(["usersIdlingList":FieldValue.arrayUnion([userID])])
+        }else if chatType == "personal"{
+            COLLECTION_USER.document(userID).collection("Personal Chats").document(chatID).updateData(["usersIdlingList":FieldValue.arrayUnion([userID])])
+        }
         
         
     }
     
-    func exitChat(userID: String, chatID: String){
-        COLLECTION_CHAT.document(chatID).updateData(["usersIdlingList":FieldValue.arrayRemove([userID])])
+    func exitChat(userID: String, chatID: String, chatType: String){
+        if chatType == "groupChat"{
+            COLLECTION_CHAT.document(chatID).updateData(["usersIdlingList":FieldValue.arrayRemove([userID])])
+        }else if chatType == "personal"{
+            COLLECTION_USER.document(userID).collection("Personal Chats").document(chatID).updateData(["usersIdlingList":FieldValue.arrayRemove([userID])])
+        }
     }
     
     
@@ -155,7 +170,7 @@ class ChatRepository : ObservableObject {
         let data = ["name": name,
                     "memberAmount":1,
                     "dateCreated":Date(),
-                    "users":[userID], "id":id, "chatNameColors":[], "pickedColors":[], "nextColor":0,"groupID":groupID] as [String : Any]
+                    "users":[userID], "id":id, "chatNameColors":[], "pickedColors":[], "nextColor":0,"groupID":groupID,"chatType":"groupChat"] as [String : Any]
         
         let chat = ChatModel(dictionary: data)
         
@@ -170,6 +185,8 @@ class ChatRepository : ObservableObject {
         pickColor(chatID: chat.id, picker: 0)
 
     }
+    
+    
     
     func leaveChat(chatID: String, userID: String){
         COLLECTION_CHAT.document(chatID).updateData(["memberAmount":FieldValue.increment(Int64(-1))])

@@ -17,9 +17,10 @@ class UserRepository : ObservableObject {
     @Published var userSession : FirebaseAuth.User?
     @Published var profilePicture : UIImage = UIImage()
     @Published var groups: [Group] = []
-    @Published var chats: [ChatModel] = []
+    @Published var groupChats: [ChatModel] = []
     @Published var polls: [PollModel] = []
     @Published var events: [EventModel] = []
+    @Published var personalChats: [ChatModel] = []
     @Published var isConnected : Bool = false
     @Published var firestoreListener : [ListenerRegistration] = []
 
@@ -59,30 +60,50 @@ class UserRepository : ObservableObject {
         }
       
     }
-    
+    func listenToUser(uid: String){
+        
+      let listener =  COLLECTION_USER.whereField("uid", isEqualTo: uid).addSnapshotListener { (snapshot, err) in
+            if err != nil {
+                print("ERROR - User Not Being Fetched")
+                return
+            }
+            
+            guard let documents = snapshot?.documents else {
+                print("No user found!")
+                self.signOut()
+                return
+            }
+            
+        
+            for document in documents {
+                self.user = User(dictionary: document.data())
+            }
+           
+            
+          
+            
+           
+         
+                        
+            
+        }
+        
+        firestoreListener.append(listener)
+        
+    }
     func listenToUserChats(uid: String){
         
         
         let listener = COLLECTION_CHAT.whereField("users", arrayContains: uid).addSnapshotListener { (snapshot, err) in
             
-            guard let source = snapshot?.metadata.isFromCache else{
-                print("error")
-                return
-            }
-            if source {
-                self.isConnected = false
-                print("You are not connected, your data may not be up to date!")
-            }else{
-                self.isConnected = true
-                print("You are connected!")
-            }
+            
             
             guard let documents = snapshot?.documents else {
                 print("No document!")
                 return
             }
             
-            self.chats = documents.map{ queryDocumentSnapshot -> ChatModel in
+            self.groupChats = documents.map{ queryDocumentSnapshot -> ChatModel in
                 let data = queryDocumentSnapshot.data()
                 let chatNameColors = data["chatNameColors"] as? [String] ?? []
                 let pickedColors = data["pickedColors"] as? [String] ?? []
@@ -104,23 +125,12 @@ class UserRepository : ObservableObject {
         
         firestoreListener.append(listener)
     }
-    
     func listenToUserGroups(uid: String){
         
        let listener = COLLECTION_GROUP.whereField("users", arrayContains: uid).addSnapshotListener { (snapshot, err) in
             
          
-            guard let source = snapshot?.metadata.isFromCache else{
-                print("error")
-                return
-            }
-            if source {
-                self.isConnected = false
-                print("You are not connected, your data may not be up to date!")
-            }else{
-                self.isConnected = true
-                print("You are connected!")
-            }
+            
             
             guard let documents = snapshot?.documents else {
                 print("No document!")
@@ -152,22 +162,11 @@ class UserRepository : ObservableObject {
         firestoreListener.append(listener)
 
     }
-    
     func listenToUserPolls(uid: String){
         
         let listener = COLLECTION_POLLS.whereField("users", arrayContains: uid).order(by: "dateCreated",descending: true).addSnapshotListener { (snapshot, err) in
                 
-                guard let source = snapshot?.metadata.isFromCache else{
-                    print("error")
-                    return
-                }
-                if source {
-                    self.isConnected = false
-                    print("You are not connected, your data may not be up to date!")
-                }else{
-                    self.isConnected = true
-                    print("You are connected!")
-                }
+               
                 
                 
                 guard let documents = snapshot?.documents else {
@@ -198,28 +197,17 @@ class UserRepository : ObservableObject {
         
         
     }
-    
     func listenToUserEvents(uid: String){
         
         let listener = COLLECTION_EVENTS.whereField("usersVisibleTo", arrayContains: uid).addSnapshotListener { (snapshot, err) in
                 
-                guard let source = snapshot?.metadata.isFromCache else{
-                    print("error")
-                    return
-                }
-                if source {
-                    self.isConnected = false
-                    print("You are not connected, your data may not be up to date!")
-                }else{
-                    self.isConnected = true
-                    print("You are connected!")
-                }
                 
                 
                 guard let documents = snapshot?.documents else {
                     print("No document!")
                     return
                 }
+            
                 self.events = documents.map{ queryDocumentSnapshot -> EventModel in
                     let data = queryDocumentSnapshot.data()
                     let eventName = data["eventName"] as? String ?? ""
@@ -242,24 +230,12 @@ class UserRepository : ObservableObject {
         
         
     }
-    
     func listenToUserFriends(uid: String){
         
         
  let listener = COLLECTION_USER.whereField("friendsList", arrayContains: uid).addSnapshotListener { (snapshot, err) in
                 
-                guard let source = snapshot?.metadata.isFromCache else{
-                    print("error")
-                    return
-                }
-                if source {
-                    self.isConnected = false
-                    print("You are not connected, your data may not be up to date!")
-                }else{
-                    self.isConnected = true
-                    print("You are connected!")
-                }
-                
+               
                 
                 guard let documents = snapshot?.documents else {
                     print("No document!")
@@ -282,19 +258,58 @@ class UserRepository : ObservableObject {
         
         
     }
+    func listenToNetworkChanges(uid: String){
+        COLLECTION_USER.document(uid).addSnapshotListener { (snapshot, err) in
+            if err != nil {
+                print("ERROR")
+                return
+            }
+            guard let source = snapshot?.metadata.isFromCache else{
+                print("error")
+                return
+            }
+            if source {
+                self.isConnected = false
+                print("You are not connected, your data may not be up to date!")
+            }else{
+                self.isConnected = true
+                print("You are connected!")
+            }
+        }
+    }
     
-    
+    func listenToPersonalChats(uid: String){
+        COLLECTION_PERSONAL_CHAT.whereField("users", arrayContains: uid).addSnapshotListener { (snapshot, err) in
+            if err != nil {
+                print("ERROR")
+                return
+            }
+            
+            guard let documents = snapshot?.documents else {
+                print("No document!")
+                return
+            }
+            
+            self.personalChats = documents.map({ (snapshot) -> ChatModel in
+                let data = snapshot.data()
+                return ChatModel(dictionary: data)
+            })
+            
+        }
+    }
     func listenToAll(uid: String){
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
             self.listenToUserChats(uid: uid)
             self.listenToUserGroups(uid: uid)
             self.listenToUserPolls(uid: uid)
             self.listenToUserEvents(uid: uid)
             self.listenToUserFriends(uid: uid)
-        }
+            self.listenToUser(uid: uid)
+            self.listenToNetworkChanges(uid: uid)
+            self.listenToPersonalChats(uid: uid)
+           
+        
        
     }
-    
     func fetchUserChats(){
         //TODO
         COLLECTION_CHAT.whereField("users", arrayContains: user?.id ?? "").getDocuments { (snapshot, err) in
@@ -316,7 +331,7 @@ class UserRepository : ObservableObject {
                 return
             }
             
-            self.chats = documents.map{ queryDocumentSnapshot -> ChatModel in
+            self.groupChats = documents.map{ queryDocumentSnapshot -> ChatModel in
                 let data = queryDocumentSnapshot.data()
          
 
@@ -332,7 +347,6 @@ class UserRepository : ObservableObject {
             
         }
     }
-    
     func fetchUserGroups(){
         //TODO
         COLLECTION_GROUP.whereField("users", arrayContains: user?.id ?? "").getDocuments { (snapshot, err) in
@@ -416,7 +430,6 @@ class UserRepository : ObservableObject {
             
         }
     }
-    
     func fetchUserEvents(){
         //TODO
         //TODO
@@ -455,21 +468,12 @@ class UserRepository : ObservableObject {
             
         }
     }
-    
-    
-   
-    
-    
-    
     func fetchAll(){
         fetchUserChats()
         fetchUserGroups()
         fetchUserPolls()
         fetchUserEvents()
     }
-    
-    
-    
     func createUser(email: String, password: String, username: String, nickName: String, birthday: Date, image:UIImage){
         Auth.auth().createUser(withEmail: email, password: password) { (result, err) in
             if let err = err{
@@ -507,8 +511,6 @@ class UserRepository : ObservableObject {
             
         }
     }
-    
-    
     func signIn(withEmail email: String, password: String){
         
         Auth.auth().signIn(withEmail: email, password: password) { [self] (result,err) in
@@ -528,7 +530,7 @@ class UserRepository : ObservableObject {
                     loginErrorMessage = "The email or password is incorrect"
                     
                   default:
-                      loginErrorMessage = "fuck"
+                      loginErrorMessage = "The e"
                   }
             }else{
                 print("You are connected")
@@ -536,13 +538,11 @@ class UserRepository : ObservableObject {
             
             self.userSession = result?.user
             self.fetchUser()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1 ) {
-                self.listenToAll(uid: userSession?.uid ?? "")
-            }
+            self.listenToAll(uid: userSession?.uid ?? "")
+            
         }
         
     }
-    
     func signOut(){
         
         for listener in firestoreListener  {
@@ -554,8 +554,8 @@ class UserRepository : ObservableObject {
         self.loginErrorMessage = ""
         try? Auth.auth().signOut()
     }
-    
     func fetchUser(){
+        
         guard let uid = userSession?.uid else {return}
         
         store.collection(path).document(uid).getDocument { (snapshot, _) in
@@ -564,17 +564,11 @@ class UserRepository : ObservableObject {
             self.user = user
         }
     }
-    
-    
-   
-    
     func resetPassword(email: String){
         Auth.auth().sendPasswordReset(withEmail: email) { (err) in
             print("You have been sent an email to reset your password!")
         }
     }
-    
-    
     func addFriend(friendID: String, userID: String){
         COLLECTION_USER.document(userID).updateData(["friendsList":FieldValue.arrayUnion([friendID])])
         COLLECTION_USER.document(friendID).updateData(["friendsList":FieldValue.arrayUnion([userID])])
@@ -582,7 +576,6 @@ class UserRepository : ObservableObject {
         print("\(userID) has added \(friendID) as a friend!")
 
     }
-    
     func removeFriend(friendID: String, userID: String){
         COLLECTION_USER.document(userID).updateData(["friendsList":FieldValue.arrayRemove([friendID])])
         COLLECTION_USER.document(friendID).updateData(["friendsList":FieldValue.arrayRemove([userID])])
@@ -590,10 +583,8 @@ class UserRepository : ObservableObject {
         print("\(userID) has removed \(friendID) as a friend!")
 
     }
-    
     func changeBio(userID: String, bio: String){
         COLLECTION_USER.document(userID).updateData(["bio":bio])
-        fetchUser()
     }
     
 }
