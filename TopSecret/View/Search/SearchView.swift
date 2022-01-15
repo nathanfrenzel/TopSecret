@@ -12,6 +12,7 @@ struct SearchView: View {
     @Environment(\.presentationMode) var presentationMode
     @State var goToUserProfile: Bool = false
     @StateObject var searchRepository = SearchRepository()
+    @EnvironmentObject var userVM : UserViewModel
     var body: some View {
         ZStack{
             Color("Background")
@@ -38,7 +39,7 @@ struct SearchView: View {
                             VStack{
                                 ForEach(searchRepository.returnedResults, id: \.id) { user in
                                     NavigationLink(
-                                        destination: UserProfilePage(user: user),
+                                        destination: UserProfilePage(user: user, isCurrentUser: userVM.user?.id == user.id ?? ""),
                                         label: {
                                             UserSearchCell(user: user)
                                         })

@@ -13,9 +13,9 @@ import SwiftUI
 class PollRepository : ObservableObject {
     
     
-    func createPoll(creator: String, question: String, group: Group){
+    func createPoll(creator: String, question: String, group: Group, pollType: String){
         let id = UUID().uuidString
-        let data = ["creator":creator,"question":question,"dateCreated":Timestamp(),"id":id, "groupID":group.id, "groupName":group.groupName,"users":group.users ?? ""] as [String : Any]
+        let data = ["creator":creator,"question":question,"dateCreated":Timestamp(),"id":id, "groupID":group.id, "groupName":group.groupName,"users":group.users ?? "","pollType":pollType] as [String : Any]
         COLLECTION_POLLS.document(id).setData(data) { (err) in
             if err != nil {
                 print("ERROR")

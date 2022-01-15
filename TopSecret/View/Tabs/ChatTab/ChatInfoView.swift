@@ -49,7 +49,7 @@ struct ChatInfoView: View {
                                         },label:{
                                             GroupUsersListCell(user: user, isCurrentUser: user.id == userVM.user?.id, nameColor: chatVM.colors[chat.users.firstIndex(of: user.id ?? "") ?? 0])
                                         }).fullScreenCover(isPresented: $goToUserProfilePage, content: {
-                                            UserProfilePage(user: user)
+                                            UserProfilePage(user: user, isCurrentUser: userVM.user?.id == user.id ?? "")
                                         })
                                     }
                                     

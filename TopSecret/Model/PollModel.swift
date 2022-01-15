@@ -14,14 +14,11 @@ struct PollModel : Identifiable {
     var question: String?
     var groupID : String?
     var groupName: String?
-    var answered: Bool?
+    var pollType: String?
+    var totalUsers: Int?
+    var usersAnswered: [String]?
     
-    public enum pollType {
-        case freeResponse
-        case twoChoices
-        case threeChoices
-        case fourChoices           
-    }
+   
     
     
     init(dictionary: [String:Any]){
@@ -30,8 +27,10 @@ struct PollModel : Identifiable {
         self.question = dictionary["question"] as? String ?? ""
         self.groupID = dictionary["groupID"] as? String ?? ""
         self.groupName = dictionary["groupName"] as? String ?? ""
-        self.answered = dictionary["answered"] as? Bool ?? false
         self.id = dictionary["id"] as? String ?? ""
+        self.pollType = dictionary["pollType"] as? String ?? ""
+        self.totalUsers = dictionary["totalUsers"] as? Int ?? 0
+        self.usersAnswered = dictionary["usersAnswered"] as? [String] ?? []
     }
     
     init(){

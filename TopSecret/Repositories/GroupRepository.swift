@@ -164,7 +164,7 @@ class GroupRepository : ObservableObject {
 
     }
     
-    func createGroup(groupName: String, memberLimit: Int, dateCreated: Date,userID: String, image: UIImage){
+    func createGroup(groupName: String, memberLimit: Int, dateCreated: Date, users: [String], image: UIImage){
         
         
         let id = UUID().uuidString
@@ -173,7 +173,7 @@ class GroupRepository : ObservableObject {
 
         let data = ["groupName" : groupName,
                     "memberLimit" : memberLimit,
-                    "users" : [userID] ,
+                    "users" : users ,
                     "memberAmount": 1, "id":id, "chatID": " ", "dateCreated":Timestamp(), "groupProfileImage": " "
         ] as [String:Any]
                 
@@ -184,10 +184,43 @@ class GroupRepository : ObservableObject {
             }
             self.persistImageToStorage(groupID: id,image: image)
         }
-        chatRepository.createGroupChat(name: groupName, userID: userID, groupID: id)
+        chatRepository.createGroupChat(name: groupName, users: users, groupID: id)
 
         
+        
     }
+    
+    func createGroup(groupName: String, memberLimit: Int, dateCreated: Date, users: [String], image: UIImage, completion: @escaping (ChatModel) -> ()) -> (){
+        
+        
+        let id = UUID().uuidString
+        
+       
+
+        let data = ["groupName" : groupName,
+                    "memberLimit" : memberLimit,
+                    "users" : users ,
+                    "memberAmount": 1, "id":id, "chatID": " ", "dateCreated":Timestamp(), "groupProfileImage": " "
+        ] as [String:Any]
+                
+        COLLECTION_GROUP.document(id).setData(data) { (err) in
+            if err != nil {
+                print("ERROR \(err!.localizedDescription)")
+                return
+            }
+            self.persistImageToStorage(groupID: id,image: image)
+        }
+        chatRepository.createGroupChat(name: groupName, users: users, groupID: id,completion: { chat in
+            return completion(chat)
+        })
+
+        
+        
+    }
+    
+    
+    
+    
     func persistImageToStorage(groupID: String, image: UIImage) {
        let fileName = "groupImages/\(groupID)"
         let ref = Storage.storage().reference(withPath: fileName)

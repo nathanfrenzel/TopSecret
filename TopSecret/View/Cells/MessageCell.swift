@@ -74,7 +74,7 @@ struct MessageCell: View {
                 VStack(alignment: .leading){
                     HStack{
                         Text("\(message.name ?? "")").foregroundColor(Color(message.nameColor ?? ""))
-                        Text("*")
+                        Text("•")
                         Text("\(message.timeStamp?.dateValue() ?? Date(), style: .time)")
                         Spacer()
                         Menu(content:{

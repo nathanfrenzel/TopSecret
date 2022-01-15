@@ -18,8 +18,8 @@ class PollViewModel : ObservableObject{
     }
     
     
-    func createPoll(creator: String, question: String, group: Group){
-        pollRepository.createPoll(creator: creator, question: question, group: group)
+    func createPoll(creator: String, question: String, group: Group, pollType: String){
+        pollRepository.createPoll(creator: creator, question: question, group: group, pollType: pollType)
     }
     
     

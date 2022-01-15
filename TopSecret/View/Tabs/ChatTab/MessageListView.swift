@@ -17,8 +17,7 @@ struct MessageListView: View {
     
     @State var selectedIndex = 0
     @State private var options = ["Groups","Friends"]
-    @State var goNext: Bool = false
-    @State var showAddChat = false
+    
  
     
     var body: some View {
@@ -43,23 +42,22 @@ struct MessageListView: View {
                         Text("Messages").font(.largeTitle).fontWeight(.bold)
                         
                         Spacer()
-                        Button(action:{
-                            //TODO
-                            self.showAddChat.toggle()
-                        },label:{
-                            Image(systemName: "plus.message")
-                        }).padding(.trailing,20)
-                        .sheet(isPresented: $showAddChat, content: {
-                            AddChatView(chatVM: chatVM)
-                        })
-                    }
+                        
+                        NavigationLink(
+                            destination: AddChatView(chatVM: chatVM),
+                            label: {
+                                Image(systemName: "plus.message")
+                            }).padding(.trailing)
+                       
+                        
+                    }.foregroundColor(FOREGROUNDCOLOR)
                 }.padding(.top,50)
                 
             }
             VStack{
                 
             
-            if userVM.groupChats.count != 0{
+                if userVM.groupChats.count != 0 || userVM.personalChats.count != 0{
                 VStack{
                     Picker("Options",selection: $selectedIndex){
                         ForEach(0..<options.count){ index in
@@ -82,15 +80,15 @@ struct MessageListView: View {
                             
                         }else{
                             ForEach(userVM.personalChats, id: \.id){ chat in
-                                    NavigationLink(
-                                        destination: ChatView(uid: userVM.user?.id ?? " ",chat: chat),
-                                        label: {
-                                            ChatListCell(chat: chat)
-                                        })
-                                    
-                                    Divider()
-                                
+                                let id = userVM.user?.id ?? ""
+                               NavigationLink(
+                                destination: PersonalChatView(chat: chat),
+                                label: {
+                                    Text("\(id == chat.users[0] ? chat.users[1] : chat.users[0])")
+                                })
+                                Divider()
                             }
+                            
                         }
                         
                         Button(action: {
@@ -122,6 +120,7 @@ struct MessageListView: View {
             
         }
        
+            
             
         }.navigationBarHidden(true)
         .edgesIgnoringSafeArea(.all)

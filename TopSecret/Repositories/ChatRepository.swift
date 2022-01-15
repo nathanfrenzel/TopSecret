@@ -162,7 +162,7 @@ class ChatRepository : ObservableObject {
     }
    
     
-    func createGroupChat(name: String, userID: String, groupID: String){
+    func createGroupChat(name: String, users: [String], groupID: String){
         
         let id = UUID().uuidString
         
@@ -170,7 +170,7 @@ class ChatRepository : ObservableObject {
         let data = ["name": name,
                     "memberAmount":1,
                     "dateCreated":Date(),
-                    "users":[userID], "id":id, "chatNameColors":[], "pickedColors":[], "nextColor":0,"groupID":groupID,"chatType":"groupChat"] as [String : Any]
+                    "users":users, "id":id, "chatNameColors":[], "pickedColors":[], "nextColor":0,"groupID":groupID,"chatType":"groupChat"] as [String : Any]
         
         let chat = ChatModel(dictionary: data)
         
@@ -184,6 +184,30 @@ class ChatRepository : ObservableObject {
         COLLECTION_GROUP.document(groupID).updateData(["chatID": id])
         pickColor(chatID: chat.id, picker: 0)
 
+    }
+    func createGroupChat(name: String, users: [String], groupID: String, completion: @escaping (ChatModel) -> ()) -> (){
+        
+        let id = UUID().uuidString
+        
+        
+        let data = ["name": name,
+                    "memberAmount":1,
+                    "dateCreated":Date(),
+                    "users":users, "id":id, "chatNameColors":[], "pickedColors":[], "nextColor":0,"groupID":groupID,"chatType":"groupChat"] as [String : Any]
+        
+        let chat = ChatModel(dictionary: data)
+        
+        COLLECTION_CHAT.document(chat.id).setData(data) { (err) in
+            if err != nil{
+                print("Error")
+                return
+            }
+        }
+        
+        COLLECTION_GROUP.document(groupID).updateData(["chatID": id])
+        pickColor(chatID: chat.id, picker: 0)
+
+        return completion(chat)
     }
     
     

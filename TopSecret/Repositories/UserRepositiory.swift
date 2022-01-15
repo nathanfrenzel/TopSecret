@@ -532,8 +532,6 @@ class UserRepository : ObservableObject {
                   default:
                       loginErrorMessage = "The e"
                   }
-            }else{
-                print("You are connected")
             }
             
             self.userSession = result?.user
@@ -566,21 +564,18 @@ class UserRepository : ObservableObject {
     }
     func resetPassword(email: String){
         Auth.auth().sendPasswordReset(withEmail: email) { (err) in
-            print("You have been sent an email to reset your password!")
         }
     }
     func addFriend(friendID: String, userID: String){
         COLLECTION_USER.document(userID).updateData(["friendsList":FieldValue.arrayUnion([friendID])])
         COLLECTION_USER.document(friendID).updateData(["friendsList":FieldValue.arrayUnion([userID])])
         
-        print("\(userID) has added \(friendID) as a friend!")
 
     }
     func removeFriend(friendID: String, userID: String){
         COLLECTION_USER.document(userID).updateData(["friendsList":FieldValue.arrayRemove([friendID])])
         COLLECTION_USER.document(friendID).updateData(["friendsList":FieldValue.arrayRemove([userID])])
         
-        print("\(userID) has removed \(friendID) as a friend!")
 
     }
     func changeBio(userID: String, bio: String){

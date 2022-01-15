@@ -169,7 +169,9 @@ struct ChatView: View {
             chatVM.openChat(userID: uid, chatID: chat.id, chatType: "groupChat")
             chatVM.getUsersIdlingList(chatID: chat.id)
             chatVM.getUsersTypingList(chatID: chat.id)
-            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                messageVM.scrollToBottom += 1
+            }
         }
     }
 }

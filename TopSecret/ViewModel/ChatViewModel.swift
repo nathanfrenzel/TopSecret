@@ -74,8 +74,8 @@ class ChatViewModel : ObservableObject {
         chatRepository.joinChat(chatID: chatID, userID: userID)
     }
    
-    func createGroupChat(name: String, userID: String, groupID: String){
-        chatRepository.createGroupChat(name: name, userID: userID, groupID: groupID)
+    func createGroupChat(name: String, users: [String], groupID: String){
+        chatRepository.createGroupChat(name: name, users: users, groupID: groupID)
     }
     
     

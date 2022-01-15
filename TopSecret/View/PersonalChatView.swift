@@ -16,29 +16,32 @@ struct PersonalChatView: View {
     @State var isShowingPhotoPicker:Bool = false
     @State var showImageSendView : Bool = false
     @State var avatarImage = UIImage(named: "Icon")!
+    @State var name: String = ""
+    @Environment(\.presentationMode) var presentationMode
     
     @StateObject var chatVM = ChatViewModel()
     @StateObject var messageVM = MessageViewModel()
     @EnvironmentObject var userVM: UserViewModel
-    @Binding var goBack : Bool
-    
     @State var chat: ChatModel
-    var user2 : User
+    
     var body: some View {
         ZStack{
             Color("Background")
             VStack{
-                HStack{
+                VStack(spacing: 2){
+                    HStack(alignment: .center){
                     Button(action:{
-                        goBack.toggle()
+                        presentationMode.wrappedValue.dismiss()
                     },label:{
                         Text("Back").foregroundColor(FOREGROUNDCOLOR)
                     }).padding(.leading)
                     
                     Spacer()
-                    Text("\(user2.nickName ?? "")").foregroundColor(FOREGROUNDCOLOR)
+                    Text("\(name)").foregroundColor(FOREGROUNDCOLOR)
                      Spacer()
-                }.padding(.top,50)
+                }
+                    Divider()
+                }.padding(.top,50).background(Color("Color"))
                 ScrollView(showsIndicators: false){
                     ScrollViewReader{ scrollViewProxy in
                         
@@ -47,7 +50,7 @@ struct PersonalChatView: View {
                                 MessageCell(message: message, chatID: chat.id)
                             }
                             
-                            HStack{Spacer()}.padding(0).id("Empty")
+                            HStack{Spacer()}.id("Empty")
                             
                         }.onReceive(messageVM.$scrollToBottom, perform: { _ in
                             withAnimation(.easeOut(duration: 0.5)) {
@@ -58,7 +61,7 @@ struct PersonalChatView: View {
                     }
                     
                     
-                }.padding(.top,50)
+                }
                 
                 
                 VStack{
@@ -132,12 +135,18 @@ struct PersonalChatView: View {
             }
         }.edgesIgnoringSafeArea(.all).navigationBarHidden(true) .onAppear{
             
+            let id = userVM.user?.id ?? ""
+            userVM.fetchUser(userID: id == chat.users[0] ? chat.users[1] : chat.users[0], completion: { user in
+                self.name = user.nickName ?? ""
+            })
             messageVM.readAllMessages(chatID: chat.id, userID: userVM.user?.id ?? "", chatType: "personal")
             messageVM.getPinnedMessage(chatID: chat.id)
             chatVM.openChat(userID: userVM.user?.id ?? "", chatID: chat.id, chatType: "personal")
             chatVM.getUsersIdlingList(chatID: chat.id)
             chatVM.getUsersTypingList(chatID: chat.id)
-            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                messageVM.scrollToBottom += 1
+            }
         }
     }
 }

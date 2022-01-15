@@ -77,7 +77,7 @@ struct GroupHomeScreenView: View {
                             VStack{
                                 ForEach(searchRepository.returnedResults) { user in
                                     NavigationLink(
-                                        destination: UserProfilePage(user: user),
+                                        destination: UserProfilePage(user: user, isCurrentUser: userVM.user?.id == user.id ?? ""),
                                         label: {
                                             UserSearchCell(user: user)
                                         })

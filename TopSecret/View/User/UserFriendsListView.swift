@@ -21,7 +21,7 @@ struct UserFriendsListView: View {
                     VStack{
                         ForEach(friendsList, id: \.self) { user in
                             NavigationLink(
-                                destination: UserProfilePage(user: user),
+                                destination: UserProfilePage(user: user, isCurrentUser: userVM.user?.id == user.id ?? ""),
                                 label: {
                                     UserSearchCell(user: user)
                                 })
@@ -41,7 +41,6 @@ struct UserFriendsListView: View {
             userVM.fetchUser(userID: user.id ?? "", completion: { user in
                 self.user = user
             })
-            print("User Fetched!")
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 
                 userVM.getUserFriendsList(user: user, completion: { list in

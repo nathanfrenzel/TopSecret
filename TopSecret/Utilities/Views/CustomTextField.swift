@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct CustomTextField: View {
+    @EnvironmentObject var userVM: UserViewModel
     @Binding var text: String
     var placeholder: String
     var isPassword:Bool

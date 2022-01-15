@@ -33,7 +33,7 @@ struct HomeScreenView: View {
                         
                         HStack{
                              NavigationLink(
-                                destination: UserProfilePage(user: userVM.user ?? User()),
+                                destination: UserProfilePage(user: userVM.user ?? User(), isCurrentUser: true),
                                 label: {
                                     WebImage(url: URL(string: userVM.user?.profilePicture ?? ""))
                                         .resizable()

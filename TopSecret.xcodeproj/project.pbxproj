@@ -48,6 +48,7 @@
 		789FC2ED2617DCC80021616B /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 789FC2EC2617DCC80021616B /* FirebaseAuth */; };
 		789FC2EF2617DCC80021616B /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 789FC2EE2617DCC80021616B /* FirebaseMessaging */; };
 		789FC2F82618B9FC0021616B /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 789FC2F72618B9FC0021616B /* UserModel.swift */; };
+		78A3480E27906950006D32D7 /* PollInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A3480D27906950006D32D7 /* PollInfoCell.swift */; };
 		78A61F0D26B9B79800671021 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A61F0C26B9B79800671021 /* LoginView.swift */; };
 		78A61F1B26BB12BC00671021 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A61F1A26BB12BC00671021 /* CustomTextField.swift */; };
 		78A61F1E26BB19F700671021 /* RegisterEmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A61F1D26BB19F700671021 /* RegisterEmailView.swift */; };
@@ -107,6 +108,9 @@
 		78F13C8D27861C7600EB2346 /* ImageMessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F13C8C27861C7600EB2346 /* ImageMessageModel.swift */; };
 		78F13C922786805B00EB2346 /* ImageSendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F13C912786805B00EB2346 /* ImageSendView.swift */; };
 		78F13C982788C96F00EB2346 /* PersonalChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F13C972788C96F00EB2346 /* PersonalChatView.swift */; };
+		78F13C9B278B7F4000EB2346 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F13C9A278B7F3F00EB2346 /* LoadingView.swift */; };
+		78F13CA2278BB36E00EB2346 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 78F13CA1278BB36E00EB2346 /* LaunchScreen.storyboard */; };
+		78F13CA6278BDBB700EB2346 /* CountDownPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F13CA5278BDBB700EB2346 /* CountDownPicker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -145,6 +149,7 @@
 		789FC2CD2617DA720021616B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		789FC2CF2617DA720021616B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		789FC2F72618B9FC0021616B /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
+		78A3480D27906950006D32D7 /* PollInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollInfoCell.swift; sourceTree = "<group>"; };
 		78A61F0C26B9B79800671021 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		78A61F1A26BB12BC00671021 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		78A61F1D26BB19F700671021 /* RegisterEmailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterEmailView.swift; sourceTree = "<group>"; };
@@ -204,6 +209,9 @@
 		78F13C8C27861C7600EB2346 /* ImageMessageModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImageMessageModel.swift; path = TopSecret/Model/ImageMessageModel.swift; sourceTree = SOURCE_ROOT; };
 		78F13C912786805B00EB2346 /* ImageSendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSendView.swift; sourceTree = "<group>"; };
 		78F13C972788C96F00EB2346 /* PersonalChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalChatView.swift; sourceTree = "<group>"; };
+		78F13C9A278B7F3F00EB2346 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
+		78F13CA1278BB36E00EB2346 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		78F13CA5278BDBB700EB2346 /* CountDownPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountDownPicker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -235,6 +243,8 @@
 				78C74CE227821ECE0009E08C /* CustomDatePicker.swift */,
 				78C74CF527825D0E0009E08C /* MapViewUtility.swift */,
 				78C74CFE278266430009E08C /* PlaceListView.swift */,
+				78F13C9A278B7F3F00EB2346 /* LoadingView.swift */,
+				78F13CA5278BDBB700EB2346 /* CountDownPicker.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -327,6 +337,7 @@
 				78D1A72326DE99040083FE2C /* Register */,
 				7887ADEE26267F5C00D9FC21 /* Login */,
 				78F13C972788C96F00EB2346 /* PersonalChatView.swift */,
+				78F13CA1278BB36E00EB2346 /* LaunchScreen.storyboard */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -467,6 +478,7 @@
 				78C74D04278286720009E08C /* PinnedMessageCell.swift */,
 				78F13C782783DE3900EB2346 /* UserSearchCell.swift */,
 				78F13C7D2784D27C00EB2346 /* SettingsButtonCell.swift */,
+				78A3480D27906950006D32D7 /* PollInfoCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -598,6 +610,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6290119C267BE56D00A226EF /* Preview Assets.xcassets in Resources */,
+				78F13CA2278BB36E00EB2346 /* LaunchScreen.storyboard in Resources */,
 				789FC2CB2617DA720021616B /* Assets.xcassets in Resources */,
 				62CE5AE426DEE62300AE6ACC /* GoogleService-Info.plist in Resources */,
 			);
@@ -647,6 +660,7 @@
 				7817085F270B327C00975014 /* PollViewModel.swift in Sources */,
 				788A470727551295003A6232 /* EnterUserProfilePicture.swift in Sources */,
 				78D1A75D26DF16D50083FE2C /* ChatView.swift in Sources */,
+				78A3480E27906950006D32D7 /* PollInfoCell.swift in Sources */,
 				7839C05626E9084E000B8722 /* ChatModel.swift in Sources */,
 				78D1A75226DEFE370083FE2C /* CreateGroupView.swift in Sources */,
 				78F13C982788C96F00EB2346 /* PersonalChatView.swift in Sources */,
@@ -682,8 +696,10 @@
 				78E938D826FE3722006D630F /* GroupUsersListCell.swift in Sources */,
 				78A61F0D26B9B79800671021 /* LoginView.swift in Sources */,
 				629710FA26E563E400A90E61 /* FullScreenPostView.swift in Sources */,
+				78F13CA6278BDBB700EB2346 /* CountDownPicker.swift in Sources */,
 				629710FC26E5662E00A90E61 /* PostViewFilterOptions.swift in Sources */,
 				78C74D0B278375EE0009E08C /* UserProfilePage.swift in Sources */,
+				78F13C9B278B7F4000EB2346 /* LoadingView.swift in Sources */,
 				78F13C862784ECFA00EB2346 /* UserInfoView.swift in Sources */,
 				78B7C77326F4D4CA001244D7 /* AddChatView.swift in Sources */,
 				78E6F1FB273ABD5200AFE7EB /* UserRepositiory.swift in Sources */,

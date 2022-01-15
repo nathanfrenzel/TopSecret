@@ -30,10 +30,10 @@ struct VotingView: View {
                         Button(action: {
                             self.goToAddPoll.toggle()
                         }, label: {
-                            Text("+")
+                            Image(systemName: "plus")
                         })
                         .padding(.trailing,20).sheet(isPresented: $goToAddPoll, content: {
-                            AddPollView(pollVM: pollVM).environmentObject(userVM)
+                            AddPollView(pollVM: pollVM)
                         })
                         
                         
@@ -45,7 +45,7 @@ struct VotingView: View {
                     
                     ScrollView(showsIndicators: false){
                         ForEach(userVM.polls){ poll in
-                            PollCell(name: poll.creator ?? "", groupName: poll.groupName ?? "", dateCreated: poll.dateCreated ?? Timestamp(), question: poll.question ?? "" ).padding(.bottom,15)
+                            PollCell(name: poll.creator ?? "", groupName: poll.groupName ?? "", dateCreated: poll.dateCreated ?? Timestamp(), question: poll.question ?? "", poll: poll ).padding(.bottom,15)
                             
                         }
                     }
@@ -68,7 +68,7 @@ struct VotingView: View {
                             Text("+")
                         })
                         .padding(.trailing,20).sheet(isPresented: $goToAddPoll, content: {
-                            AddPollView(pollVM: pollVM)
+                            AddPollView(pollVM: pollVM).environmentObject(UserViewModel())
                         })
                         
                     }.padding(.top,50)

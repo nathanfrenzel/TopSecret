@@ -11,6 +11,7 @@ struct UserEditProfilePageView: View {
     @State var bio: String = ""
     @Environment(\.presentationMode) var dismiss
     @EnvironmentObject var userVM: UserViewModel
+    @State var user: User
     var body: some View {
         ZStack{
             Color("Background")
@@ -20,7 +21,7 @@ struct UserEditProfilePageView: View {
                 Text("Change Bio")
                 
                 
-                CustomTextField(text: $bio, placeholder: "Bio", isPassword: false, isSecure: false, hasSymbol: false, symbol: "")
+                CustomTextField(text: $bio, placeholder: user.bio ?? "Bio" ,isPassword: false, isSecure: false, hasSymbol: false, symbol: "")
                 
                 
                 Button(action:{
@@ -35,8 +36,8 @@ struct UserEditProfilePageView: View {
     }
 }
 
-struct UserEditProfilePageView_Previews: PreviewProvider {
-    static var previews: some View {
-        UserEditProfilePageView()
-    }
-}
+//struct UserEditProfilePageView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        UserEditProfilePageView()
+//    }
+//}

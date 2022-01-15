@@ -10,43 +10,42 @@ import Foundation
 import Firebase
 
 struct PollCell: View {
+    
+    //used for testing
     var name : String
     var groupName : String
     var dateCreated : Timestamp
     var question : String
-    @State var answered : Bool = false
+    
+    //actual
+    var poll: PollModel
     
     var body: some View {
-       
-        VStack{
-            
-            VStack{
-                HStack(alignment: .center){
-                    Text(groupName).foregroundColor(Color("Foreground")).fontWeight(.bold)
-                    
-                    Text("• \(name)   ").foregroundColor(.gray)
-                    
-                    Text(dateCreated.dateValue(), style: .time).foregroundColor(.gray)
-                }
-                
-                
+        ZStack{
+            Color("Color")
+            VStack(spacing: 45){
+                PollInfoCell(poll: poll).padding(0)
                 VStack{
-                    Text(question).foregroundColor(Color("Foreground")).lineLimit(20)
+                    switch poll.pollType {
+                    case "Two Choices":
+                        Text("2")
+                    case "Three Choices":
+                        Text("3")
+                    case "Four Choices":
+                        Text("4")
+                    default:
+                        Text("5")
+                    }
+                    Spacer()
                 }
-                .padding()
-              
-            }
-            HStack{
-                Spacer()
-            }
-        
-        }.padding().background(       RoundedRectangle(cornerRadius: 20).fill(Color("Color"))).padding(.horizontal)
-        }
+            }.frame(width: 350,height:150).background(RoundedRectangle(cornerRadius: 16).stroke(FOREGROUNDCOLOR,lineWidth: 3))
+        }.edgesIgnoringSafeArea(.all).navigationBarHidden(true)
     }
+}
 
 
 struct PollCell_Previews: PreviewProvider {
     static var previews: some View {
-        PollCell(name: "jesusnogs", groupName: "Laotians", dateCreated: Timestamp(), question: "Where should we skate today?", answered: false).preferredColorScheme(.dark)
+        PollCell(name: "jesusnogs", groupName: "Laotians", dateCreated: Timestamp(), question: "Where should we skate today?", poll: PollModel()).preferredColorScheme(.dark)
     }
 }
